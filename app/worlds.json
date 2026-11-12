@@ -1,0 +1,53 @@
+{
+  "hp": {
+    "name": "Harry Potter",
+    "label": "House",
+    "groups": {
+      "gryffindor": { "name": "Gryffindor", "color": "#b5402f" },
+      "ravenclaw": { "name": "Ravenclaw", "color": "#2f5fa8" },
+      "hufflepuff": { "name": "Hufflepuff", "color": "#c99a1e" },
+      "slytherin": { "name": "Slytherin", "color": "#2e7d4f" }
+    }
+  },
+  "divergent": {
+    "name": "Divergent",
+    "label": "Faction",
+    "groups": {
+      "dauntless": { "name": "Dauntless", "color": "#3b3b3b" },
+      "erudite": { "name": "Erudite", "color": "#2f6fb5" },
+      "abnegation": { "name": "Abnegation", "color": "#8a8174" },
+      "amity": { "name": "Amity", "color": "#d08a24" },
+      "candor": { "name": "Candor", "color": "#6b6b6b" }
+    }
+  },
+  "pokemon": {
+    "name": "Pokémon GO",
+    "label": "Team",
+    "groups": {
+      "valor": { "name": "Valor", "color": "#c8362b" },
+      "mystic": { "name": "Mystic", "color": "#2a63c4" },
+      "instinct": { "name": "Instinct", "color": "#d4a514" }
+    }
+  },
+  "avatar": {
+    "name": "Avatar",
+    "label": "Nation",
+    "groups": {
+      "fire": { "name": "Fire Nation", "color": "#c2412d" },
+      "water": { "name": "Water Tribe", "color": "#2c7bb6" },
+      "earth": { "name": "Earth Kingdom", "color": "#4f8a3a" },
+      "air": { "name": "Air Nomads", "color": "#d39b2a" }
+    }
+  },
+  "invented": {
+    "name": "Invented world (control)",
+    "label": "House",
+    "note": "Made-up houses BERT cannot have memorized. Veltrin: patient, observant, methodical, reserved. Osmark: warm, generous, sociable, forgiving. Calwen: restless, curious, independent, spontaneous. Durrask: disciplined, competitive, proud, determined.",
+    "groups": {
+      "veltrin": { "name": "Veltrin", "color": "#5b6fa8" },
+      "osmark": { "name": "Osmark", "color": "#c07a3a" },
+      "calwen": { "name": "Calwen", "color": "#3a9a8a" },
+      "durrask": { "name": "Durrask", "color": "#8a3a5a" }
+    }
+  }
+}

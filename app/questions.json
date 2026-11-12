@@ -1,0 +1,143 @@
+{
+  "about": "Original questions written for this project. Their style is inspired by the official quizzes (Wizarding World sorting quiz: dilemmas, objects and 'which would you hate'; Divergent aptitude test: moral scenarios like the growling dog and the stranger on the bus; Pokémon GO team leaders' philosophies; Avatar nations' cultural values). No question is copied from those quizzes. Each option carries 2 hidden trait words, which are the only thing BERT sees, and a 'key': what WE, the designers, expect in each world. A null key means we expect no clear group. The key is the 'official-test-style' score and is compared against BERT's answer.",
+  "worlds": ["hp", "divergent", "pokemon", "avatar", "invented"],
+  "questions": [
+    {
+      "id": "q1",
+      "inspired_by": "Divergent aptitude test (scenario under threat)",
+      "text": "A stray dog is growling at a child in a park. What do you do?",
+      "options": [
+        { "text": "Step between them and hold your ground.", "traits": ["fearless", "protective"], "key": { "hp": "gryffindor", "divergent": "dauntless", "pokemon": "valor", "avatar": "fire", "invented": "durrask" } },
+        { "text": "Freeze and read the dog's body language first.", "traits": ["observant", "cautious"], "key": { "hp": "ravenclaw", "divergent": "erudite", "pokemon": "mystic", "avatar": "earth", "invented": "veltrin" } },
+        { "text": "Scoop up the child and wave the owner over.", "traits": ["caring", "practical"], "key": { "hp": "hufflepuff", "divergent": "abnegation", "pokemon": null, "avatar": "water", "invented": "osmark" } },
+        { "text": "Crouch down and offer the dog some of your food.", "traits": ["gentle", "trusting"], "key": { "hp": "hufflepuff", "divergent": "amity", "pokemon": "instinct", "avatar": "air", "invented": "osmark" } }
+      ]
+    },
+    {
+      "id": "q2",
+      "inspired_by": "Divergent aptitude test (the stranger who asks about someone you know)",
+      "text": "An upset stranger asks whether you know a certain person. You do. What do you say?",
+      "options": [
+        { "text": "\"Yes. Why do you want to know?\"", "traits": ["honest", "direct"], "key": { "hp": "gryffindor", "divergent": "candor", "pokemon": null, "avatar": null, "invented": null } },
+        { "text": "\"No.\" It isn't your place to hand someone over.", "traits": ["protective", "discreet"], "key": { "hp": "hufflepuff", "divergent": "abnegation", "pokemon": null, "avatar": "water", "invented": "osmark" } },
+        { "text": "\"Not sure.\" Then you quietly warn the person later.", "traits": ["strategic", "resourceful"], "key": { "hp": "slytherin", "divergent": "erudite", "pokemon": "mystic", "avatar": null, "invented": "veltrin" } },
+        { "text": "You ask what happened, and maybe help them sort it out.", "traits": ["diplomatic", "empathetic"], "key": { "hp": "hufflepuff", "divergent": "amity", "pokemon": "instinct", "avatar": "air", "invented": "osmark" } }
+      ]
+    },
+    {
+      "id": "q3",
+      "inspired_by": "Sorting-quiz style: 'which would you most hate to be called'",
+      "text": "Which of these would sting the most if someone said it about you?",
+      "options": [
+        { "text": "\"You're so ordinary.\"", "traits": ["proud", "driven"], "key": { "hp": "slytherin", "divergent": null, "pokemon": "valor", "avatar": "fire", "invented": "durrask" } },
+        { "text": "\"You only think about yourself.\"", "traits": ["considerate", "selfless"], "key": { "hp": "hufflepuff", "divergent": "abnegation", "pokemon": null, "avatar": "water", "invented": "osmark" } },
+        { "text": "\"You don't know what you're talking about.\"", "traits": ["curious", "studious"], "key": { "hp": "ravenclaw", "divergent": "erudite", "pokemon": "mystic", "avatar": null, "invented": "calwen" } },
+        { "text": "\"You backed down.\"", "traits": ["daring", "bold"], "key": { "hp": "gryffindor", "divergent": "dauntless", "pokemon": "valor", "avatar": "fire", "invented": "durrask" } }
+      ]
+    },
+    {
+      "id": "q4",
+      "inspired_by": "Sorting-quiz style: free-time preference",
+      "text": "You suddenly have a free afternoon. What do you do with it?",
+      "options": [
+        { "text": "Go somewhere you've never been, without a plan.", "traits": ["adventurous", "spontaneous"], "key": { "hp": "gryffindor", "divergent": "dauntless", "pokemon": "instinct", "avatar": "air", "invented": "calwen" } },
+        { "text": "Get lost reading about something obscure.", "traits": ["absorbed", "thoughtful"], "key": { "hp": "ravenclaw", "divergent": "erudite", "pokemon": "mystic", "avatar": null, "invented": "veltrin" } },
+        { "text": "Help a friend move apartments.", "traits": ["dependable", "generous"], "key": { "hp": "hufflepuff", "divergent": "abnegation", "pokemon": null, "avatar": "water", "invented": "osmark" } },
+        { "text": "Work on a side project you hope will pay off one day.", "traits": ["ambitious", "disciplined"], "key": { "hp": "slytherin", "divergent": null, "pokemon": "valor", "avatar": "fire", "invented": "durrask" } }
+      ]
+    },
+    {
+      "id": "q5",
+      "inspired_by": "Sorting-quiz style: choose an object",
+      "text": "You can take only one thing on a long journey. Which one?",
+      "options": [
+        { "text": "A worn notebook full of half-finished ideas.", "traits": ["imaginative", "reflective"], "key": { "hp": "ravenclaw", "divergent": "erudite", "pokemon": "mystic", "avatar": "air", "invented": "calwen" } },
+        { "text": "A sturdy pocketknife.", "traits": ["resourceful", "self-reliant"], "key": { "hp": null, "divergent": "dauntless", "pokemon": null, "avatar": "earth", "invented": "durrask" } },
+        { "text": "A letter from someone who loves you.", "traits": ["sentimental", "devoted"], "key": { "hp": "hufflepuff", "divergent": "amity", "pokemon": "instinct", "avatar": "water", "invented": "osmark" } },
+        { "text": "A key to a door you haven't opened yet.", "traits": ["intrigued", "intuitive"], "key": { "hp": null, "divergent": null, "pokemon": "instinct", "avatar": "air", "invented": "calwen" } }
+      ]
+    },
+    {
+      "id": "q6",
+      "inspired_by": "Pokémon GO team leaders' philosophies (strength vs. analysis vs. instinct)",
+      "text": "Your team is losing with five minutes left. What do you do?",
+      "options": [
+        { "text": "Push everyone to go all-out. There's still time.", "traits": ["competitive", "energetic"], "key": { "hp": "gryffindor", "divergent": "dauntless", "pokemon": "valor", "avatar": "fire", "invented": "durrask" } },
+        { "text": "Call a timeout and change the plan.", "traits": ["strategic", "composed"], "key": { "hp": "ravenclaw", "divergent": "erudite", "pokemon": "mystic", "avatar": "earth", "invented": "veltrin" } },
+        { "text": "Keep everyone's spirits up, win or lose.", "traits": ["cheerful", "supportive"], "key": { "hp": "hufflepuff", "divergent": "amity", "pokemon": "instinct", "avatar": "water", "invented": "osmark" } },
+        { "text": "Do whatever it takes, even if it bends the rules.", "traits": ["cunning", "determined"], "key": { "hp": "slytherin", "divergent": null, "pokemon": null, "avatar": "fire", "invented": "durrask" } }
+      ]
+    },
+    {
+      "id": "q7",
+      "inspired_by": "Divergent factions' values (honesty vs. peace vs. knowledge)",
+      "text": "Someone criticizes your work in front of others, and they're partly right. How do you react?",
+      "options": [
+        { "text": "Admit the part they got right and argue the rest openly.", "traits": ["candid", "outspoken"], "key": { "hp": "gryffindor", "divergent": "candor", "pokemon": "valor", "avatar": null, "invented": null } },
+        { "text": "Say thanks, then redo it so well nobody can say anything.", "traits": ["proud", "meticulous"], "key": { "hp": "slytherin", "divergent": "erudite", "pokemon": null, "avatar": "earth", "invented": "durrask" } },
+        { "text": "Let it go. Staying calm matters more than winning.", "traits": ["calm", "forgiving"], "key": { "hp": "hufflepuff", "divergent": "amity", "pokemon": null, "avatar": "air", "invented": "osmark" } },
+        { "text": "Take notes and think it over alone later.", "traits": ["reserved", "analytical"], "key": { "hp": "ravenclaw", "divergent": "erudite", "pokemon": "mystic", "avatar": "earth", "invented": "veltrin" } }
+      ]
+    },
+    {
+      "id": "q8",
+      "inspired_by": "Avatar nations' cultural values (community, endurance, freedom, drive), with no element words",
+      "text": "Which place feels most like home?",
+      "options": [
+        { "text": "A crowded kitchen where everyone talks at once.", "traits": ["sociable", "warm"], "key": { "hp": "hufflepuff", "divergent": "amity", "pokemon": "instinct", "avatar": "water", "invented": "osmark" } },
+        { "text": "A quiet library late at night.", "traits": ["studious", "solitary"], "key": { "hp": "ravenclaw", "divergent": "erudite", "pokemon": "mystic", "avatar": null, "invented": "veltrin" } },
+        { "text": "A rooftop with a view over the whole city.", "traits": ["free-spirited", "independent"], "key": { "hp": null, "divergent": "dauntless", "pokemon": "instinct", "avatar": "air", "invented": "calwen" } },
+        { "text": "A training ground at sunrise.", "traits": ["disciplined", "tireless"], "key": { "hp": null, "divergent": "dauntless", "pokemon": "valor", "avatar": "fire", "invented": "durrask" } }
+      ]
+    },
+    {
+      "id": "q9",
+      "inspired_by": "Sorting-quiz style moral dilemma (loyalty vs. truth)",
+      "text": "You find out a close friend cheated on an important exam. What do you do?",
+      "options": [
+        { "text": "Tell them to come clean, or you will.", "traits": ["principled", "blunt"], "key": { "hp": "gryffindor", "divergent": "candor", "pokemon": null, "avatar": null, "invented": null } },
+        { "text": "Say nothing. They're your friend.", "traits": ["loyal", "discreet"], "key": { "hp": "hufflepuff", "divergent": null, "pokemon": "instinct", "avatar": "water", "invented": "osmark" } },
+        { "text": "Try to understand why they felt they had to.", "traits": ["understanding", "perceptive"], "key": { "hp": null, "divergent": "amity", "pokemon": null, "avatar": "air", "invented": "veltrin" } },
+        { "text": "Remember it. It might be useful someday.", "traits": ["calculating", "pragmatic"], "key": { "hp": "slytherin", "divergent": "erudite", "pokemon": null, "avatar": "fire", "invented": null } }
+      ]
+    },
+    {
+      "id": "q10",
+      "inspired_by": "Sorting-quiz style: choose a power",
+      "text": "Pick a superpower you would actually use every day.",
+      "options": [
+        { "text": "Knowing what people really think.", "traits": ["perceptive", "inquisitive"], "key": { "hp": "ravenclaw", "divergent": "candor", "pokemon": "mystic", "avatar": null, "invented": "veltrin" } },
+        { "text": "Never feeling fear.", "traits": ["fearless", "reckless"], "key": { "hp": "gryffindor", "divergent": "dauntless", "pokemon": "valor", "avatar": "fire", "invented": "calwen" } },
+        { "text": "Healing anyone you touch.", "traits": ["compassionate", "nurturing"], "key": { "hp": "hufflepuff", "divergent": "abnegation", "pokemon": "instinct", "avatar": "water", "invented": "osmark" } },
+        { "text": "Changing anyone's mind in a few words.", "traits": ["persuasive", "charming"], "key": { "hp": "slytherin", "divergent": null, "pokemon": null, "avatar": "fire", "invented": "durrask" } }
+      ]
+    },
+    {
+      "id": "q11",
+      "inspired_by": "Pokémon GO team leaders (gut feeling vs. evidence vs. strength)",
+      "text": "When you make a big decision, what do you trust most?",
+      "options": [
+        { "text": "My gut, even when I can't explain it.", "traits": ["intuitive", "impulsive"], "key": { "hp": "gryffindor", "divergent": "dauntless", "pokemon": "instinct", "avatar": "air", "invented": "calwen" } },
+        { "text": "The evidence, once I have enough of it.", "traits": ["rational", "patient"], "key": { "hp": "ravenclaw", "divergent": "erudite", "pokemon": "mystic", "avatar": "earth", "invented": "veltrin" } },
+        { "text": "What the people I care about need.", "traits": ["selfless", "devoted"], "key": { "hp": "hufflepuff", "divergent": "abnegation", "pokemon": null, "avatar": "water", "invented": "osmark" } },
+        { "text": "Whatever gets me closer to my goal.", "traits": ["goal-driven", "decisive"], "key": { "hp": "slytherin", "divergent": null, "pokemon": "valor", "avatar": "fire", "invented": "durrask" } }
+      ]
+    },
+    {
+      "id": "q12",
+      "inspired_by": "Divergent factions (role in a group)",
+      "text": "In group projects, which role do you usually end up in?",
+      "options": [
+        { "text": "The one who keeps everyone getting along.", "traits": ["peaceful", "friendly"], "key": { "hp": "hufflepuff", "divergent": "amity", "pokemon": "instinct", "avatar": "air", "invented": "osmark" } },
+        { "text": "The one who says what nobody wants to hear.", "traits": ["frank", "honest"], "key": { "hp": "gryffindor", "divergent": "candor", "pokemon": null, "avatar": null, "invented": null } },
+        { "text": "The one who quietly does the parts nobody wants.", "traits": ["humble", "hardworking"], "key": { "hp": "hufflepuff", "divergent": "abnegation", "pokemon": null, "avatar": "earth", "invented": "veltrin" } },
+        { "text": "The one who presents it at the end.", "traits": ["confident", "ambitious"], "key": { "hp": "slytherin", "divergent": null, "pokemon": "valor", "avatar": "fire", "invented": "durrask" } }
+      ]
+    }
+  ],
+  "free_text": {
+    "id": "q13",
+    "text": "Optional: describe yourself in a few words, the way a friend would.",
+    "placeholder": "e.g. stubborn but kind, always late, asks too many questions"
+  }
+}
