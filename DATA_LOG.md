@@ -5,6 +5,37 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
 
 ---
 
+## 2026-11-18 · Short human form is live after all
+**Decision.** Alongside the simulated panel, we're running a **short real form** (about 3 minutes) so the panel can be checked against real people.
+- **Items (25):** the 20 generic items of `vote_items.csv` (3 per world, 8 for HP) plus 1 clear item per world as an attention check (`k01-hp`, `k01-div`, `k01-got`, `k01-ava`, `k01-inv`). Same wording as `vote_items.csv`. Conflicting items are not included.
+- **Familiarity grid:** HP, Divergent, Game of Thrones, Avatar.
+- **Attention rule (set before seeing any data):** drop a respondent who gets **2 or more of the 5** clear items wrong.
+- **Target:** about 35 responses, so about 30 remain after the filter. 10 is the useful minimum for checking the panel.
+- **Analysis plan:** humans vs. panel vs. BERT on the same items. Report a **human split-half floor**: split respondents randomly in two, compute the JSD between the halves, and repeat about 1,000 times. That gives the distance expected between humans themselves.
+- Responses will be linked to a Google Sheet and exported to `data/human_votes.csv` (`source=human`).
+
+---
+
+## 2026-11-18 · Every method runs with and without group descriptions
+**Problem.** In the fill-in-the-blank method, the prompt was only "Someone who is X belongs to Veltrin." BERT has never seen "Veltrin", and nothing in the prompt says what it means, so the invented world would sit near chance **by design**. That would make the memorization control unfair: a low score there would tell us nothing.
+
+**Decision.** Every method (MLM, embedding, NLI) runs in two variants:
+- **Without descriptions:** the model sees only the group names. A correct answer can come from memory of the franchise or from the meaning of the name itself.
+- **With descriptions:** each group's one-line description (from `data/<world>/groups.csv`) comes first in the prompt, or next to the name for embedding and NLI. The model can now read what each group stands for.
+
+**What it lets us say.**
+- Invented world: only the "with" variant is meaningful. That's the pure "reads the traits" score.
+- Real worlds: the **gap between the variants** shows how much BERT already knew. A small gap means the descriptions add nothing beyond memory; a large gap means BERT relied on reading them.
+- Humans in the form also saw one-line descriptions, so the "with" variant is the fair comparison with the human votes and the panel.
+
+**Known side effects to report.**
+- In the "with" variant, groups are listed in a fixed order (the order in `sorter.WORLDS`). Order effects are possible.
+- The embedding variant divides cosine similarities by a fixed temperature (0.05) before the softmax, so entropies are comparable within a method but not across methods.
+
+Implemented in `sorter.py` (`descriptions=` argument of `predict`). Spec in IMPLEMENTATION.md, step 3.
+
+---
+
 ## 2026-11-18 · Pokémon GO replaced by Game of Thrones
 **Decision.** Pokémon GO is out and **Game of Thrones** is in, with id `got` and houses `stark`, `lannister`, `targaryen`, `greyjoy`, `tyrell`.
 **Why.** GO's team names are trait words ("valor" means courage), so a correct answer could come from word meaning alone. GO also had almost no canonical characters (3 leaders plus invented personas). GoT house names are not trait words, there are many canonical characters, and the franchise is heavily present in pre-2018 text.

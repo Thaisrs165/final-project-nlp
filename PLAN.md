@@ -30,7 +30,9 @@ For an ambiguous input like "smart and nice", we can't simply assume the right a
 2. **Name-frequency bias.** BERT may prefer "Gryffindor" simply because it is common in Wikipedia.
    → **Calibrate** against a content-free prompt ("Someone who is N/A belongs to ___") and subtract that prior (Zhao et al. 2021, *Calibrate Before Use*). Report both the raw and the calibrated scores. The size of the gap is itself a finding for Q3: *under ambiguity, does BERT fall back to the most frequent name?*
 3. **Prompt sensitivity.** Use 3 prompt wordings and report the mean and spread (Jiang et al. 2020).
-4. **No training on small data.** BERT stays frozen. An optional logistic-regression probe needs leave-one-out cross-validation and must be clearly labeled as a small-data sanity check (a model trained on small data is what the rubric marks as a D).
+4. **Without descriptions, the invented world can't be scored fairly** (decided 2026-11-18). With only "Someone who is X belongs to Veltrin", BERT has no way to know what Veltrin means, so the control would sit at chance by design.
+   → Every method runs in **two variants**: *without descriptions* (the model only sees the group names: memory plus whatever the name itself means) and *with descriptions* (the groups' one-line descriptions come first in the prompt). The gap between the variants, per world, separates "BERT already knew this franchise" from "BERT read the descriptions". Details: [DATA_LOG.md](DATA_LOG.md).
+5. **No training on small data.** BERT stays frozen. An optional logistic-regression probe needs leave-one-out cross-validation and must be clearly labeled as a small-data sanity check (a model trained on small data is what the rubric marks as a D).
 
 ---
 
@@ -131,6 +133,7 @@ This makes the presentation interactive and ties straight back to our main metri
 - [ ] 30-second pitch
 - [ ] Masked-LM probing, and why multi-token names need pseudo-log-likelihood
 - [ ] Calibration: what the content-free prior is and why we subtract it
+- [ ] Why every method runs with and without group descriptions (the invented world needs them)
 - [ ] Cosine similarity; why raw BERT embeddings are anisotropic and Sentence-BERT is not
 - [ ] NLI zero-shot: how a label becomes a hypothesis
 - [ ] Entropy vs. JSD: why matching (simulated) human-like uncertainty beats a uniform distribution as the target
