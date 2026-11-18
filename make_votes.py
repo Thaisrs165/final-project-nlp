@@ -76,12 +76,10 @@ TRAITS = {
     "honest": {"honesty": 1},
     "intelligent": {"intellect": 1},
     "always tells the truth, even when it hurts": {"honesty": 1, "bravery": .2},
-    "passionate": {"bravery": .4, "ambition": .4, "spontaneity": .2},
-    "calm": {"calm": 1},
-    "analytical": {"intellect": 1},
-    "impulsive": {"spontaneity": 1},
-    "trains hard": {"diligence": .7, "ambition": .4},
-    "loves a challenge": {"bravery": .4, "ambition": .5},
+    "honorable": {"honesty": .8, "diligence": .5, "selflessness": .2},
+    "charming": {"warmth": .6, "adaptability": .4},
+    "reckless": {"bravery": .6, "spontaneity": .7},
+    "always keeps their word, whatever it costs": {"honesty": .9, "diligence": .5},
     "adaptable": {"adaptability": 1},
     "stubborn": {"diligence": .8},
     "free-spirited": {"spontaneity": 1},
@@ -109,10 +107,12 @@ GROUPS = {
         "dauntless": {"bravery": 1},
         "erudite": {"intellect": 1},
     },
-    "pokemon": {
-        "valor": {"bravery": .6, "ambition": .5, "diligence": .3},
-        "mystic": {"intellect": .8, "calm": .6},
-        "instinct": {"spontaneity": 1},
+    "got": {  # from each house's words and reputation (see data/got/README.md)
+        "stark": {"honesty": .8, "diligence": .6, "selflessness": .3, "bravery": .3},
+        "lannister": {"ambition": .9, "intellect": .5},
+        "targaryen": {"bravery": .6, "ambition": .5, "spontaneity": .5},
+        "greyjoy": {"bravery": .6, "ambition": .3, "warmth": -.4, "adaptability": .3},
+        "tyrell": {"warmth": .6, "intellect": .5, "adaptability": .5},
     },
     "avatar": {
         "fire": {"ambition": .8, "bravery": .4},
@@ -129,14 +129,14 @@ GROUPS = {
 }
 
 # "Main character" group a fan drifts toward. ASSUMPTION, see DATA_LOG.md.
-SALIENT = {"hp": "gryffindor", "divergent": "dauntless", "pokemon": "mystic",
+SALIENT = {"hp": "gryffindor", "divergent": "dauntless", "got": "stark",
            "avatar": "air", "invented": None}
-FRANCHISES = ["hp", "divergent", "pokemon", "avatar"]
+FRANCHISES = ["hp", "divergent", "got", "avatar"]
 
 # ---- Archetypes -------------------------------------------------------------
 # big5 ranges are (low, high) on a 1-5 scale; fam = P(not at all, a little, well)
 POP_FAM = {"hp": (.1, .4, .5), "divergent": (.5, .35, .15),
-           "pokemon": (.3, .45, .25), "avatar": (.4, .35, .25)}
+           "got": (.25, .4, .35), "avatar": (.4, .35, .25)}
 ANY = (1.5, 4.5)
 ARCHETYPES = [
     dict(name="bookworm", n=4, desc="Introverted reader; reads every word, knows HP well",
@@ -146,9 +146,9 @@ ARCHETYPES = [
     dict(name="social_butterfly", n=5, desc="Outgoing and warm; answers fast, sees the best in people",
          O=(3, 4), C=(2, 4), E=(4, 5), A=(4, 5), N=(2, 3), fam=POP_FAM,
          beta=(4, 6), noise=(.04, .07), first=(1.2, 1.4), proj=(1.5, 2.5), fan=(.4, .6)),
-    dict(name="competitor", n=4, desc="Athlete and gamer; values winning, plays Pokemon GO",
+    dict(name="competitor", n=4, desc="Athlete and gamer; values winning, loves power struggles in Game of Thrones",
          O=(2, 3.5), C=(4, 5), E=(4, 5), A=(1.5, 3), N=(1.5, 3),
-         fam={**POP_FAM, "pokemon": (0, .2, .8)},
+         fam={**POP_FAM, "got": (0, .2, .8)},
          beta=(5, 7), noise=(.02, .04), first=(1, 1.1), proj=(1.5, 2), fan=(.7, 1)),
     dict(name="newcomer", n=5, desc="Knows none of the franchises; relies on the one-line descriptions",
          O=ANY, C=ANY, E=ANY, A=ANY, N=ANY,

@@ -20,12 +20,12 @@ g03-div,divergent,generic,easygoing; polite,
 c01-div,divergent,conflicting,brave; selfless,dauntless|abnegation
 c02-div,divergent,conflicting,honest; intelligent,candor|erudite
 k01-div,divergent,clear,"always tells the truth, even when it hurts",candor
-g01-pkm,pokemon,generic,smart; nice,
-g02-pkm,pokemon,generic,funny; kind,
-g03-pkm,pokemon,generic,easygoing; polite,
-c01-pkm,pokemon,conflicting,passionate; calm,valor|mystic
-c02-pkm,pokemon,conflicting,analytical; impulsive,mystic|instinct
-k01-pkm,pokemon,clear,trains hard; loves a challenge,valor
+g01-got,got,generic,smart; nice,
+g02-got,got,generic,funny; kind,
+g03-got,got,generic,easygoing; polite,
+c01-got,got,conflicting,honorable; cunning,stark|lannister
+c02-got,got,conflicting,charming; reckless,tyrell|targaryen
+k01-got,got,clear,"always keeps their word, whatever it costs",stark
 g01-ava,avatar,generic,smart; nice,
 g02-ava,avatar,generic,funny; kind,
 g03-ava,avatar,generic,easygoing; polite,

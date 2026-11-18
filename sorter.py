@@ -16,7 +16,7 @@ NLI_MODEL = "facebook/bart-large-mnli"                  # zero-shot NLI baseline
 WORLDS = {
     "hp": ["gryffindor", "ravenclaw", "hufflepuff", "slytherin"],
     "divergent": ["abnegation", "amity", "candor", "dauntless", "erudite"],
-    "pokemon": ["valor", "mystic", "instinct"],
+    "got": ["stark", "lannister", "targaryen", "greyjoy", "tyrell"],
     "avatar": ["fire", "water", "earth", "air"],
     "invented": ["veltrin", "osmark", "calwen", "durrask"],
 }

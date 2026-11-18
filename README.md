@@ -28,7 +28,7 @@ Models (`bert-base-uncased`, `all-MiniLM-L6-v2`, `bart-large-mnli`) download fro
 ## Layout
 
 ```
-data/        shared CSVs (vote items, simulated panel) + one folder per world (hp/, divergent/, pokemon/, avatar/, invented/)
+data/        shared CSVs (vote items, simulated panel) + one folder per world (hp/, divergent/, got/, avatar/, invented/)
 sorter.py    the only place methods live (shared by experiments and app)
 make_votes.py  builds the simulated voter panel (replaces the human-votes form)
 notebooks/   analysis, one per research question

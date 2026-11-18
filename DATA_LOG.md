@@ -5,6 +5,46 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
 
 ---
 
+## 2026-11-18 · Pokémon GO replaced by Game of Thrones
+**Decision.** Pokémon GO is out and **Game of Thrones** is in, with id `got` and houses `stark`, `lannister`, `targaryen`, `greyjoy`, `tyrell`.
+**Why.** GO's team names are trait words ("valor" means courage), so a correct answer could come from word meaning alone. GO also had almost no canonical characters (3 leaders plus invented personas). GoT house names are not trait words, there are many canonical characters, and the franchise is heavily present in pre-2018 text.
+**Caveat for the report.** GoT membership is decided by **birth**, not by personality. Houses still have strong documented stereotypes (their words and reputation), and that's what we test. Gold-label and exclusion rules are in `data/got/README.md`.
+
+### What changed
+- `data/pokemon/` renamed to `data/got/`, with a new README (gold label = house of birth; exclude Jon Snow, Joffrey/Tommen/Myrcella and similar).
+- `sorter.WORLDS`: `pokemon` replaced by `got`.
+- `data/vote_items.csv`: the 6 `*-pkm` items replaced by `*-got`.
+  - Generic items: same 3 trait sets as every other world.
+  - Conflicting: `honorable; cunning` (stark|lannister) and `charming; reckless` (tyrell|targaryen).
+  - Clear: `always keeps their word, whatever it costs` (stark).
+- `make_votes.py`:
+  - GoT house vectors (from each house's words and reputation).
+  - 4 new trait phrases.
+  - Main-character house = **Stark** (an assumption, as for the other worlds).
+  - Population familiarity for GoT = (.25, .4, .35).
+  - The competitor archetype now knows GoT well instead of Pokémon GO.
+  - Persona columns are now `fam_got` / `home_got`.
+- `app/worlds.json` and `app/questions.json`: GoT replaces Pokémon GO. Every quiz option has a GoT key, or `null` where no house clearly fits.
+
+### Panel re-run (seed 42)
+- HP, Divergent, Avatar and invented votes are unchanged, because the random stream is consumed in the same order. Only the GoT items are new.
+- Same 5 voters excluded (v14, v16, v23, v24, v25), leaving **35**.
+- Mean normalized entropy: clear 0.30 · generic 0.59 · conflicting 0.72. Conflicting items: 86% of votes on the two expected houses.
+- GoT items:
+
+  | Item | Votes (of 40) |
+  |---|---|
+  | smart; nice | Tyrell 26 |
+  | funny; kind | Tyrell 30 |
+  | easygoing; polite | split, Tyrell 13 / Targaryen 11 |
+  | honorable; cunning | Stark 22 / Lannister 10 |
+  | charming; reckless | Targaryen 20 / Tyrell 15 |
+  | always keeps their word | Stark 35 |
+
+- Same weak spot as before: warm generic traits pile onto the one "warm" house (Tyrell here).
+
+---
+
 ## 2026-11-18 · One folder per world, one owner per world
 - Data is split into `data/hp/`, `data/divergent/`, `data/pokemon/`, `data/avatar/`, `data/invented/`. Each holds `groups.csv`, `tests.csv` (headers only for now) and a `README.md` with the owner, target size, gold-label rules and checklist.
 - Paths changed from `data/<world>_groups.csv` / `data/<world>_tests.csv` to `data/<world>/groups.csv` / `data/<world>/tests.csv` (PLAN.md, IMPLEMENTATION.md, sorter.py comment).

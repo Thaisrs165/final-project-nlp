@@ -39,7 +39,7 @@ final-project-nlp/
 ├── data/            # shared CSVs (vote items, simulated panel, generic.csv)
 │   ├── hp/          # one folder per world: groups.csv, tests.csv, README.md
 │   ├── divergent/
-│   ├── pokemon/
+│   ├── got/
 │   ├── avatar/
 │   └── invented/
 ├── sorter.py        # the ONLY place methods live (step 3)
@@ -70,13 +70,13 @@ Each teammate builds steps 2.1–2.2 for **their own world, inside its own folde
 |---|---|---|
 | Harry Potter | [data/hp/](data/hp/) | Ana |
 | Divergent | [data/divergent/](data/divergent/) | _TBD_ |
-| Pokémon GO | [data/pokemon/](data/pokemon/) | _TBD_ |
+| Game of Thrones | [data/got/](data/got/) | _TBD_ |
 | Avatar | [data/avatar/](data/avatar/) | _TBD_ (Member 3 reviews the shortcut pairs) |
 | Invented | [data/invented/](data/invented/) | _TBD_ (Member 4 approves the personas) |
 
 ### 2.1 Group descriptions: `data/<world>/groups.csv`
 Columns: `group, description, source_url`
-- 🤖 For each of the 5 worlds, find the official description of each group and write a short paraphrase with the source URL. Sources: the Wizarding World site and the Sorting Hat songs; the Divergent faction manifestos; the Pokémon GO team leaders' statements; the Avatar nations' cultural values. The invented world uses the descriptions we write ourselves.
+- 🤖 For each of the 5 worlds, find the official description of each group and write a short paraphrase with the source URL. Sources: the Wizarding World site and the Sorting Hat songs; the Divergent faction manifestos; each Game of Thrones house's words and reputation (Fandom / A Wiki of Ice and Fire); the Avatar nations' cultural values. The invented world uses the descriptions we write ourselves.
 - 🙋 The world's owner checks that the descriptions match the source (about 10 min per world).
 
 ### 2.2 Canonical characters: `data/<world>/tests.csv`
@@ -87,7 +87,7 @@ Columns: `id, test_type, name, traits, gold_group, source_url, trait_evidence`
 | Harry Potter | ~40, about 10 per house | Books or the official Wizarding World site, never fan guesses |
 | Divergent | ~25 | Books or films |
 | Avatar | ~30 | The series |
-| Pokémon GO | 3 leaders + ~30 personas | Personas are written from each team's official values (`source = persona`) |
+| Game of Thrones | ~30, about 6 per house | The books or the show. House by **birth**; disputed characters excluded (rules in [data/got/README.md](data/got/README.md)) |
 
 - 🤖 Build the character list with the gold group and a source link for each.
 - 🤖 **Traits:** 5 per character, taken **only from adjectives that literally appear** in the "Personality" section of the character's Fandom page. The sentence each one came from goes in `trait_evidence`, so every trait can be traced. Two filters:
@@ -285,7 +285,7 @@ app/
 - 12 original scenario questions plus 1 optional free-text question. They're written in the *style* of the official tests, with nothing copied:
   - Wizarding World quiz: dilemmas, "which would sting most", choosing an object or a power.
   - Divergent aptitude test: the growling dog, the stranger who asks about someone you know.
-  - Pokémon GO leaders: trust your gut, the evidence, or your strength.
+  - Game of Thrones house values: duty, ambition, passion.
   - Avatar nations' values.
 - Each option carries **2 hidden traits** (all BERT sees) and a **key** per world (what we expected, or `null`).
 - No group names or element words appear anywhere in the questions or options, so the user can't steer the result and BERT can't take lexical shortcuts.

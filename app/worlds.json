@@ -20,13 +20,15 @@
       "candor": { "name": "Candor", "color": "#6b6b6b" }
     }
   },
-  "pokemon": {
-    "name": "Pokémon GO",
-    "label": "Team",
+  "got": {
+    "name": "Game of Thrones",
+    "label": "House",
     "groups": {
-      "valor": { "name": "Valor", "color": "#c8362b" },
-      "mystic": { "name": "Mystic", "color": "#2a63c4" },
-      "instinct": { "name": "Instinct", "color": "#d4a514" }
+      "stark": { "name": "Stark", "color": "#7a8a99" },
+      "lannister": { "name": "Lannister", "color": "#b8892b" },
+      "targaryen": { "name": "Targaryen", "color": "#9e2b25" },
+      "greyjoy": { "name": "Greyjoy", "color": "#3f5a5e" },
+      "tyrell": { "name": "Tyrell", "color": "#4f8a3a" }
     }
   },
   "avatar": {

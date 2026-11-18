@@ -3,7 +3,7 @@
 **Tracks:** Researcher + Educator (needed for an A).
 **Thesis in one line:** We test whether a frozen BERT puts people into groups because of their traits or because of names it memorized, and what it does when the traits don't point to a single group.
 
-We use fictional sorting systems (HP, Divergent, Pokémon GO, Avatar, and one invented world) as a controlled test bed. The project is about **BERT and ambiguity**. Harry Potter is only the setting.
+We use fictional sorting systems (HP, Divergent, Game of Thrones, Avatar, and one invented world) as a controlled test bed. The project is about **BERT and ambiguity**. Harry Potter is only the setting.
 
 ---
 
@@ -50,7 +50,7 @@ For an ambiguous input like "smart and nice", we can't simply assume the right a
 | `generic` | A shared list of about 25 vague trait sets, written once and reused in every world |
 | `invented` | Written by hand once |
 
-Otherwise negation would be tested only on Pokémon, and we couldn't tell a negation effect apart from a Pokémon effect.
+Otherwise negation would be tested only on one world, and we couldn't tell a negation effect apart from that world's effect.
 
 ---
 
@@ -66,7 +66,7 @@ data/simulated_votes.csv  item_id, world, voter_id, group, source       # make_v
 ```
 
 - 5 traits per character, taken from the Fandom "Personality" sections. A second annotator writes traits for 10 characters per world, and we report Cohen's κ.
-- Rough size: HP 40, Divergent 25, Avatar 30, Pokémon 30 personas, invented 30 personas.
+- Rough size: HP 40, Divergent 25, Avatar 30, Game of Thrones 30, invented 30 personas.
 - Simulated panel: 39 items (20 generic, 12 conflicting, 7 clear as an attention check), 40 voters in 10 personality archetypes. Built by `make_votes.py`, logged in [DATA_LOG.md](DATA_LOG.md).
 
 ---
@@ -87,7 +87,7 @@ A chat interface (`gr.Chatbot`). You describe yourself in free text and the Hat 
 The interface also shows each word of the input colored by its occlusion importance, plus a live **certainty meter** (entropy).
 
 ### Tab 2: Multiverse (Q1 + cross-franchise)
-One input is sorted in all 5 worlds side by side. "brave, reckless" → Gryffindor / Dauntless / Valor / Fire Nation / ? (invented). This shows that BERT is consistent in the real worlds and lost in the invented one, which is the memorization finding in one picture.
+One input is sorted in all 5 worlds side by side. "brave, reckless" → Gryffindor / Dauntless / Targaryen / Fire Nation / ? (invented). This shows that BERT is consistent in the real worlds and lost in the invented one, which is the memorization finding in one picture.
 
 ### Tab 3: Beat the Hat (live game for the presentation, Q3)
 1. A QR code on the slide opens a phone-friendly page.
