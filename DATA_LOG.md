@@ -5,6 +5,32 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
 
 ---
 
+## 2026-11-18 · Group descriptions written (step 2.1)
+**Rule.** Each `data/<world>/groups.csv` description is **word for word the one-line description the human form showed**. Humans, the simulated panel and BERT's "with descriptions" variant therefore all read the same definitions. Each row was then checked against an outside source, and the supporting text is in the new `source_quote` column. ⚠️ If anyone changed a description's wording when building the Google Form, the CSV has to be updated to match.
+
+**How well each world is supported.**
+
+| World | Source | Support |
+|---|---|---|
+| Harry Potter | Wikipedia, *Hogwarts* §Houses | ✅ Strong. Every word matches or is a synonym (courage → bravery, nerve → daring, learning → love of learning, justice → fairness). |
+| Divergent | Wikipedia, *Divergent (novel)* | ✅ Strong, except Amity's "kindness", which is our addition (Wikipedia only says "peaceful"). |
+| Avatar | Iroh's speech in the official live-action series (Netflix, S2E3 transcript) | 🟡 Partial. Earth (enduring), Air (freedom, detachment, peace) and Water (change, adapting) are confirmed. **Fire's "drive, ambition, passion" and Water's "community"** come from Iroh's speech in the animated episode *Bitter Work* (2006), which **couldn't be checked online** because the Avatar wiki blocks automated access. Esther checks it by hand. |
+| Game of Thrones | Wikipedia, *World of A Song of Ice and Fire*; Dummies, *Game of Thrones list of houses* | 🟡 Interpretive. Sources confirm Stark's "honorable devotion to duty", Lannister wealth, Greyjoy raids and rebellion, and Tyrell cleverness and scheming. "Pride", "passion, boldness, ambition" (Targaryen) and "defiance, toughness, independence" (Greyjoy) are **our reading of each house's reputation**, not quoted traits. Fardin checks them. Mottos were deliberately left out ("Fire and Blood" would be a literal fire cue). |
+| Invented | Our own definitions | Control world, no outside source. |
+
+**For the report:** HP and Divergent descriptions are sourced. GoT and part of Avatar are our paraphrase of a reputation. Say so in Data/Limitations.
+
+**Checked in code:** all 5 files load with `sorter.load_descriptions`, and every method runs in the "with descriptions" variant for every world.
+
+---
+
+## 2026-11-18 · World owners assigned
+- **Harry Potter → Ana**, **Divergent → Thais**, **Game of Thrones → Fardin**, **Avatar → Esther** (Esther also reviews the Avatar shortcut pairs).
+- **Invented world → Esther** (approves the personas).
+- Each owner works only inside their world's folder (`data/<world>/`). Owners are listed in each folder's README and in IMPLEMENTATION.md.
+
+---
+
 ## 2026-11-18 · Short human form is live after all
 **Decision.** Alongside the simulated panel, we're running a **short real form** (about 3 minutes) so the panel can be checked against real people.
 - **Items (25):** the 20 generic items of `vote_items.csv` (3 per world, 8 for HP) plus 1 clear item per world as an attention check (`k01-hp`, `k01-div`, `k01-got`, `k01-ava`, `k01-inv`). Same wording as `vote_items.csv`. Conflicting items are not included.
@@ -13,6 +39,7 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
 - **Target:** about 35 responses, so about 30 remain after the filter. 10 is the useful minimum for checking the panel.
 - **Analysis plan:** humans vs. panel vs. BERT on the same items. Report a **human split-half floor**: split respondents randomly in two, compute the JSD between the halves, and repeat about 1,000 times. That gives the distance expected between humans themselves.
 - Responses will be linked to a Google Sheet and exported to `data/human_votes.csv` (`source=human`).
+- The full form text (settings, description, sections, attention key, id mapping) is in [forms/human_votes_form.md](forms/human_votes_form.md).
 
 ---
 

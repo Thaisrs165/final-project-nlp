@@ -1,1 +1,5 @@
-group,description,source_url
+group,description,source_url,source_quote
+gryffindor,"bravery, daring",https://en.wikipedia.org/wiki/Hogwarts#Houses,"Gryffindor values courage, nerve, and chivalry."
+ravenclaw,"intelligence, wisdom, love of learning",https://en.wikipedia.org/wiki/Hogwarts#Houses,"Ravenclaw values intelligence, learning, wisdom, and wit."
+hufflepuff,"loyalty, hard work, fairness",https://en.wikipedia.org/wiki/Hogwarts#Houses,"Hufflepuff values hard work, patience, justice, and loyalty."
+slytherin,"ambition, cunning, resourcefulness",https://en.wikipedia.org/wiki/Hogwarts#Houses,"Slytherin values ambition, cunning, leadership, and resourcefulness."

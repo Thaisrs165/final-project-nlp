@@ -1,6 +1,6 @@
 # Game of Thrones
 
-**Owner:** _TBD (fill in)_
+**Owner:** Fardin
 **Groups:** Stark, Lannister, Targaryen, Greyjoy, Tyrell (ids: `stark`, `lannister`, `targaryen`, `greyjoy`, `tyrell`, matching `sorter.WORLDS["got"]` and `app/worlds.json`)
 
 Steps 2.1–2.2 of [IMPLEMENTATION.md](../../IMPLEMENTATION.md). Work only inside this folder. Shared files (`vote_items.csv`, `generic.csv`, the simulated panel) live in `data/` and are not edited here.
@@ -12,7 +12,7 @@ It replaced Pokémon GO on 2026-11-18 (see [DATA_LOG.md](../../DATA_LOG.md)). Th
 ## Files to produce
 | File | Columns |
 |---|---|
-| `groups.csv` | `group, description, source_url` (paraphrase the house's words and reputation) |
+| `groups.csv` | `group, description, source_url, source_quote` (paraphrase the house's words and reputation) |
 | `tests.csv` | `id, test_type, name, traits, gold_group, source_url, trait_evidence` (`test_type = canonical` for hand-made rows; step 4 appends the generated rows) |
 
 ## Target
@@ -24,7 +24,7 @@ It replaced Pokémon GO on 2026-11-18 (see [DATA_LOG.md](../../DATA_LOG.md)). Th
 - Theon Greyjoy (raised by the Starks) stays as Greyjoy. He's a useful ambiguous case for the analysis.
 
 ## Checklist
-- [ ] `groups.csv`: one row per house, paraphrased description plus source URL
+- [x] `groups.csv`: one row per house, paraphrased description plus source URL (2026-11-18)
 - [ ] Owner checked the descriptions against the sources
 - [ ] `tests.csv`: canonical rows, each with `gold_group` and `source_url`
 - [ ] 5 traits per row, only adjectives that literally appear in the source; the sentence goes in `trait_evidence`

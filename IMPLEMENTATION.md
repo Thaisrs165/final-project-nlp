@@ -15,7 +15,7 @@ Steps 2 and 3 can run in parallel. Step 8's front end can start alongside them i
 | Step | State | Notes |
 |---|---|---|
 | 1. Setup | ✅ done | venv, pinned requirements, folder layout |
-| 2. Data | 🟡 in progress | Per-world folders exist (headers only). HP owned by Ana; Divergent, GoT, Avatar and Invented still have no owner. Simulated panel done. **Short human form (25 items) is live**, collecting responses. |
+| 2. Data | 🟡 in progress | Per-world folders exist. **2.1 group descriptions written for all 5 worlds** (owners still to check). Owners: HP Ana, Divergent Thais, GoT Fardin, Avatar Esther, Invented Esther. Simulated panel done. **Short human form (25 items) is live**, collecting responses. |
 | 3. `sorter.py` | ✅ done | 4 methods, with and without descriptions, PLL-word-l2r, calibration, occlusion. **31/31 tests pass**; one MLM call takes about 0.1 s on the Mac GPU. |
 | 4. `make_tests.py` | ⏳ waiting | Needs the canonical rows from step 2.2. |
 | 5–6. Experiments, analysis | ⏳ waiting | Need steps 2 and 4. |
@@ -23,12 +23,11 @@ Steps 2 and 3 can run in parallel. Step 8's front end can start alongside them i
 | 9–10. Report, presentation | ⏳ not started | |
 
 **Waiting on people (🛑):**
-- Assign owners for Divergent, GoT, Avatar and Invented.
+- Each owner checks their world's `data/<world>/groups.csv` against the `source_quote` column (about 10 min). GoT and Avatar need the most attention: see DATA_LOG.md.
 - Form: send the reminder 2–3 days after launch. When responses arrive, link them to a Google Sheet and share the link so `data/human_votes.csv` can be built.
 - Review the simulated panel's assumptions (step 2.6).
 
 **Next for Claude, once approved:**
-- 2.1 group descriptions for all 5 worlds. Everything "with descriptions" needs them.
 - 2.4 invented personas (word pieces already recorded: Veltrin `ve·lt·rin`, Osmark `os·mark`, Calwen `cal·wen`, Durrask `du·rra·sk`; the web check that the names aren't real brands or places is still to do).
 - 2.5 `generic.csv` built from `vote_items.csv`.
 - A script that reads the form responses (attention filter, human split-half floor, humans vs. panel).
@@ -52,7 +51,7 @@ Steps 2 and 3 can run in parallel. Step 8's front end can start alongside them i
 | Step 2.1 | Check the group descriptions against their sources | each world's owner | 10 min/world |
 | Step 2.2 | Trait check: mark each extracted trait ✓/✗ in the Google Sheet | each world's owner | ~1 h/world |
 | Step 2.3 | Sort 20 unnamed trait sets per world, independently | 2 people | 30 min each |
-| Step 2.4 | Approve the invented-world personas | Member 4 | 20 min |
+| Step 2.4 | Approve the invented-world personas | Esther | 20 min |
 | Step 8 | Decide Node vs. Gradio and the hosting; approve the quiz keys | team | 30 min meeting |
 | Step 8 | Create the hosting account or Space, if we host online (needs your login) | 1 person | 15 min |
 | Step 9 | Write the report text (one paragraph each); Claude only formats it and checks the page limit | everyone | ~4 days |
@@ -97,13 +96,13 @@ Each teammate builds steps 2.1–2.2 for **their own world, inside its own folde
 | World | Folder | Owner |
 |---|---|---|
 | Harry Potter | [data/hp/](data/hp/) | Ana |
-| Divergent | [data/divergent/](data/divergent/) | _TBD_ |
-| Game of Thrones | [data/got/](data/got/) | _TBD_ |
-| Avatar | [data/avatar/](data/avatar/) | _TBD_ (Member 3 reviews the shortcut pairs) |
-| Invented | [data/invented/](data/invented/) | _TBD_ (Member 4 approves the personas) |
+| Divergent | [data/divergent/](data/divergent/) | Thais |
+| Game of Thrones | [data/got/](data/got/) | Fardin |
+| Avatar | [data/avatar/](data/avatar/) | Esther (also reviews the shortcut pairs) |
+| Invented | [data/invented/](data/invented/) | Esther (approves the personas) |
 
-### 2.1 Group descriptions: `data/<world>/groups.csv`
-Columns: `group, description, source_url`
+### 2.1 Group descriptions: `data/<world>/groups.csv` ✅ written 2026-11-18 (owner check pending)
+Columns: `group, description, source_url, source_quote`
 - 🤖 For each of the 5 worlds, find the official description of each group and write a short paraphrase with the source URL. Sources: the Wizarding World site and the Sorting Hat songs; the Divergent faction manifestos; each Game of Thrones house's words and reputation (Fandom / A Wiki of Ice and Fire); the Avatar nations' cultural values. The invented world uses the descriptions we write ourselves.
 - 🙋 The world's owner checks that the descriptions match the source (about 10 min per world).
 
@@ -134,11 +133,11 @@ Comparing two people's free-text trait lists with κ doesn't really work. Instea
 ### 2.4 Invented world: `data/invented/groups.csv`, `data/invented/tests.csv`
 - 🤖 Check how BERT splits Veltrin, Osmark, Calwen and Durrask into word pieces and record the counts. Search each name to make sure it isn't a real brand or place, and propose replacements if any is.
 - 🤖 Write 30 personas (about 7–8 per house). Use **synonyms** of the house descriptions, not the same words (for example, "never rushes" for *patient*), so BERT can't win by matching identical words.
-- 🙋 Member 4 reviews the personas and approves them.
+- 🙋 Esther reviews the personas and approves them.
 
 ### 2.5 Shared test inputs
 - 🤖 `data/generic.csv`: 25 vague trait sets ("smart, nice", "funny, a good friend").
-- 🤖 Avatar shortcut pairs: element-flavored vs. neutral wording (Member 3 reviews them).
+- 🤖 Avatar shortcut pairs: element-flavored vs. neutral wording (Esther reviews them).
 - Everything else (no_name, name_swap, negation, conflicting) is generated by the script in step 4.
 
 ### 2.6 Reference votes: simulated panel ✅ done 2026-11-18

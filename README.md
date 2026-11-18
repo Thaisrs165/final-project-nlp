@@ -6,6 +6,7 @@ Does a frozen BERT sort people into groups (Hogwarts houses, Divergent factionsâ
 - Step-by-step build plan: [IMPLEMENTATION.md](IMPLEMENTATION.md)
 - Literature: [RELATED_WORK.md](RELATED_WORK.md) Â· [references.bib](references.bib)
 - Data decisions and the simulated voter panel: [DATA_LOG.md](DATA_LOG.md)
+- Human-votes form (live version): [forms/human_votes_form.md](forms/human_votes_form.md)
 
 ## Setup
 
@@ -34,5 +35,6 @@ make_votes.py  builds the simulated voter panel (replaces the human-votes form)
 notebooks/   analysis, one per research question
 results/     outputs: all.csv, tables, figures
 tests/       pytest for sorter.py
+forms/       text of the live human-votes form
 app/         interface (step 8, not built yet)
 ```
