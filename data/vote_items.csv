@@ -1,0 +1,40 @@
+item_id,world,item_type,traits,expected
+g01-hp,hp,generic,smart; nice,
+g02-hp,hp,generic,funny; kind,
+g03-hp,hp,generic,easygoing; polite,
+g04-hp,hp,generic,quiet; friendly,
+g05-hp,hp,generic,creative; talkative,
+g06-hp,hp,generic,sensible; cheerful,
+g07-hp,hp,generic,a good listener; loves music,
+g08-hp,hp,generic,confident; caring,
+c01-hp,hp,conflicting,brave; ambitious,gryffindor|slytherin
+c02-hp,hp,conflicting,curious; loyal,ravenclaw|hufflepuff
+c03-hp,hp,conflicting,daring; studious,gryffindor|ravenclaw
+c04-hp,hp,conflicting,cunning; kind,slytherin|hufflepuff
+k01-hp,hp,clear,witty; bookish; original,ravenclaw
+k02-hp,hp,clear,patient; fair; hardworking,hufflepuff
+k03-hp,hp,clear,shrewd; power-hungry; proud,slytherin
+g01-div,divergent,generic,smart; nice,
+g02-div,divergent,generic,funny; kind,
+g03-div,divergent,generic,easygoing; polite,
+c01-div,divergent,conflicting,brave; selfless,dauntless|abnegation
+c02-div,divergent,conflicting,honest; intelligent,candor|erudite
+k01-div,divergent,clear,"always tells the truth, even when it hurts",candor
+g01-pkm,pokemon,generic,smart; nice,
+g02-pkm,pokemon,generic,funny; kind,
+g03-pkm,pokemon,generic,easygoing; polite,
+c01-pkm,pokemon,conflicting,passionate; calm,valor|mystic
+c02-pkm,pokemon,conflicting,analytical; impulsive,mystic|instinct
+k01-pkm,pokemon,clear,trains hard; loves a challenge,valor
+g01-ava,avatar,generic,smart; nice,
+g02-ava,avatar,generic,funny; kind,
+g03-ava,avatar,generic,easygoing; polite,
+c01-ava,avatar,conflicting,ambitious; adaptable,fire|water
+c02-ava,avatar,conflicting,stubborn; free-spirited,earth|air
+k01-ava,avatar,clear,never gives up; can endure anything,earth
+g01-inv,invented,generic,smart; nice,
+g02-inv,invented,generic,funny; kind,
+g03-inv,invented,generic,easygoing; polite,
+c01-inv,invented,conflicting,never rushes; loves doing things on a whim,veltrin|calwen
+c02-inv,invented,conflicting,generous with friends; hates to lose,osmark|durrask
+k01-inv,invented,clear,watches carefully for a long time before acting,veltrin

@@ -20,13 +20,11 @@ Steps 2 and 3 can run in parallel. Step 8's front end can start alongside them i
 
 | When | What | Who | Time |
 |---|---|---|---|
-| Step 2.6 (do first) | Paste [forms/human_votes_form.md](forms/human_votes_form.md) into Google Forms and apply its settings checklist | 1 person | 20 min |
-| Step 2.6 | Send the form link to the class; chase until there are ≥ 30 responses | everyone | spread over 1–2 weeks |
+| Step 2.6 | Review the simulated panel's assumptions in [DATA_LOG.md](DATA_LOG.md) (main-character groups, trait vectors) | 1 person | 20 min |
 | Step 2.1 | Check the group descriptions against their sources | each world's owner | 10 min/world |
 | Step 2.2 | Trait check: mark each extracted trait ✓/✗ in the Google Sheet | each world's owner | ~1 h/world |
 | Step 2.3 | Sort 20 unnamed trait sets per world, independently | 2 people | 30 min each |
 | Step 2.4 | Approve the invented-world personas | Member 4 | 20 min |
-| Step 2.6 | Link the form responses to a Google Sheet | 1 person | 2 min |
 | Step 8 | Decide Node vs. Gradio and the hosting; approve the quiz keys | team | 30 min meeting |
 | Step 8 | Create the hosting account or Space, if we host online (needs your login) | 1 person | 15 min |
 | Step 9 | Write the report text (one paragraph each); Claude only formats it and checks the page limit | everyone | ~4 days |
@@ -38,7 +36,12 @@ Steps 2 and 3 can run in parallel. Step 8's front end can start alongside them i
 
 ```
 final-project-nlp/
-├── data/            # CSVs (step 2)
+├── data/            # shared CSVs (vote items, simulated panel, generic.csv)
+│   ├── hp/          # one folder per world: groups.csv, tests.csv, README.md
+│   ├── divergent/
+│   ├── pokemon/
+│   ├── avatar/
+│   └── invented/
 ├── sorter.py        # the ONLY place methods live (step 3)
 ├── make_tests.py    # generates the automatic test sets (step 4)
 ├── run_experiments.py
@@ -48,7 +51,7 @@ final-project-nlp/
 ├── tests/           # pytest for sorter.py
 └── app/             # Node interface (step 8)
 ```
-- [x] Python 3.11+ venv, plus a `requirements.txt` with: `torch transformers sentence-transformers scikit-learn scipy pandas numpy umap-learn matplotlib fastapi uvicorn pytest`
+- [x] Python 3.11+ venv (recreated 2026-11-18 with Python 3.12.11, see [DATA_LOG.md](DATA_LOG.md)), plus a `requirements.txt` with: `torch transformers sentence-transformers scikit-learn scipy pandas numpy umap-learn matplotlib fastapi uvicorn pytest`
 - [x] Node 18 or newer (no npm packages needed)
 - [x] Pin the model names in one place: `bert-base-uncased`, `sentence-transformers/all-MiniLM-L6-v2`, `facebook/bart-large-mnli`
 
@@ -60,12 +63,23 @@ final-project-nlp/
 
 Legend: 🤖 = Claude does it (web search plus writing the files) · 🙋 = a team member has to do it · 🛑 = Claude stops and tells you before going on.
 
-### 2.1 Group descriptions: `data/<world>_groups.csv`
+### Who owns which world (decided 2026-11-18)
+Each teammate builds steps 2.1–2.2 for **their own world, inside its own folder**, so nobody edits the same file. Each folder's `README.md` has the target size, gold-label rules and a checklist. Shared files stay in `data/` and every test type still runs on every world (PLAN.md §3).
+
+| World | Folder | Owner |
+|---|---|---|
+| Harry Potter | [data/hp/](data/hp/) | Ana |
+| Divergent | [data/divergent/](data/divergent/) | _TBD_ |
+| Pokémon GO | [data/pokemon/](data/pokemon/) | _TBD_ |
+| Avatar | [data/avatar/](data/avatar/) | _TBD_ (Member 3 reviews the shortcut pairs) |
+| Invented | [data/invented/](data/invented/) | _TBD_ (Member 4 approves the personas) |
+
+### 2.1 Group descriptions: `data/<world>/groups.csv`
 Columns: `group, description, source_url`
 - 🤖 For each of the 5 worlds, find the official description of each group and write a short paraphrase with the source URL. Sources: the Wizarding World site and the Sorting Hat songs; the Divergent faction manifestos; the Pokémon GO team leaders' statements; the Avatar nations' cultural values. The invented world uses the descriptions we write ourselves.
 - 🙋 The world's owner checks that the descriptions match the source (about 10 min per world).
 
-### 2.2 Canonical characters: `data/<world>_tests.csv`
+### 2.2 Canonical characters: `data/<world>/tests.csv`
 Columns: `id, test_type, name, traits, gold_group, source_url, trait_evidence`
 
 | World | Target | Gold label must come from |
@@ -89,7 +103,7 @@ Comparing two people's free-text trait lists with κ doesn't really work. Instea
   - **Human accuracy:** how well a person sorts from traits alone. This is a human baseline for Table 1.
   - **Cohen's κ** between the two people: whether the traits are informative enough for humans to agree.
 
-### 2.4 Invented world: `data/invented_groups.csv`, `data/invented_tests.csv`
+### 2.4 Invented world: `data/invented/groups.csv`, `data/invented/tests.csv`
 - 🤖 Check how BERT splits Veltrin, Osmark, Calwen and Durrask into word pieces and record the counts. Search each name to make sure it isn't a real brand or place, and propose replacements if any is.
 - 🤖 Write 30 personas (about 7–8 per house). Use **synonyms** of the house descriptions, not the same words (for example, "never rushes" for *patient*), so BERT can't win by matching identical words.
 - 🙋 Member 4 reviews the personas and approves them.
@@ -99,18 +113,18 @@ Comparing two people's free-text trait lists with κ doesn't really work. Instea
 - 🤖 Avatar shortcut pairs: element-flavored vs. neutral wording (Member 3 reviews them).
 - Everything else (no_name, name_swap, negation, conflicting) is generated by the script in step 4.
 
-### 2.6 Human votes form: `data/human_votes.csv`
-- 🤖 ✅ The questions, options and form settings are written in [forms/human_votes_form.md](forms/human_votes_form.md). There are 39 sorting items across 5 worlds (generic, conflicting and clear), a familiarity grid, and an answer key that stays with us.
-- 🛑 **Checkpoint: build the form.** One person pastes the questions into Google Forms and applies the settings checklist at the top of that file (about 20 min).
-- 🛑 **Checkpoint: send the form** to the class (WhatsApp, Slack, etc.). Target at least 30 responses. **Do this in week 1**, because it's the slowest step of the whole project.
-- 🛑 **Checkpoint: link the responses** to a Google Sheet (Responses → Link to Sheets). Then 🤖 Claude reads it through the Sheets connector and writes `data/human_votes.csv`.
+### 2.6 Reference votes: simulated panel ✅ done 2026-11-18
+The Google Form was dropped (not enough time or respondents). Its 39 items are kept in `data/vote_items.csv`.
+- 🤖 ✅ `make_votes.py` builds 40 simulated voters in 10 personality archetypes and writes `data/voter_personas.csv` and `data/simulated_votes.csv` (1,560 votes, `source=simulated`). Run: `.venv/bin/python make_votes.py`.
+- 🤖 ✅ Attention rule applied as planned (drop voters with ≥ 2 of 7 clear items wrong): 35 voters remain.
+- 🛑 **Checkpoint: review the assumptions** listed in [DATA_LOG.md](DATA_LOG.md). If anything is tuned, log it there **before** BERT's results exist.
 
 **Done when:**
 - every CSV loads with `pandas`;
 - no canonical row is missing `gold_group` or `source_url`;
 - the trait check is finished;
 - κ and human accuracy are computed;
-- the form has at least 30 responses.
+- the simulated panel is generated and its assumptions reviewed.
 
 ## Step 3: `sorter.py` (2–3 days, written together on day 1–2)
 
@@ -159,7 +173,7 @@ This also cancels the length penalty for long names. Report both `raw_probs` and
 
 ## Step 4: `make_tests.py` (1 day)
 
-Reads canonical rows and writes generated rows back to `data/<world>_tests.csv`, with an `origin_id` column linking each to its source row.
+Reads canonical rows and writes generated rows back to `data/<world>/tests.csv`, with an `origin_id` column linking each to its source row.
 
 | test_type | Rule |
 |---|---|
@@ -195,7 +209,7 @@ world, id, origin_id, test_type, method, template, gold, pred, probs_json, raw_p
 |---|---|---|---|
 | `q1_correctness.ipynb` | M4 | Accuracy and macro-F1 per world × method, with bootstrap 95% CIs (1,000 resamples), against chance. **Real worlds vs. invented world.** | Table 1 |
 | `q2_traits.ipynb` | M1 | canonical vs. no_name vs. name_swap (McNemar on paired rows); the share of name_swap predictions that follow the name; whether the top occlusion trait is the one we expected | Table 1 (rows) |
-| `q3_ambiguity.ipynb` | M2 + M3 | Entropy for generic/conflicting vs. canonical (Wilcoxon); **JSD between BERT and human votes**; Baan et al.'s human-entropy calibration error; negation flip rate and total variation; conflicting split mass on A∪B | Figure 1 |
+| `q3_ambiguity.ipynb` | M2 + M3 | Entropy for generic/conflicting vs. canonical (Wilcoxon); **JSD between BERT and the simulated panel**; Baan et al.'s entropy calibration error (against the panel); negation flip rate and total variation; conflicting split mass on A∪B | Figure 1 |
 | `clustering.ipynb` | whoever finishes first | ARI/NMI of KMeans on the embeddings vs. true groups; UMAP plot | Appendix |
 
 **Done when:** each notebook ends with a 5-line plain-language answer to its question.

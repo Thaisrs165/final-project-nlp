@@ -12,7 +12,7 @@ MLM_MODEL = "bert-base-uncased"                         # main subject of the st
 EMBED_MODEL = "sentence-transformers/all-MiniLM-L6-v2"   # Sentence-BERT similarity
 NLI_MODEL = "facebook/bart-large-mnli"                  # zero-shot NLI baseline
 
-# ---- Worlds and their group ids (must match data/<world>_groups.csv) ---------
+# ---- Worlds and their group ids (must match data/<world>/groups.csv) ---------
 WORLDS = {
     "hp": ["gryffindor", "ravenclaw", "hufflepuff", "slytherin"],
     "divergent": ["abnegation", "amity", "candor", "dauntless", "erudite"],

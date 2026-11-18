@@ -1,0 +1,41 @@
+voter_id,archetype,description,O,C,E,A,N,fam_hp,fam_divergent,fam_pokemon,fam_avatar,beta,noise,first_trait_weight,projection,fan_bias,home_hp,home_divergent,home_pokemon,home_avatar,home_invented
+v01,bookworm,"Introverted reader; reads every word, knows HP well",4.6,4.0,1.4,3.2,3.5,2,2,0,1,7.06,0.01,1.0,0.51,0.36,ravenclaw,erudite,mystic,earth,veltrin
+v02,bookworm,"Introverted reader; reads every word, knows HP well",4.6,4.5,1.3,3.6,3.6,1,1,1,0,7.31,0.03,1.0,0.55,0.33,ravenclaw,erudite,mystic,earth,veltrin
+v03,bookworm,"Introverted reader; reads every word, knows HP well",4.8,4.6,2.2,3.7,3.1,2,0,1,2,8.24,0.03,1.0,0.85,0.31,ravenclaw,erudite,mystic,earth,veltrin
+v04,bookworm,"Introverted reader; reads every word, knows HP well",4.2,4.3,1.1,3.2,2.2,2,1,1,0,7.42,0.02,1.0,0.82,0.48,ravenclaw,erudite,mystic,earth,veltrin
+v05,social_butterfly,"Outgoing and warm; answers fast, sees the best in people",3.2,3.5,4.2,4.4,3.0,2,1,1,2,5.55,0.05,1.21,1.82,0.45,hufflepuff,abnegation,valor,water,osmark
+v06,social_butterfly,"Outgoing and warm; answers fast, sees the best in people",3.2,3.9,4.9,4.3,2.7,1,2,1,0,4.49,0.06,1.25,2.08,0.58,hufflepuff,dauntless,valor,water,osmark
+v07,social_butterfly,"Outgoing and warm; answers fast, sees the best in people",3.4,2.4,5.0,4.5,2.1,0,0,1,2,4.84,0.04,1.28,2.5,0.51,gryffindor,dauntless,valor,water,osmark
+v08,social_butterfly,"Outgoing and warm; answers fast, sees the best in people",4.0,3.7,4.0,4.7,2.7,2,0,1,0,4.87,0.05,1.39,2.38,0.45,hufflepuff,abnegation,mystic,water,osmark
+v09,social_butterfly,"Outgoing and warm; answers fast, sees the best in people",3.5,2.4,4.9,4.9,2.3,2,1,0,2,5.08,0.06,1.31,1.5,0.46,gryffindor,abnegation,instinct,water,osmark
+v10,competitor,"Athlete and gamer; values winning, plays Pokemon GO",2.0,4.9,4.9,2.7,2.0,0,2,2,0,5.97,0.02,1.08,1.88,0.74,gryffindor,dauntless,valor,fire,durrask
+v11,competitor,"Athlete and gamer; values winning, plays Pokemon GO",2.7,4.5,4.3,2.8,2.1,1,1,2,0,5.62,0.04,1.06,1.72,0.86,gryffindor,dauntless,valor,fire,durrask
+v12,competitor,"Athlete and gamer; values winning, plays Pokemon GO",2.2,4.2,4.3,2.4,1.8,1,0,2,0,6.81,0.04,1.01,1.62,0.9,gryffindor,dauntless,valor,fire,durrask
+v13,competitor,"Athlete and gamer; values winning, plays Pokemon GO",2.3,4.1,4.9,2.4,2.2,2,1,1,0,5.86,0.03,1.05,1.86,0.9,gryffindor,dauntless,valor,fire,durrask
+v14,newcomer,Knows none of the franchises; relies on the one-line descriptions,4.5,1.8,2.7,2.5,4.1,0,0,0,0,2.42,0.07,1.48,0.98,0.0,ravenclaw,erudite,instinct,air,calwen
+v15,newcomer,Knows none of the franchises; relies on the one-line descriptions,3.2,1.7,4.5,4.0,4.4,1,1,0,0,2.32,0.08,1.31,0.95,0.0,ravenclaw,abnegation,instinct,water,osmark
+v16,newcomer,Knows none of the franchises; relies on the one-line descriptions,2.3,3.9,2.9,2.8,4.4,1,0,0,0,2.45,0.1,1.42,1.02,0.0,hufflepuff,candor,valor,earth,durrask
+v17,newcomer,Knows none of the franchises; relies on the one-line descriptions,1.7,3.3,3.0,4.1,2.0,1,0,0,0,3.01,0.07,1.32,1.16,0.0,hufflepuff,amity,valor,earth,osmark
+v18,newcomer,Knows none of the franchises; relies on the one-line descriptions,3.3,3.4,2.8,3.3,3.1,1,0,0,0,2.59,0.09,1.36,0.93,0.0,hufflepuff,erudite,mystic,earth,veltrin
+v19,superfan,Knows every franchise in depth; leans on canon and main characters,4.1,3.2,4.0,4.0,2.1,2,2,2,2,7.76,0.01,1.0,0.63,1.62,gryffindor,dauntless,mystic,water,osmark
+v20,superfan,Knows every franchise in depth; leans on canon and main characters,4.6,4.0,3.7,3.0,3.2,2,2,2,2,6.23,0.01,1.0,0.41,1.56,ravenclaw,erudite,valor,earth,durrask
+v21,superfan,Knows every franchise in depth; leans on canon and main characters,4.7,2.8,3.6,3.3,2.7,2,2,2,2,6.55,0.01,1.0,0.55,1.36,ravenclaw,erudite,instinct,air,calwen
+v22,superfan,Knows every franchise in depth; leans on canon and main characters,4.7,3.3,3.4,3.0,2.1,2,2,2,2,7.17,0.01,1.0,0.42,1.74,ravenclaw,erudite,mystic,air,calwen
+v23,rushed_clicker,Inattentive; clicks almost at random (should fail the attention check),3.9,1.9,4.2,2.1,2.2,1,1,2,1,1.62,0.53,1.96,0.43,0.29,gryffindor,dauntless,instinct,air,calwen
+v24,rushed_clicker,Inattentive; clicks almost at random (should fail the attention check),3.9,1.9,1.6,3.7,2.5,2,1,2,2,1.27,0.66,1.55,0.44,0.26,ravenclaw,amity,instinct,air,calwen
+v25,rushed_clicker,Inattentive; clicks almost at random (should fail the attention check),2.2,1.8,2.9,2.4,3.9,1,0,0,0,1.86,0.69,1.64,0.32,0.12,slytherin,candor,instinct,air,calwen
+v26,contrarian,Avoids the obvious pick; distrusts the 'hero' group,5.0,2.8,3.9,1.1,4.0,1,2,0,0,5.87,0.03,1.0,1.3,-1.24,ravenclaw,erudite,instinct,fire,calwen
+v27,contrarian,Avoids the obvious pick; distrusts the 'hero' group,4.4,2.9,2.9,1.7,2.5,2,1,1,1,6.34,0.03,1.0,1.33,-1.33,ravenclaw,erudite,mystic,air,calwen
+v28,contrarian,Avoids the obvious pick; distrusts the 'hero' group,4.3,3.3,3.6,1.3,3.0,1,0,0,0,5.84,0.04,1.0,1.45,-1.19,slytherin,erudite,valor,fire,durrask
+v29,careful_worrier,"Anxious and conscientious; reads to the end, weighs the last trait",3.0,4.5,1.5,3.8,4.4,2,1,1,1,7.43,0.01,0.88,1.12,0.33,hufflepuff,abnegation,mystic,earth,durrask
+v30,careful_worrier,"Anxious and conscientious; reads to the end, weighs the last trait",2.6,4.5,2.4,3.8,4.8,2,1,0,0,7.05,0.01,0.8,1.14,0.31,hufflepuff,abnegation,valor,earth,durrask
+v31,careful_worrier,"Anxious and conscientious; reads to the end, weighs the last trait",3.1,4.6,1.8,4.2,4.5,1,1,0,2,8.54,0.01,0.79,0.87,0.49,hufflepuff,abnegation,mystic,earth,osmark
+v32,careful_worrier,"Anxious and conscientious; reads to the end, weighs the last trait",3.3,4.1,1.9,4.3,4.5,2,1,2,1,8.9,0.02,0.82,1.09,0.4,hufflepuff,abnegation,mystic,earth,osmark
+v33,free_spirit,"Artsy and spontaneous; low structure, projects curiosity",4.9,1.5,4.3,3.7,3.0,1,0,1,2,5.04,0.06,1.15,1.85,0.29,ravenclaw,erudite,instinct,air,calwen
+v34,free_spirit,"Artsy and spontaneous; low structure, projects curiosity",4.6,1.3,3.8,3.1,2.7,2,1,0,1,5.09,0.06,1.14,2.09,0.47,ravenclaw,erudite,instinct,air,calwen
+v35,free_spirit,"Artsy and spontaneous; low structure, projects curiosity",4.8,1.7,4.3,3.8,2.9,0,0,2,2,5.91,0.06,1.25,2.18,0.38,ravenclaw,erudite,instinct,air,calwen
+v36,free_spirit,"Artsy and spontaneous; low structure, projects curiosity",4.6,1.2,3.7,3.0,2.8,2,0,0,1,4.26,0.06,1.11,2.08,0.37,ravenclaw,erudite,instinct,air,calwen
+v37,caregiver,Gentle and selfless; projects warmth onto vague people,3.0,4.1,2.2,4.7,2.6,1,0,1,2,5.76,0.04,1.0,1.98,0.32,hufflepuff,abnegation,mystic,earth,osmark
+v38,caregiver,Gentle and selfless; projects warmth onto vague people,3.0,4.0,3.5,4.7,3.2,2,1,2,2,5.4,0.02,1.0,1.89,0.5,hufflepuff,abnegation,valor,earth,osmark
+v39,caregiver,Gentle and selfless; projects warmth onto vague people,3.6,3.7,3.0,4.9,2.7,2,1,0,2,6.93,0.02,1.0,2.02,0.5,hufflepuff,abnegation,mystic,water,osmark
+v40,caregiver,Gentle and selfless; projects warmth onto vague people,4.0,3.9,3.1,4.5,3.2,2,0,2,2,6.2,0.02,1.0,2.35,0.4,hufflepuff,abnegation,mystic,water,osmark

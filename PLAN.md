@@ -13,13 +13,13 @@ We use fictional sorting systems (HP, Divergent, Pokémon GO, Avatar, and one in
 |---|---|---|---|---|
 | Q1 | *Is BERT answering correctly?* | Canonical characters, real franchises vs. **invented world** | Accuracy / macro-F1 vs. chance, bootstrap 95% CI | LAMA probing (Petroni 2019) |
 | Q2 | *Is it looking at the traits we expected?* | (a) name kept / removed / swapped; (b) leave-one-trait-out occlusion | Accuracy drop and McNemar test; % of cases where the most influential trait is the one we expected | Jain & Wallace 2019 (why occlusion and not attention) |
-| Q3 | *How does it resolve ambiguity?* | generic, conflicting, and negated inputs, compared with **human votes on the same inputs** | Entropy; Jensen–Shannon divergence between BERT's and humans' distributions; negation flip rate | Ettinger 2020, Kassner & Schütze 2020 (negation); ChaosNLI (Nie et al. 2020) and Pavlick & Kwiatkowski 2019 (human disagreement) |
+| Q3 | *How does it resolve ambiguity?* | generic, conflicting, and negated inputs, compared with **a simulated, personality-diverse voter panel on the same inputs** | Entropy; Jensen–Shannon divergence between BERT's and the panel's distributions; negation flip rate | Ettinger 2020, Kassner & Schütze 2020 (negation); ChaosNLI (Nie et al. 2020) and Pavlick & Kwiatkowski 2019 (human disagreement) |
 
-**New piece compared with the earlier plan: human votes as the reference for ambiguity.**
-For an ambiguous input like "smart and nice", we can't simply assume the right answer is a uniform split. So we ask about 30 classmates to sort the same ambiguous inputs using a Google Form. The human vote distribution becomes the gold standard: a good model is uncertain in the same places people are. This follows ChaosNLI, and it turns Q3 from a matter of opinion into something we can measure. It is also the part of the project that makes it unique.
+**New piece compared with the earlier plan: a reference distribution for ambiguity.**
+For an ambiguous input like "smart and nice", we can't simply assume the right answer is a uniform split. The original plan was a Google Form answered by about 30 classmates, following ChaosNLI. **Changed 2026-11-18:** there wasn't time or enough respondents, so `make_votes.py` builds a **simulated panel of 40 voters** with distinct personalities (Big Five profile, franchise familiarity, reading style, self-projection, fan bias) who answer the same 39 items. The panel's vote split is the reference: a good model is uncertain where the panel is. **It is not human data**, and the report must say so and list it as a limitation. Details and assumptions: [DATA_LOG.md](DATA_LOG.md).
 
 **Measurable objective (for the report):**
-> The project succeeds if we report, with 95% CIs: (1) the accuracy gap between real franchises and the invented-world control; (2) the JSD between BERT's and humans' distributions on ambiguous inputs, compared with the canonical ones; and (3) BERT's negation flip rate, compared with Ettinger (2020).
+> The project succeeds if we report, with 95% CIs: (1) the accuracy gap between real franchises and the invented-world control; (2) the JSD between BERT's and the simulated panel's distributions on ambiguous inputs, compared with the canonical ones; and (3) BERT's negation flip rate, compared with Ettinger (2020).
 
 ---
 
@@ -57,15 +57,17 @@ Otherwise negation would be tested only on Pokémon, and we couldn't tell a nega
 ## 4. Data (minimum viable)
 
 ```
-data/<world>_groups.csv   group, official_description
-data/<world>_tests.csv    id, test_type, name, traits, gold_group, source
+data/<world>/groups.csv   group, description, source_url    # one folder per world, one owner each
+data/<world>/tests.csv    id, test_type, name, traits, gold_group, source_url, trait_evidence
 data/generic.csv          id, traits                     # shared across worlds
-data/human_votes.csv      item_id, world, voter_id, group # from the Google Form
+data/vote_items.csv       item_id, world, item_type, traits, expected  # the 39 items
+data/voter_personas.csv   one row per simulated voter                  # make_votes.py
+data/simulated_votes.csv  item_id, world, voter_id, group, source       # make_votes.py
 ```
 
 - 5 traits per character, taken from the Fandom "Personality" sections. A second annotator writes traits for 10 characters per world, and we report Cohen's κ.
 - Rough size: HP 40, Divergent 25, Avatar 30, Pokémon 30 personas, invented 30 personas.
-- Google Form: about 40 items (20 generic, 10 conflicting, 10 canonical as a sanity check), about 30 respondents. **Send it in week 1** because responses take time to come in.
+- Simulated panel: 39 items (20 generic, 12 conflicting, 7 clear as an attention check), 40 voters in 10 personality archetypes. Built by `make_votes.py`, logged in [DATA_LOG.md](DATA_LOG.md).
 
 ---
 
@@ -93,7 +95,7 @@ One input is sorted in all 5 worlds side by side. "brave, reckless" → Gryffind
 3. The app shows a bar chart of class votes vs. BERT.
 4. Then the JSD for that item, together with the same number from our full study.
 
-This makes the presentation interactive and ties straight back to our main metric. (Vote logging: `gr.State` plus a CSV on the Space; the Google Form remains the reliable data source for the report.)
+This makes the presentation interactive and ties straight back to our main metric. (Vote logging: `gr.State` plus a CSV on the Space; the simulated panel remains the reference for the report.)
 
 **Why this counts as Educator:** it teaches people outside NLP that a model's confidence is not understanding, using a setting they already know.
 
@@ -103,7 +105,7 @@ This makes the presentation interactive and ties straight back to our main metri
 
 | Phase | Output | Owner |
 |---|---|---|
-| 0. Day 1 together | `sorter.py` (3 methods + pseudo-log-likelihood + calibration + occlusion + entropy), repo skeleton, Google Form sent | all |
+| 0. Day 1 together | `sorter.py` (3 methods + pseudo-log-likelihood + calibration + occlusion + entropy), repo skeleton, simulated voter panel | all |
 | 1. Lit review, about 1 week | 5-line summary per paper, BibTeX, a one-paragraph statement of the gap | all (2–3 papers each) |
 | 2. Data, about 1 week | `data/*.csv`, κ, test sets generated automatically | each person's franchise |
 | 3. Experiments, about 1 week | `results/all.csv` (world × method × test_type), 3 key tables, UMAP | Q1: M4 · Q2: M1 · Q3: M2 + M3 |
@@ -131,7 +133,7 @@ This makes the presentation interactive and ties straight back to our main metri
 - [ ] Calibration: what the content-free prior is and why we subtract it
 - [ ] Cosine similarity; why raw BERT embeddings are anisotropic and Sentence-BERT is not
 - [ ] NLI zero-shot: how a label becomes a hypothesis
-- [ ] Entropy vs. JSD: why matching human uncertainty beats a uniform distribution as the target
+- [ ] Entropy vs. JSD: why matching (simulated) human-like uncertainty beats a uniform distribution as the target
 - [ ] Occlusion vs. attention as an explanation
 - [ ] ARI/NMI; bootstrap CI; McNemar
 - [ ] Why no fine-tuning
