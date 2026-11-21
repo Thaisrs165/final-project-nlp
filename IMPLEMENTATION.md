@@ -106,6 +106,29 @@ Columns: `group, description, source_url, source_quote`
 - 🤖 For each of the 5 worlds, find the official description of each group and write a short paraphrase with the source URL. Sources: the Wizarding World site and the Sorting Hat songs; the Divergent faction manifestos; each Game of Thrones house's words and reputation (Fandom / A Wiki of Ice and Fire); the Avatar nations' cultural values. The invented world uses the descriptions we write ourselves.
 - 🙋 The world's owner checks that the descriptions match the source (about 10 min per world).
 
+### How to build your world: reuse the HP tools (2.2 and 2.3)
+Harry Potter (Ana) is done with two scripts that **work for every world**. Use them instead of writing your own, so all worlds are built the same way and the report can describe one method. `data/hp/` is the worked example: copy its file layout.
+
+| Your world | Fandom wiki (`--wiki`) | API access (checked 2026-11-21) |
+|---|---|---|
+| Divergent | `divergent` | ⚠️ Patchy. Some pages have a "Personality" section (Jeanine Matthews), others don't (Tobias Eaton); "Beatrice Prior" returns no sections (try the page title the wiki actually uses). Expect more `needs_review` rows, and decide as a team before using other sections. |
+| Game of Thrones | `gameofthrones` | ✅ works (Eddard Stark: 1,817 words) |
+| Avatar | `avatar` | ✅ works through the API even though the normal pages block scripts (Zuko: 3,326 words) |
+| Invented | — | No wiki. Personas are hand-written (step 2.4); only `agreement.py` applies. |
+
+**Steps for world `<w>`** (each one has an example in `data/hp/`):
+1. `data/<w>/leak_words.csv` (`word, group, found_in`): extra words a trait may not use. Group names and every word of your `groups.csv` descriptions are banned **automatically**; add the trait words from your `source_quote` and other sources.
+2. `data/<w>/characters.csv` (`name, page, gold_group, gold_source, role`). `page` = exact wiki title. `gold_source` = where the group is stated (book chapter, episode, official site). `role` = `main` or `spare`. **Leave out characters whose name contains a group name** (it gives the answer away).
+3. `.venv/bin/python fetch_personality.py fetch <w> --wiki <wiki>` caches each Personality section in `data/<w>/raw/` and writes `trait_candidates.csv`: every usable adjective with its sentence, leak words already removed.
+4. Write `data/<w>/trait_picks.csv` (`name, traits`, 5 traits separated by `;`). **Read the sentence for every pick.** In HP, 12 of the first picks were wrong:
+   - **negated**: "wasn't as short-tempered", "less outgoing";
+   - **about someone else**: "murderous" described Gaunt, not Riddle;
+   - **not personality**: "flamboyant clothing", "strict orders", "romantic relationship".
+5. `.venv/bin/python fetch_personality.py build <w> --wiki <wiki>` writes `tests.csv`. It **refuses** any trait that isn't literally in the section or that leaks the label. Rows with fewer than 5 traits become `needs_review`. To add characters later, append them at the **end** of `trait_picks.csv` so existing ids don't change.
+6. Owner's trait check: rule on the borderline traits, then log the share accepted in DATA_LOG.md.
+7. `.venv/bin/python agreement.py make <w>` creates two nameless sheets plus `key.csv`. Two people **who haven't seen your character list** fill them in. Then `.venv/bin/python agreement.py score <w>` gives human accuracy and κ.
+8. Log every decision in DATA_LOG.md (dated, newest on top).
+
 ### 2.2 Canonical characters: `data/<world>/tests.csv`
 Columns: `id, test_type, name, traits, gold_group, source_url, trait_evidence`
 
