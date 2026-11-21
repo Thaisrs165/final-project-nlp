@@ -12,3 +12,4 @@ fastapi==0.162.5
 uvicorn==0.54.0
 pytest==9.2.0
 ipykernel==7.4.0
+nltk==3.10.4

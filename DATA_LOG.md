@@ -5,6 +5,33 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
 
 ---
 
+## 2026-11-21 · HP step 2.2: canonical characters
+- **`fetch_personality.py`** (new, works for any world) reads each character's "Personality and traits" section through the Fandom API (the pages themselves return HTTP 402 to scripts) and caches it in `data/<world>/raw/`. It lists every adjective with its sentence (nltk POS tagger, `nltk==3.10.4` added to requirements), filters non-personality words and leak words, and builds `tests.csv` from hand-picked traits. It **refuses** any pick that isn't literally in the section or that leaks the label.
+- Leak filter fixed for hyphenated words: "hard-working" = "hardworking", and "kind-hearted", "fair-minded", "quick-witted" contain banned words.
+- **48 characters fetched → 41 rows in `tests.csv`: 33 canonical, 8 `needs_review`.**
+
+  | House | Canonical | needs_review |
+  |---|---|---|
+  | Gryffindor | 10 | 0 |
+  | Ravenclaw | 8 | 2 (Ollivander, Padma) |
+  | Hufflepuff | **5** | 5 (Hannah, Ernie, Justin, Susan, Fat Friar) |
+  | Slytherin | 10 | 1 (Regulus) |
+
+- **Hufflepuff is thin on Fandom.** Its minor characters have short Personality sections (Susan Bones has none at all). That's a class imbalance to report and to handle with macro-F1.
+- Excluded on purpose: founders and ghosts whose name contains the house (Helga Hufflepuff, Helena Ravenclaw), because the name gives the answer away.
+- **Picks rejected after reading the sentence** (the tagger finds adjectives, not who they describe):
+  - negated: Hermione "short-tempered", Padma "outgoing", Regulus "exemplary";
+  - about someone else: Riddle "murderous" (Gaunt), Marietta "eager", Pansy "hostile", "offensive";
+  - not personality: Dumbledore "flamboyant" (clothes), McGonagall "strict" ("strict orders"), Cho "romantic" (relationship), Sirius "rash" (advice), Hagrid "emotional" (caption).
+- Gold labels: `characters.csv` → `gold_source` gives the book chapter or Wizarding World writing for each. Several come from Wizarding World writing rather than the books (Dumbledore, McGonagall, Hagrid, Flitwick, Lockhart, Trelawney, Quirrell, Myrtle, Ollivander, Sprout, Lucius, Bellatrix, Umbridge, Narcissa).
+- **Trait check (Ana, 2026-11-21).** All 165 traits were read in context by Claude; Ana ruled on 6 borderline ones:
+  - swapped: Cho "irrational" → "popular", Luna "dreamy" → "perceptive", Newt "astute" → "courteous", Riddle "compulsive" → "unpredictable";
+  - kept: Cho "emotional", Pansy "anxious" and "frightened".
+  - Accepted as extracted: 161 of 165 traits (97.6%).
+- The `raw/` cache is committed for traceability (Fandom text, CC BY-SA).
+
+---
+
 ## 2026-11-21 · HP: description wording follows the live form
 - On 2026-11-18 Ana's branch (`hp-data`) had drafted HP descriptions as full sentences from the official harrypotter.com fact files. They were **never committed**, and main's rule supersedes them: descriptions must be word for word what the live form showed. Kept in `git stash` ("hp 2.1 sentence-version") in case they're needed.
 - A side check on that draft found description *format* barely matters. On 6 clear HP cases, sentences vs. word lists: MLM 2/6 vs 1/6, embedding 5/6 vs 4/6, NLI 5/6 vs 5/6. So keeping the form wording costs nothing.
