@@ -5,6 +5,21 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
 
 ---
 
+## 2026-11-21 · HP: description wording follows the live form
+- On 2026-11-18 Ana's branch (`hp-data`) had drafted HP descriptions as full sentences from the official harrypotter.com fact files. They were **never committed**, and main's rule supersedes them: descriptions must be word for word what the live form showed. Kept in `git stash` ("hp 2.1 sentence-version") in case they're needed.
+- A side check on that draft found description *format* barely matters. On 6 clear HP cases, sentences vs. word lists: MLM 2/6 vs 1/6, embedding 5/6 vs 4/6, NLI 5/6 vs 5/6. So keeping the form wording costs nothing.
+- Same check: MLM ranks **Gryffindor first for almost every input**, even after calibration (e.g. "patient, fair, hardworking" → Gryffindor 0.64 without descriptions), and goes near-uniform with descriptions (H ≈ 0.95–0.99). It's an early observation to confirm on the full data.
+- **New: `data/hp/leak_words.csv`** (49 words). Step 2.2 drops any character trait on this list: house names, every description word, plus trait words in the Wikipedia quotes, the official fact files and the Sorting Hat song.
+- **Things to know for the analysis:**
+  - Two items deliberately use leak words. Clear item k01-hp ("witty, bookish, original"), the HP attention check on the form, uses "witty". Generic item g02-hp ("funny and kind") uses "kind", an official Hufflepuff word, so it isn't fully neutral in HP.
+- **Owner check done (Ana, 2026-11-21).** Wording unchanged, sources strengthened:
+  - Gryffindor's "bravery, daring" had only synonyms in the Wikipedia quote. It now cites the official fact file ("courage, bravery and determination") and the Sorting Hat song ("daring").
+  - Hufflepuff now cites the official fact file, which has "hard work, patience, loyalty and fairness" word for word.
+  - Ravenclaw and Slytherin keep Wikipedia, which matches them word for word.
+- Common words on the leak list (kind, true, just, fair, humble, individual) **stay banned**: stricter, but no label leaks.
+
+---
+
 ## 2026-11-18 · Group descriptions written (step 2.1)
 **Rule.** Each `data/<world>/groups.csv` description is **word for word the one-line description the human form showed**. Humans, the simulated panel and BERT's "with descriptions" variant therefore all read the same definitions. Each row was then checked against an outside source, and the supporting text is in the new `source_quote` column. ⚠️ If anyone changed a description's wording when building the Google Form, the CSV has to be updated to match.
 

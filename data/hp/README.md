@@ -9,6 +9,7 @@ Steps 2.1–2.2 of [IMPLEMENTATION.md](../../IMPLEMENTATION.md). Work only insid
 | File | Columns |
 |---|---|
 | `groups.csv` | `group, description, source_url, source_quote` |
+| `leak_words.csv` | `word, group, found_in`: 49 words a character trait may not use (house names, every description word, plus trait words from the Wikipedia quotes, the official fact files and the Sorting Hat song). |
 | `tests.csv` | `id, test_type, name, traits, gold_group, source_url, trait_evidence` (`test_type = canonical` for hand-made rows; step 4 appends the generated rows) |
 
 ## Target
@@ -16,7 +17,7 @@ Steps 2.1–2.2 of [IMPLEMENTATION.md](../../IMPLEMENTATION.md). Work only insid
 
 ## Checklist
 - [x] `groups.csv`: one row per group, paraphrased description plus source URL (2026-11-18)
-- [ ] Owner checked the descriptions against the sources
+- [x] Owner checked the descriptions against the sources (2026-11-21). Wording kept identical to the live form; Gryffindor and Hufflepuff now cite the official fact files, which match word for word.
 - [ ] `tests.csv`: canonical rows, each with `gold_group` and `source_url`
 - [ ] 5 traits per row, only adjectives that literally appear in the source; the sentence goes in `trait_evidence`
 - [ ] No trait is a group name or a word from this world's group descriptions (label leak)
