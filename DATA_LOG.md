@@ -5,6 +5,14 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
 
 ---
 
+## 2026-11-21 · HP step 2.3: agreement sheets
+- **`agreement.py`** (new, any world) builds two annotator sheets from the canonical rows: 20 trait sets with the names removed, stratified by house (HP: 5 per house), drawn with seed 42, in a different order per sheet, with a dropdown of the houses. The house descriptions are shown at the top, the same text as the form and BERT's "with descriptions" variant.
+- `score` reads both filled sheets and reports each annotator's accuracy against gold (the human baseline for Table 1), raw agreement and Cohen's κ. Results go to `data/hp/agreement/results.json`. The scoring path was tested on throwaway copies with fake answers, which were then discarded.
+- Annotators: **Thais and Fardin**. They haven't seen the HP character list; Ana didn't annotate because she reviewed every character with names and traits, so her answers would measure memory. Sheets sent 2026-11-21.
+- 🛑 Waiting on their sheets.
+
+---
+
 ## 2026-11-21 · HP step 2.2: canonical characters
 - **`fetch_personality.py`** (new, works for any world) reads each character's "Personality and traits" section through the Fandom API (the pages themselves return HTTP 402 to scripts) and caches it in `data/<world>/raw/`. It lists every adjective with its sentence (nltk POS tagger, `nltk==3.10.4` added to requirements), filters non-personality words and leak words, and builds `tests.csv` from hand-picked traits. It **refuses** any pick that isn't literally in the section or that leaks the label.
 - Leak filter fixed for hyphenated words: "hard-working" = "hardworking", and "kind-hearted", "fair-minded", "quick-witted" contain banned words.
