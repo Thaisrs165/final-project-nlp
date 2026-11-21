@@ -29,6 +29,9 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
   - kept: Cho "emotional", Pansy "anxious" and "frightened".
   - Accepted as extracted: 161 of 165 traits (97.6%).
 - The `raw/` cache is committed for traceability (Fandom text, CC BY-SA).
+- **More Hufflepuffs and Ravenclaws (Ana's choice).** All 330 pages in Fandom's Hufflepuff and Ravenclaw categories were scanned; 11 have a Personality section with at least 5 usable words. Only **Silvanus Kettleburn** passes the gold rule: Hufflepuff per Rowling's *Short Stories from Hogwarts*. Added as `hp-c42` (cheerful, dutiful, reckless, careful, professorial; the last two are borderline but approved).
+  - Rejected: Theseus Scamander (house from a cast interview on a fan channel), Bilton Bilmes (Hogwarts Mystery), Constance Pickering (Wizards Unite), plus game-only characters (Beatrice Haywood, Mirabel Garlick, Sage Bragnam, Isidora Morganach).
+  - **Final HP set: 34 canonical** (Gryffindor 10, Ravenclaw 8, Hufflepuff 6, Slytherin 10). The imbalance is accepted and goes in the report's limitations; macro-F1 weights each house equally.
 
 ---
 

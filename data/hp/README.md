@@ -28,7 +28,7 @@ Steps 2.1–2.2 of [IMPLEMENTATION.md](../../IMPLEMENTATION.md). Work only insid
 ## Checklist
 - [x] `groups.csv`: one row per group, paraphrased description plus source URL (2026-11-18)
 - [x] Owner checked the descriptions against the sources (2026-11-21). Wording kept identical to the live form; Gryffindor and Hufflepuff now cite the official fact files, which match word for word.
-- [x] `tests.csv`: canonical rows, each with `gold_group` and `source_url` (2026-11-21: 41 rows, 33 canonical, 8 needs_review)
+- [x] `tests.csv`: canonical rows, each with `gold_group` and `source_url` (2026-11-21: 42 rows, 34 canonical, 8 needs_review)
 - [x] 5 traits per row, only adjectives that literally appear in the source; the sentence goes in `trait_evidence`
 - [x] No trait is a group name or a word from this world's group descriptions (label leak)
 - [x] Rows with fewer than 5 usable adjectives marked `needs_review`, not padded
