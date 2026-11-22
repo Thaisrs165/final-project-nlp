@@ -5,6 +5,19 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
 
 ---
 
+## 2026-11-21 · Name slot in `sorter.py` (Q2) and shared `generic.csv` (step 2.5)
+- **Name slot.** `predict(..., name=None)` (and `score_mlm`, `score_embed`, `score_nli`). With a name, every MLM template uses its named twin in `sorter.NAMED_TEMPLATES` ("Ginny Weasley, who is …, belongs to Gryffindor."); embed and NLI use "Ginny Weasley, who is …." as the person sentence. Without a name, the prompts are exactly as before, so existing results don't change.
+  - **Calibration with a name:** the prior uses the named template with **both** name and traits set to "N/A". The prior removes the template's own bias but not what the name carries; using the real name in the prior would calibrate away the very effect Q2 measures.
+  - 4 new tests (named templates line up with the plain ones; the name reaches the prompt; the named content-free prompt calibrates to uniform; a name changes the scores for every method). All 40 tests pass (8 fast, 32 with models).
+  - The step 5 runner must pass `name=row["name"]` for canonical and name_swap rows and no name for every other type.
+  - **First look (one example, not a result):** Ginny's traits without a name give Ravenclaw 0.57. With "Ginny Weasley" they give Gryffindor 0.99, and with "Draco Malfoy" Gryffindor 0.97. So the named prompt may simply push everything to Gryffindor, which step 5 has to check across all rows.
+  - `sorter.py` is Esther's: **Ana tells her about this change.**
+- **`data/generic.csv`** (columns `id, traits, source`): 25 vague two-trait sets, shared by every world. g01–g08 are the 8 distinct generic sets in `vote_items.csv`, word for word; g09 is the PLAN.md example; g10–g25 are new everyday words.
+  - The new sets were checked against the HP leak list. **g02 "funny; kind" contains the HP leak word "kind" (Hufflepuff).** It stays (Ana, decision 1A): the panel and the live form already use it; the report flags its HP result.
+  - `make_tests.py` skips a set that a world already has from its vote items, so nothing is counted twice. **HP generic: 8 → 25** (8 vote items + 17 from `generic.csv`). Every other world gets 25 (3 vote items + 22 from `generic.csv`) once it has canonical rows.
+
+---
+
 ## 2026-11-21 · Step 4: generated test sets (`make_tests.py`)
 - `make_tests.py` reads each world's canonical rows and **appends** generated rows to `data/<world>/tests.csv`. Two new columns: `origin_id` (the source row or rows) and `name_group` (name_swap only). Re-running gives an identical file; `fetch_personality.py build` now keeps these rows.
 - **HP output:** 34 no_name, 34 name_swap, 34 negation, 28 conflicting, 8 generic.
@@ -12,7 +25,7 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
   - **negation:** "not" before every trait. Gold is empty; the metric is how far the answer moves from `origin_id`.
   - **conflicting:** 24 generated (4 per house pair: 2–3 traits from a character of house A plus 2–3 from house B; gold `A|B`), plus the 4 HP conflicting items from `vote_items.csv`, so BERT is scored on exactly what the panel and the form saw. Pair order is normalized to `sorter.WORLDS` order (`c04-hp` was `slytherin|hufflepuff`, now `hufflepuff|slytherin`).
   - **generic:** the 8 HP generic items from `vote_items.csv`. The shared `data/generic.csv` (step 2.5, ~25 sets) doesn't exist yet; `make_tests.py` picks it up automatically once it does.
-- **Open issue:** `sorter.py` prompts have no slot for a name, so canonical, no_name and name_swap rows currently give BERT the same input. Q2 needs a name-aware prompt before step 5.
+- ~~Open issue: no name slot in `sorter.py`~~ → fixed, see the entry above.
 
 ---
 

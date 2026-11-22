@@ -1,0 +1,26 @@
+id,traits,source
+g01,smart; nice,vote_items.csv
+g02,funny; kind,vote_items.csv
+g03,easygoing; polite,vote_items.csv
+g04,quiet; friendly,vote_items.csv
+g05,creative; talkative,vote_items.csv
+g06,sensible; cheerful,vote_items.csv
+g07,a good listener; loves music,vote_items.csv
+g08,confident; caring,vote_items.csv
+g09,funny; a good friend,PLAN.md example
+g10,nice; normal,new
+g11,chatty; sporty,new
+g12,laid-back; friendly,new
+g13,shy; sweet,new
+g14,likes movies; easy to talk to,new
+g15,positive; helpful,new
+g16,punctual; cheerful,new
+g17,good company; relaxed,new
+g18,fun; down-to-earth,new
+g19,likes travelling; outgoing,new
+g20,pleasant; casual,new
+g21,social; good-natured,new
+g22,gets along with everyone; upbeat,new
+g23,likes animals; sociable,new
+g24,mellow; friendly,new
+g25,ordinary; likable,new

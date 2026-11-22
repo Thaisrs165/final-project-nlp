@@ -16,7 +16,8 @@ Generated test types (IMPLEMENTATION.md step 4)
   conflicting  2-3 traits from a group-A character plus     gold = "A|B"
                2-3 from a group-B character
   generic      vague trait sets: this world's generic items gold = empty
-               in data/vote_items.csv, plus data/generic.csv if it exists
+               in data/vote_items.csv, plus data/generic.csv (sets the world
+               already has from vote_items are not repeated)
   conflicting  (vote_items) this world's conflicting items  gold = their "A|B"
                in data/vote_items.csv, so BERT is scored on exactly what the panel and the form saw
 
@@ -108,10 +109,15 @@ def generate(world, canon, rng):
             add(id=f"{world}-v-{i['item_id']}", test_type=i["item_type"], traits=i["traits"],
                 gold_group=pair(world, i["expected"]), source_url="data/vote_items.csv", origin_id=i["item_id"])
 
+    # Shared generic sets; skip a set this world already has from vote_items.csv,
+    # so it is counted once (under its vote item, which the panel also answered).
     shared = DATA / "generic.csv"
+    seen = {i["traits"] for i in items if i["item_type"] == "generic"}
     if shared.exists():
         with open(shared) as f:
             for g in csv.DictReader(f):
+                if g["traits"] in seen:
+                    continue
                 add(id=f"{world}-g-{g['id']}", test_type="generic", traits=g["traits"],
                     source_url="data/generic.csv", origin_id=g["id"])
     return rows
