@@ -5,6 +5,17 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
 
 ---
 
+## 2026-11-21 · Step 4: generated test sets (`make_tests.py`)
+- `make_tests.py` reads each world's canonical rows and **appends** generated rows to `data/<world>/tests.csv`. Two new columns: `origin_id` (the source row or rows) and `name_group` (name_swap only). Re-running gives an identical file; `fetch_personality.py build` now keeps these rows.
+- **HP output:** 34 no_name, 34 name_swap, 34 negation, 28 conflicting, 8 generic.
+  - **name_swap:** each character's traits get a name from another house (gold = the traits' house, `name_group` = the name's house). Names are spread out (33 distinct, none used more than twice).
+  - **negation:** "not" before every trait. Gold is empty; the metric is how far the answer moves from `origin_id`.
+  - **conflicting:** 24 generated (4 per house pair: 2–3 traits from a character of house A plus 2–3 from house B; gold `A|B`), plus the 4 HP conflicting items from `vote_items.csv`, so BERT is scored on exactly what the panel and the form saw. Pair order is normalized to `sorter.WORLDS` order (`c04-hp` was `slytherin|hufflepuff`, now `hufflepuff|slytherin`).
+  - **generic:** the 8 HP generic items from `vote_items.csv`. The shared `data/generic.csv` (step 2.5, ~25 sets) doesn't exist yet; `make_tests.py` picks it up automatically once it does.
+- **Open issue:** `sorter.py` prompts have no slot for a name, so canonical, no_name and name_swap rows currently give BERT the same input. Q2 needs a name-aware prompt before step 5.
+
+---
+
 ## 2026-11-21 · HP step 2.3: agreement sheets
 - **`agreement.py`** (new, any world) builds two annotator sheets from the canonical rows: 20 trait sets with the names removed, stratified by house (HP: 5 per house), drawn with seed 42, in a different order per sheet, with a dropdown of the houses. The house descriptions are shown at the top, the same text as the form and BERT's "with descriptions" variant.
 - `score` reads both filled sheets and reports each annotator's accuracy against gold (the human baseline for Table 1), raw agreement and Cohen's κ. Results go to `data/hp/agreement/results.json`. The scoring path was tested on throwaway copies with fake answers, which were then discarded.

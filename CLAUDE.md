@@ -6,6 +6,7 @@ Read these first: [PLAN.md](PLAN.md) (research design), [IMPLEMENTATION.md](IMPL
 Harry Potter was built with two reusable scripts. **For Divergent, Game of Thrones, Avatar or the invented world, use these. Don't write new extraction or agreement code.** Follow "How to build your world" in IMPLEMENTATION.md step 2, and use `data/hp/` as the worked example.
 
 - `fetch_personality.py fetch|build <world> --wiki <fandom-subdomain>`: traits taken literally from Fandom "Personality" sections through the MediaWiki API (the pages themselves block scripts), with the sentence each one comes from, a leak-word filter, and a build step that refuses non-literal or leaking traits.
+- `make_tests.py [<world>]`: step 4 generated rows (no_name, name_swap, negation, conflicting, generic) appended to `tests.csv`; safe to re-run.
 - `agreement.py make|score <world>`: two nameless annotator sheets (.xlsx with dropdowns) → human accuracy and Cohen's κ.
 
 ## Rules that apply to every world

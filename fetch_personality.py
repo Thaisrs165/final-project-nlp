@@ -225,12 +225,22 @@ def cmd_build(world, prefix, wiki):
     if errors:
         sys.exit("Refusing to write tests.csv:\n  " + "\n  ".join(errors))
     cols = ["id", "test_type", "name", "traits", "gold_group", "source_url", "trait_evidence"]
-    with open(folder / "tests.csv", "w", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=cols)
+    # Keep rows made elsewhere (make_tests.py, hand-written shortcut pairs); only the
+    # canonical / needs_review rows are rebuilt here.
+    other = []
+    path = folder / "tests.csv"
+    if path.exists():
+        with open(path) as f:
+            reader = csv.DictReader(f)
+            cols += [c for c in (reader.fieldnames or []) if c not in cols]
+            other = [r for r in reader if r["test_type"] not in ("canonical", "needs_review")]
+    with open(path, "w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=cols, restval="")
         w.writeheader()
-        w.writerows(out)
+        w.writerows(out + other)
     n_ok = sum(r["test_type"] == "canonical" for r in out)
-    print(f"wrote {len(out)} rows to {folder / 'tests.csv'} ({n_ok} canonical, {len(out) - n_ok} needs_review)")
+    print(f"wrote {len(out)} rows to {path} ({n_ok} canonical, {len(out) - n_ok} needs_review; "
+          f"kept {len(other)} other rows). If canonical rows changed, re-run make_tests.py {world}.")
 
 
 if __name__ == "__main__":

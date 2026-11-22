@@ -17,7 +17,7 @@ Steps 2 and 3 can run in parallel. Step 8's front end can start alongside them i
 | 1. Setup | ✅ done | venv, pinned requirements, folder layout |
 | 2. Data | 🟡 in progress | Per-world folders exist. **2.1 group descriptions written for all 5 worlds** (owners still to check). Owners: HP Ana, Divergent Thais, GoT Fardin, Avatar Esther, Invented Esther. Simulated panel done. **Short human form (25 items) is live**, collecting responses. |
 | 3. `sorter.py` | ✅ done | 4 methods, with and without descriptions, PLL-word-l2r, calibration, occlusion. **31/31 tests pass**; one MLM call takes about 0.1 s on the Mac GPU. |
-| 4. `make_tests.py` | ⏳ waiting | Needs the canonical rows from step 2.2. |
+| 4. `make_tests.py` | ✅ built | HP: 34 no_name, 34 name_swap, 34 negation, 28 conflicting, 8 generic. Other worlds: re-run once their canonical rows exist. |
 | 5–6. Experiments, analysis | ⏳ waiting | Need steps 2 and 4. |
 | 7–8. API, interface | ⏳ not started | Node vs. Gradio still to decide. |
 | 9–10. Report, presentation | ⏳ not started | |
@@ -127,7 +127,8 @@ Harry Potter (Ana) is done with two scripts that **work for every world**. Use t
 5. `.venv/bin/python fetch_personality.py build <w> --wiki <wiki>` writes `tests.csv`. It **refuses** any trait that isn't literally in the section or that leaks the label. Rows with fewer than 5 traits become `needs_review`. To add characters later, append them at the **end** of `trait_picks.csv` so existing ids don't change.
 6. Owner's trait check: rule on the borderline traits, then log the share accepted in DATA_LOG.md.
 7. `.venv/bin/python agreement.py make <w>` creates two nameless sheets plus `key.csv`. Two people **who haven't seen your character list** fill them in. Then `.venv/bin/python agreement.py score <w>` gives human accuracy and κ.
-8. Log every decision in DATA_LOG.md (dated, newest on top).
+8. `.venv/bin/python make_tests.py <w>` generates the step 4 test rows (no_name, name_swap, negation, conflicting, generic). Re-run it whenever your canonical rows change; `build` keeps the generated rows but doesn't refresh them.
+9. Log every decision in DATA_LOG.md (dated, newest on top).
 
 ### 2.2 Canonical characters: `data/<world>/tests.csv`
 Columns: `id, test_type, name, traits, gold_group, source_url, trait_evidence`
@@ -231,7 +232,7 @@ Fast tests only, no models: `.venv/bin/python -m pytest -m "not models" tests`. 
 
 ---
 
-## Step 4: `make_tests.py` (1 day)
+## Step 4: `make_tests.py` ✅ built 2026-11-21 (HP generated; other worlds run automatically once they have canonical rows)
 
 Reads canonical rows and writes generated rows back to `data/<world>/tests.csv`, with an `origin_id` column linking each to its source row.
 
