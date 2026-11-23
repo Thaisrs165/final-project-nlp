@@ -242,7 +242,7 @@ Reads canonical rows and writes generated rows back to `data/<world>/tests.csv`,
 | `negation` | Add "not" to every trait. Paired with the original through `origin_id`. |
 | `conflicting` | 2–3 traits from group A plus 2–3 from group B. Gold is the pair `A\|B`. |
 | `generic` | Rows of `generic.csv`, copied into every world. Gold is empty. |
-| `shortcut` (Avatar) | Element-flavored vs. neutral synonyms, hand-written pairs. |
+| `shortcut` (Avatar) | Element-flavored vs. neutral synonyms. Hand-written in `data/avatar/shortcut_pairs.csv`; `make_tests.py` turns each pair into two rows (ids `…-el` / `…-ne`, same `origin_id`). |
 
 **Done when:** the counts per test type are printed and checked by hand on 5 random rows.
 

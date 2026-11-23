@@ -5,6 +5,26 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
 
 ---
 
+## 2026-11-23 · Avatar shortcut pairs (lexical-shortcut test)
+**Question.** Does BERT sort by personality, or by surface element words ("fiery" → Fire Nation)?
+
+**Design.** `data/avatar/shortcut_pairs.csv`: **20 hand-written pairs, 5 per nation**, 3 traits each. Each pair has two versions with the same meaning:
+- **element:** element-flavored words, e.g. "fiery; hot-headed; explosive", "icy; frosty; cool-headed", "rock-solid; grounded; immovable", "airy; breezy; light-hearted";
+- **neutral:** synonyms without element imagery, e.g. "intense; short-tempered; volatile", "aloof; unfriendly; level-headed".
+
+Gold = the nation the element words point to. The metric is accuracy (and the probability on gold), element vs. neutral, paired by `pair_id`. If accuracy drops sharply with neutral wording, the model relies on surface words.
+
+**Rules.**
+- Neither version may use a group id, nation name or any word of the group descriptions, so both are equally far from the descriptions. `make_tests.py` enforces this. It caught "down-to-earth" and "salt of the earth", which contain the label word "earth" itself; they were replaced with "firmly planted" and "sturdy as stone".
+- These element words are banned from canonical rows (`leak_words.csv`), so they appear **only** here.
+- **Approved by Esther on 2026-11-23, before any BERT run on them.** They're now frozen: editing them after seeing results would make the test circular.
+
+**Pipeline.** `make_tests.py` now treats `shortcut` as a generated type. It rebuilds the rows from `shortcut_pairs.csv` on every run (ids `avatar-sNN-el` / `avatar-sNN-ne`, `origin_id` = pair id, `trait_evidence` = which variant), so edits go in the CSV, not in `tests.csv`. HP output is unchanged.
+
+**Avatar now:** 28 canonical, 5 needs_review, 28 no_name, 28 name_swap, 28 negation, 26 conflicting, 25 generic, **40 shortcut** (208 rows).
+
+---
+
 ## 2026-11-23 · Human form responses imported
 **Source.** Google Forms export ("Forms NLP.xlsx", downloaded 2026-11-23): **19 responses** (2026-11-18 onward). The raw export isn't committed (it has submission timestamps); the anonymized data is:
 - `data/human_votes.csv`: `item_id, world, voter_id, group, source=human`. 19 × 25 = 475 votes; voter ids h01–h19 in submission order. Columns were mapped to item ids in form order, and every answer was checked to be a group of that item's world.

@@ -2,7 +2,8 @@
 
 Reads data/<world>/tests.csv, removes any rows this script generated before, and
 appends freshly generated ones, so it is safe to re-run. Hand-made rows
-(canonical, needs_review, shortcut) are never touched.
+(canonical, needs_review) are never touched. Shortcut rows are rebuilt from the
+hand-written data/<world>/shortcut_pairs.csv, so edit that file, not tests.csv.
 
   .venv/bin/python make_tests.py            # every world that has canonical rows
   .venv/bin/python make_tests.py hp         # one world
@@ -20,6 +21,10 @@ Generated test types (IMPLEMENTATION.md step 4)
                already has from vote_items are not repeated)
   conflicting  (vote_items) this world's conflicting items  gold = their "A|B"
                in data/vote_items.csv, so BERT is scored on exactly what the panel and the form saw
+  shortcut     only if data/<world>/shortcut_pairs.csv     gold = the pair's group
+               exists (Avatar): each hand-written pair becomes two rows with the same
+               meaning, one with element-flavored words ("fiery") and one neutral
+               ("intense"). origin_id = pair id; trait_evidence says which variant.
 
 Every generated row has origin_id pointing at the row(s) it came from.
 Randomness uses sorter.SEED, so the output is identical on every run.
@@ -27,6 +32,7 @@ Randomness uses sorter.SEED, so the output is identical on every run.
 import csv
 import itertools
 import random
+import re
 import sys
 from collections import Counter
 from pathlib import Path
@@ -36,7 +42,7 @@ from sorter import SEED, WORLDS
 DATA = Path(__file__).resolve().parent / "data"
 COLS = ["id", "test_type", "name", "traits", "gold_group", "source_url", "trait_evidence",
         "origin_id", "name_group"]
-GENERATED = {"no_name", "name_swap", "negation", "conflicting", "generic"}
+GENERATED = {"no_name", "name_swap", "negation", "conflicting", "generic", "shortcut"}
 CONFLICTING_PER_PAIR = 4   # HP: 6 group pairs x 4 = 24 generated conflicting rows
 
 
@@ -120,7 +126,33 @@ def generate(world, canon, rng):
                     continue
                 add(id=f"{world}-g-{g['id']}", test_type="generic", traits=g["traits"],
                     source_url="data/generic.csv", origin_id=g["id"])
+
+    # Shortcut pairs (Avatar): same meaning, element-flavored vs. neutral wording.
+    pairs_csv = DATA / world / "shortcut_pairs.csv"
+    if pairs_csv.exists():
+        banned = description_words(world)
+        with open(pairs_csv) as f:
+            for p in csv.DictReader(f):
+                assert p["gold_group"] in groups, (p["pair_id"], p["gold_group"])
+                for variant, col in (("element", "element_traits"), ("neutral", "neutral_traits")):
+                    hit = sorted(set(re.findall(r"[a-z]+", p[col].lower())) & banned)
+                    assert not hit, f"{p['pair_id']} {variant}: uses description/group words {hit}"
+                    add(id=f"{world}-{p['pair_id']}-{variant[:2]}", test_type="shortcut",
+                        traits=p[col], gold_group=p["gold_group"],
+                        source_url=f"data/{world}/shortcut_pairs.csv", origin_id=p["pair_id"],
+                        trait_evidence=f"{variant} wording")
     return rows
+
+
+def description_words(world):
+    """Group ids, display names and every word of the group descriptions. Neither side of
+    a shortcut pair may use them, so both versions are equally far from the descriptions."""
+    from sorter import NAMES
+    words = set(WORLDS[world]) | {w.lower() for n in NAMES[world].values() for w in n.split()}
+    with open(DATA / world / "groups.csv") as f:
+        for r in csv.DictReader(f):
+            words |= set(re.findall(r"[a-z]+", r["description"].lower()))
+    return words - {"and", "of", "the", "love", "hard", "work"}
 
 
 def run(world):
