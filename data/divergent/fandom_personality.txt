@@ -169,3 +169,65 @@ Drew's personality is similar to Peter's, as he is also very brutish and partici
 === Myra (opcional)
 https://divergent.fandom.com/wiki/Myra
 Christina describes Myra as being one of the only "nice" initiates left, as the rest of them were killed (excluding Tris and herself).
+
+
+# ============================================================================
+# RODADA 2 (novos candidatos). Mesmo jeito: cole a seção "Personality" embaixo do link.
+# Se o link não abrir, procure o nome na busca do wiki. Se não tiver a seção: SEM PERSONALITY
+# Na linha "Facção:", escreva a facção que a PÁGINA diz (infobox "Faction"). É obrigatório.
+# Prioridade: os de outras facções (Candor, Amity, Abnegation, Erudite) primeiro.
+# ============================================================================
+
+=== Niles (Candor?)
+https://divergent.fandom.com/wiki/Niles
+Facção:
+
+=== Edith Prior (Abnegation?)
+https://divergent.fandom.com/wiki/Edith_Prior
+Facção:
+
+=== Evelyn Johnson-Eaton (Abnegation -> sem facção?)
+https://divergent.fandom.com/wiki/Evelyn_Johnson-Eaton
+Facção:
+
+=== George Wu (Erudite -> Dauntless?)
+https://divergent.fandom.com/wiki/George_Wu
+Facção:
+
+=== Edward (Erudite -> Dauntless?)
+https://divergent.fandom.com/wiki/Edward
+Facção:
+
+=== Shauna (Dauntless?)
+https://divergent.fandom.com/wiki/Shauna
+Facção:
+
+=== Marlene (Dauntless?)
+https://divergent.fandom.com/wiki/Marlene
+Facção:
+
+=== Hector (Dauntless?)
+https://divergent.fandom.com/wiki/Hector
+Facção:
+
+=== Amar (Dauntless?)
+https://divergent.fandom.com/wiki/Amar
+Facção:
+
+=== Harrison (Dauntless?)
+https://divergent.fandom.com/wiki/Harrison
+Facção:
+
+=== Lauren (Dauntless?)
+https://divergent.fandom.com/wiki/Lauren
+Facção:
+
+=== Bud (Dauntless?)
+https://divergent.fandom.com/wiki/Bud
+Facção:
+
+# Ache outros? Copie o modelo abaixo e preencha:
+# === Nome
+# link
+# Facção:
+# (texto da seção Personality)
