@@ -5,6 +5,40 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
 
 ---
 
+## 2026-11-23 · Invented world step 2: 32 personas (drafted by Claude, Ana reviews)
+- **Method (Ana, option B):** the invented world has no outside source, so traits are **written directly** under a rule fixed before writing. They aren't "extracted" from a paragraph we would also have written, which would be circular.
+- **Rule:**
+  - 5 traits per persona: **3 synonyms** of the house description (each persona covers 3 of the 4 description facets, rotating which one is left out) + **2 neutral** traits that point to no house.
+  - **32 personas, 8 per house**, 4 women and 4 men each.
+  - No trait is a house name, description word or word form (`leak_words.csv` + `groups.csv`, same filter as `fetch_personality.py`).
+  - **Every neutral word appears in exactly 2 different houses** (32 neutral words × 2), so a neutral word can't give a house away.
+  - **Names** are invented and share no BERT word piece with a house name: the builder caught "Treve" (`ve`, as in Veltrin) and "Fesk" (`sk`, as in Durrask), renamed to Jonah Merrill and Dorian Holt.
+- **Files:**
+  - `data/invented/personas.csv`: the editable sheet (`name, gold_group, traits, fits, neutral`).
+  - `data/invented/build_personas.py`: checks every rule and writes the canonical rows to `tests.csv`, keeping generated rows. It refuses to write if any rule is broken.
+  - Trait order within each persona was shuffled once (seed 42), so the 3 fits aren't always first.
+- **Step 4 run:** `make_tests.py invented` → 32 no_name, 32 name_swap, 32 negation, 26 conflicting (4 per house pair + the 2 vote items), 25 generic.
+- **Gold labels:** the house each persona was written for. Since the team wrote the traits, the invented world measures *"does the model read the descriptions?"* and not memory, which is its purpose (PLAN.md §2.4). It is only meaningful **with descriptions**.
+- **Ana reviewed and approved the personas as drafted (2026-11-23).** "stubborn" kept as a neutral word (it appears in Osmark and Durrask).
+- **Step 3 (agreement):** `agreement.py make invented` → `data/invented/agreement/sheet_A.xlsx`, `sheet_B.xlsx`, `key.csv`: 20 nameless personas, 5 per house, a different order per sheet, the house descriptions at the top.
+  - 🛑 Any two of Thais, Fardin and Esther fill them in, **without opening `personas.csv`, `tests.csv` or `key.csv` first**. Ana wrote the personas and can't annotate.
+- Then: `run_experiments.py run invented` (all methods + fixes), and `agreement.py score invented` when the sheets are back.
+
+---
+
+## 2026-11-23 · Invented world step 1 (like HP 2.1): names, descriptions, leak words (Ana + Esther)
+- **Owners changed (team, 2026-11-23):** the invented world is now built by **Ana + Esther**; Thais takes the app and the report tables.
+- **Descriptions:** `data/invented/groups.csv` already matches the live form word for word (Section 6): Veltrin "patient, observant, methodical, reserved"; Osmark "warm, generous, sociable, forgiving"; Calwen "restless, curious, independent, spontaneous"; Durrask "disciplined, competitive, proud, determined". No change.
+- **Word pieces** (bert-base-uncased): Veltrin `ve·##lt·##rin`, Osmark `os·##mark`, Calwen `cal·##wen`, Durrask `du·##rra·##sk`. All are multi-piece, as expected; PLL-word-l2r handles them.
+- **Real-name check** (web search, exact spelling): none is a real brand, product or place.
+  - Closest hits: "Veltliner" (a grape), the Osmar Strait (Antarctica), **"Callwen"** (an obscure Welsh saint and village, spelled with two Ls), and Duras / Durrës.
+  - Callwen is noted but harmless: different spelling, and no trait association.
+- **Leak words:** `data/invented/leak_words.csv` (51 words): the 4 group names, the 16 description words and their word forms (patience, observe, method, reserve, warmth, generosity, social, forgive, curiosity, independence, spontaneity, discipline, competition, pride, determination…).
+  - Checked against the filter: synonyms pass (unhurried, watchful, meticulous, gregarious, charitable, inquisitive, impulsive, rigorous, tenacious), while word forms are blocked (patiently, prideful, warmish).
+- **Format test:** one draft persona per house, written as a short "Personality" paragraph and run through `fetch_personality.adjectives` + the leak filter, gives 4–5 usable traits each. The tagger misses some adjectives depending on phrasing (as in HP), so every persona is checked with the tool, not by eye.
+
+---
+
 ## 2026-11-23 · HP: caption traits checked after Fardin's parser fix; Cho "cheerful" → "irrational" (Ana: Rule 2)
 - **Why:** Fardin fixed a bug in `fetch_personality.py` (entry below): the old parser could drop section text, and it let quote-box captions through.
 - **Re-fetched every HP page with the fixed parser** into a scratch folder (`data/hp/raw/` was not touched). **No page gains text**, so no HP text had been lost; each page only shrinks by its caption lines. The 8 `needs_review` pages really are short.
