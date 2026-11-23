@@ -5,6 +5,13 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
 
 ---
 
+## 2026-11-24 · Divergent round 2: every faction page checked, still 4 characters
+**What was done.** Thais ran the team's `fetch_personality` API helpers over **every page in the wiki's faction categories** (10 categories, 56 pages; output in `data/divergent/fandom_round2_auto.txt`). Only **17 pages have a Personality section**, and 11 of them were already in round 1.
+**New characters, same rule (first 5 personality adjectives in text order, no leaks):** Marcus Eaton (Abnegation) 1 trait (hypocritical) · Zeke 3 · Marlene 2 · Lauren 2 · Bud 1 · Shauna 0 (only "brave", a leak). None reaches 5; all are `needs_review` in `characters.csv`.
+**Conclusion.** Under the team's trait rule the Divergent canon gives 4 usable characters, all Dauntless. Category sizes (Abnegation 14 pages, Candor 13, Amity 7) show the other factions exist on the wiki but have no personality text. Reaching ~25 would need a **team decision to change the rule** (fewer than 5 traits, or other sections of the page); with ≥ 3 traits the additions would be Zeke, Lynn and Al, all Dauntless again.
+
+---
+
 ## 2026-11-24 · Report tables and Figure 1 (step 6, Thais)
 **Script.** `make_tables.py` reads `results/` and `data/` only (no model). Run `run_experiments.py summary` first, then `make_tables.py`. Output in `results/report/`: `table1_data.tex/.csv`, `table2_q1q2.tex/.csv`, `fig1_q3.pdf/.png/.tex`, plus `q3_jsd.csv` and `q3_negation.csv` with every method and both variants. Re-run it when the invented world and the Avatar/GoT κ arrive; nothing else changes.
 **Choices, fixed before reading the numbers:**
