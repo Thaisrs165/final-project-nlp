@@ -5,6 +5,37 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
 
 ---
 
+## 2026-11-23 · Step 6, Q2 and Q3: analysis choices fixed BEFORE computing them (Fardin)
+Written before any of these numbers was computed, so the choices can't follow the results. One script, `analysis_q2q3.py`, reads `results/all.csv`, `results/occlusion.csv`, `results/summary_q1q2.csv` and the vote files, and writes `results/q2q3/` (tables, Figure 1, `SUMMARY.md`). Every world in `all.csv` is included automatically (the invented world joins once it has predictions).
+
+**Common settings**
+- **Main methods:** mlm, embed, bert-mean, nli. The three MLM fixes get their own table (appendix), never mixed into the main one.
+- **MLM:** probabilities averaged over the 3 templates, per row, before any metric (as in `summary`).
+- **Both description variants are reported.** The figure uses **with descriptions**: humans and the panel read the descriptions, so that is the fair comparison (entry of 2026-11-18).
+- **CIs:** bootstrap 95%, 2,000 resamples over items, seed 42. **Entropy:** normalized (0 = certain, 1 = uniform), compared within a method only.
+
+**Q2: traits or names?**
+- From `summary_q1q2.csv` (already computed): accuracy on canonical (own name) / no_name / name_swap, the "follows the name" rate, McNemar no_name vs. name_swap.
+- **Reading of the target:** the target is "McNemar p ≥ 0.05". It is formally met when p ≥ 0.05, but it is **only informative where no_name accuracy is above chance** (its 95% CI lower bound > chance): a model at chance can't lose accuracy when the name changes. Both facts are reported together.
+- **Name effect:** accuracy(canonical, own name) − accuracy(no_name), same characters.
+- **Occlusion** (`occlusion.csv`: MLM, template 0, no name, canonical rows). There is no annotation of which trait "should" matter, so instead: (a) the share of characters for which removing **one** trait changes the top answer; (b) the **position** of the most influential trait (largest delta): share at position 1 (the first trait), against 1/5 by chance, exact binomial test. (b) checks a word-order bias, which the panel also models (`first_trait_weight`).
+
+**Q3: ambiguity**
+- **Items:** the `generic` and `conflicting` vote items (`data/vote_items.csv`), matched to scored rows by world and exact trait text. `clear` items are not scored by the runner and are left out.
+- **References:**
+  - **humans**, primary: the 10 respondents kept by the pre-set attention rule; sensitivity: all 19. The form only has `generic` items.
+  - **simulated panel**: the 35 voters kept by its own pre-set rule (≥ 2 of 7 clear items wrong → dropped), recomputed from the votes. `generic` and `conflicting` items. Always labelled **simulated**.
+- **JSD** (base 2, 0 = identical, 1 = disjoint) between BERT's distribution and the reference vote shares, per item.
+- **Target (REPORT_ROADMAP §4):** BERT closer to the reference than a **uniform guess**. Per item, d = JSD(BERT, ref) − JSD(uniform, ref). **Met if the 95% CI of mean d is entirely below 0.** One-sided Wilcoxon signed-rank p as well.
+- **Human floor:** split the 10 kept humans at random into two halves of 5, JSD between the halves' vote shares, averaged over items; 1,000 random splits. This is the distance expected between people themselves.
+- **Entropy under ambiguity:** BERT's entropy on `generic` and `conflicting` rows vs. `no_name` rows, per world × method × variant, one-sided Mann-Whitney U (ambiguous > no_name), Holm-corrected over the whole table. Reference: the humans' and the panel's entropy on the same vote items.
+- **Negation:** each `negation` row is paired with the `no_name` row of the same character (same traits, no name, no "not"). Report the **flip rate** (top answer changes) and the **mean total variation distance** (TV, 0–1). **Baseline:** the mean TV between the `no_name` rows of two *different* characters of the same world (all pairs), i.e. how far the answer moves when the traits change completely. Negation TV far below that baseline = "not" is largely ignored, which is Ettinger's (2020) finding.
+- **Calibration pull (original mlm only):** the share of rows given the world's single most common answer, before (raw) and after calibration, on `no_name` vs. `generic` rows. Zhao et al. (2021) predict that raw scores fall back to a frequent label, more so on uninformative inputs.
+
+**Figure 1** (one IEEE column): (a) mean JSD to the humans and to the panel per method, with descriptions, with the uniform-guess level and the human floor as reference lines; (b) negation TV vs. the different-character baseline per method.
+
+---
+
 ## 2026-11-23 · Invented world step 2: 32 personas (drafted by Claude, Ana reviews)
 - **Method (Ana, option B):** the invented world has no outside source, so traits are **written directly** under a rule fixed before writing. They aren't "extracted" from a paragraph we would also have written, which would be circular.
 - **Rule:**
