@@ -15,7 +15,7 @@ Steps 2 and 3 can run in parallel. Step 8's front end can start alongside them i
 | Step | State | Notes |
 |---|---|---|
 | 1. Setup | ✅ done | venv, pinned requirements, folder layout |
-| 2. Data | 🟡 in progress | Per-world folders exist. **2.1 group descriptions written for all 5 worlds** (owners still to check). **2.2 done for HP (34) and Avatar (28)**; Divergent, GoT and Invented still empty. Owners: HP Ana, Divergent Thais, GoT Fardin, Avatar Esther, Invented Esther. Simulated panel done. **Human form: 19 responses imported** (`data/human_votes.csv`; 10 kept by the attention rule, all 19 as sensitivity). |
+| 2. Data | 🟡 in progress | Per-world folders exist. **2.1 group descriptions written for all 5 worlds** (owners still to check). **2.2 done for HP (34) and Avatar (28)**; Divergent, GoT and Invented still empty. Owners: HP Ana, Divergent Thais, GoT Fardin, Avatar Esther, Invented Esther. Simulated panel done. **Human form: 19 responses imported** (`data/human_votes.csv`). **Primary analysis: the 10 kept by the attention rule; all 19 reported as a sensitivity analysis** (decided 2026-11-23). |
 | 3. `sorter.py` | ✅ done | 4 methods, with and without descriptions, PLL-word-l2r, calibration, occlusion. Optional `name=` for Q2 (named prompt twins in `NAMED_TEMPLATES`, added 2026-11-21). **40/40 tests pass**; one MLM call takes about 0.1 s on the Mac GPU. |
 | 4. `make_tests.py` | ✅ built | HP: 34 no_name, 34 name_swap, 34 negation, 28 conflicting, 25 generic. Avatar: 28 / 28 / 28 / 26 / 25. Other worlds: re-run once their canonical rows exist. |
 | 5–6. Experiments, analysis | ⏳ waiting | Need steps 2 and 4. |
@@ -242,7 +242,7 @@ Reads canonical rows and writes generated rows back to `data/<world>/tests.csv`,
 | `negation` | Add "not" to every trait. Paired with the original through `origin_id`. |
 | `conflicting` | 2–3 traits from group A plus 2–3 from group B. Gold is the pair `A\|B`. |
 | `generic` | Rows of `generic.csv`, copied into every world. Gold is empty. |
-| `shortcut` (Avatar) | Element-flavored vs. neutral synonyms, hand-written pairs. |
+| `shortcut` (Avatar) | Element-flavored vs. neutral synonyms. Hand-written in `data/avatar/shortcut_pairs.csv`; `make_tests.py` turns each pair into two rows (ids `…-el` / `…-ne`, same `origin_id`). |
 
 **Done when:** the counts per test type are printed and checked by hand on 5 random rows.
 

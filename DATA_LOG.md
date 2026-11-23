@@ -12,6 +12,7 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
   - its `build` drops every `conflicting`/`generic` row, including the ones `make_tests.py` adds;
   - it writes without the `name_group` column, which name_swap rows need.
   - So for now, run `make_tests.py divergent` **after** her `build`, never before.
+- Merged with Esther's shortcut rows (same day): their ids (`<world>-sNN-el` / `-ne`) were added to the id patterns, so re-runs replace them instead of duplicating them.
 
 ---
 
@@ -30,6 +31,26 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
 - **Annotators:** A = Thais, B = Fardin. Ana confirmed Fardin doesn't know the books well, so his 85% isn't explained by recognising characters. Both results are kept as they are.
 - **The human form points the same way:** the HP attention item k01-hp "witty, bookish, original" (gold Ravenclaw) was answered correctly by only 8/19 people, even though it uses words close to the description (see the form entry below). People find Ravenclaw hard to recognise from traits.
 - The wide κ CI comes from n = 20. The report gives the CI, not just the point value.
+
+---
+
+## 2026-11-23 · Avatar shortcut pairs (lexical-shortcut test)
+**Question.** Does BERT sort by personality, or by surface element words ("fiery" → Fire Nation)?
+
+**Design.** `data/avatar/shortcut_pairs.csv`: **20 hand-written pairs, 5 per nation**, 3 traits each. Each pair has two versions with the same meaning:
+- **element:** element-flavored words, e.g. "fiery; hot-headed; explosive", "icy; frosty; cool-headed", "rock-solid; grounded; immovable", "airy; breezy; light-hearted";
+- **neutral:** synonyms without element imagery, e.g. "intense; short-tempered; volatile", "aloof; unfriendly; level-headed".
+
+Gold = the nation the element words point to. The metric is accuracy (and the probability on gold), element vs. neutral, paired by `pair_id`. If accuracy drops sharply with neutral wording, the model relies on surface words.
+
+**Rules.**
+- Neither version may use a group id, nation name or any word of the group descriptions, so both are equally far from the descriptions. `make_tests.py` enforces this. It caught "down-to-earth" and "salt of the earth", which contain the label word "earth" itself; they were replaced with "firmly planted" and "sturdy as stone".
+- These element words are banned from canonical rows (`leak_words.csv`), so they appear **only** here.
+- **Approved by Esther on 2026-11-23, before any BERT run on them.** They're now frozen: editing them after seeing results would make the test circular.
+
+**Pipeline.** `make_tests.py` now treats `shortcut` as a generated type. It rebuilds the rows from `shortcut_pairs.csv` on every run (ids `avatar-sNN-el` / `avatar-sNN-ne`, `origin_id` = pair id, `trait_evidence` = which variant), so edits go in the CSV, not in `tests.csv`. HP output is unchanged.
+
+**Avatar now:** 28 canonical, 5 needs_review, 28 no_name, 28 name_swap, 28 negation, 26 conflicting, 25 generic, **40 shortcut** (208 rows).
 
 ---
 
@@ -54,7 +75,7 @@ So the rule removes people who **genuinely read the item differently**, not only
 - mean normalized entropy on the 20 generic items: **0.46 with the rule (n = 10)** vs **0.67 with everyone (n = 19)**;
 - simulated panel on the same items: 0.49.
 
-**Proposed (not yet decided by the team):** keep the rule as the **primary** analysis, because it was set before the data, and changing it now would be choosing the rule after seeing results. Report **all 19** as a sensitivity analysis, and say in the report that the attention items turned out to be ambiguous (k01-hp especially). This is a finding about the items, not a reason to drop people silently.
+**Decision (Esther, 2026-11-23):** keep the rule as the **primary** analysis (n = 10), because it was set before the data, and changing it now would be choosing the rule after seeing results. Report **all 19** as a sensitivity analysis, and say in the report that the attention items turned out to be ambiguous (k01-hp especially). This is a finding about the items, not a reason to drop people silently.
 
 **First look (not a result).**
 - With the rule, humans are about as consensual as the panel (H 0.46 vs 0.49). Several generic items are near-unanimous for people too: "smart and nice" → Ravenclaw 10/10, "funny and kind" → Amity 10/10 in Divergent. The earlier worry (2026-11-18) that the panel was too unanimous doesn't hold for these items.
@@ -66,7 +87,7 @@ So the rule removes people who **genuinely read the item differently**, not only
 ## 2026-11-23 · Avatar step 2.2: canonical characters (+ step 4 rows, 2.3 sheets)
 Built with the HP tools (`fetch_personality.py`, `make_tests.py`, `agreement.py`), wiki `avatar`.
 
-**Gold-label rule (Esther to confirm).** Gold = the nation in the character's **Avatar Wiki infobox** (`nation =` field), cross-checked against the `ethnicity` field. The wiki pages block scripts, so the fields were read through the MediaWiki API.
+**Gold-label rule (confirmed by Esther, 2026-11-23).** Gold = the nation in the character's **Avatar Wiki infobox** (`nation =` field), cross-checked against the `ethnicity` field. The wiki pages block scripts, so the fields were read through the MediaWiki API.
 - Includes both *Avatar: The Last Airbender* (2005–08) and *The Legend of Korra* (2012–14). Both are pre-2018.
 - **Excluded:** characters whose ethnicity doesn't match their nation, or who changed nation: Kyoshi (Air Nomad–Earth Kingdom), Kai and Opal (Earth Kingdom-born, later Air Nation), Pema, Zaheer, Kya, and LoK Bumi (Aang's son).
 - **Exception:** Tenzin, Jinora and Meelo (nation = air, Air Nomad ancestry mixed with Water Tribe) are kept, because without them the Air Nomads would have only 3 characters. In the story the Air Nomads were almost wiped out, so the imbalance is canon, not sampling.
@@ -98,7 +119,7 @@ Built with the HP tools (`fetch_personality.py`, `make_tests.py`, `agreement.py`
 **Step 4:** `make_tests.py avatar` → 28 no_name, 28 name_swap, 28 negation, 26 conflicting, 25 generic (168 rows in total).
 **Step 2.3:** `agreement.py make avatar` → 20 nameless sets, 5 per nation. 🛑 Two people who haven't seen the character list fill them in (not Esther).
 **Trait check (Esther, 2026-11-23):** all 8 borderline picks **kept**. Accepted as extracted: 140 of 140 canonical traits (100%), after the 20 rejections above were made while reading the sentences.
-**Still to do:** the agreement sheets (sent to Ana and Thais); the shortcut pairs; Esther to confirm the gold-label rule.
+**Still to do:** the agreement sheets (sent to Ana and Thais); the shortcut pairs.
 
 ---
 
@@ -188,7 +209,7 @@ Built with the HP tools (`fetch_personality.py`, `make_tests.py`, `agreement.py`
 |---|---|---|
 | Harry Potter | Wikipedia, *Hogwarts* §Houses | ✅ Strong. Every word matches or is a synonym (courage → bravery, nerve → daring, learning → love of learning, justice → fairness). |
 | Divergent | Wikipedia, *Divergent (novel)* | ✅ Strong, except Amity's "kindness", which is our addition (Wikipedia only says "peaceful"). |
-| Avatar | Iroh's speech in the official live-action series (Netflix, S2E3 transcript) | 🟡 Partial. Earth (enduring), Air (freedom, detachment, peace) and Water (change, adapting) are confirmed. **Fire's "drive, ambition, passion" and Water's "community"** come from Iroh's speech in the animated episode *Bitter Work* (2006), which **couldn't be checked online** because the Avatar wiki blocks automated access. Esther checks it by hand. |
+| Avatar | Iroh's speech in the official live-action series (Netflix, S2E3 transcript) | 🟡 Partial. Earth (enduring), Air (freedom, detachment, peace) and Water (change, adapting) are confirmed. **Fire's "drive, ambition, passion" and Water's "community"** come from Iroh's speech in the animated episode *Bitter Work* (2006), which **couldn't be checked online** because the Avatar wiki blocks automated access. **Checked by hand and confirmed by Esther (2026-11-23).** |
 | Game of Thrones | Wikipedia, *World of A Song of Ice and Fire*; Dummies, *Game of Thrones list of houses* | 🟡 Interpretive. Sources confirm Stark's "honorable devotion to duty", Lannister wealth, Greyjoy raids and rebellion, and Tyrell cleverness and scheming. "Pride", "passion, boldness, ambition" (Targaryen) and "defiance, toughness, independence" (Greyjoy) are **our reading of each house's reputation**, not quoted traits. Fardin checks them. Mottos were deliberately left out ("Fire and Blood" would be a literal fire cue). |
 | Invented | Our own definitions | Control world, no outside source. |
 

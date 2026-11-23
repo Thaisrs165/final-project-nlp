@@ -16,7 +16,7 @@ Steps 2.1–2.2 of [IMPLEMENTATION.md](../../IMPLEMENTATION.md). Work only insid
 
 ## Checklist
 - [x] `groups.csv`: one row per group, paraphrased description plus source URL (2026-11-18)
-- [ ] Owner checked the descriptions against the sources
+- [x] Owner checked the descriptions against the sources (Esther confirmed Iroh's lines in *Bitter Work*, 2026-11-23)
 - [x] `tests.csv`: canonical rows, each with `gold_group` and `source_url` (28 canonical, 2026-11-23)
 - [x] 5 traits per row, only adjectives that literally appear in the source; the sentence goes in `trait_evidence`
 - [x] No trait is a group name or a word from this world's group descriptions (label leak); see `leak_words.csv`
@@ -24,4 +24,5 @@ Steps 2.1–2.2 of [IMPLEMENTATION.md](../../IMPLEMENTATION.md). Work only insid
 - [x] Trait check done (Esther kept all 8 borderline picks, 140/140 accepted); noted in [DATA_LOG.md](../../DATA_LOG.md)
 - [x] Agreement sheets made (`agreement/sheet_A.xlsx`, `sheet_B.xlsx`): 20 nameless trait sets, 5 per nation
 - [ ] Agreement sheets filled by Ana and Thais (they haven't seen the character list), then `agreement.py score avatar`
-- [ ] Shortcut pairs (element-flavored vs. neutral wording)
+- [x] Shortcut pairs written: `shortcut_pairs.csv` (20 pairs, 5 per nation) → 40 `shortcut` rows via `make_tests.py`
+- [x] Esther reviewed and approved the shortcut pairs (2026-11-23), before any BERT run on them
