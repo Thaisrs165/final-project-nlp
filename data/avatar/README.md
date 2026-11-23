@@ -16,7 +16,7 @@ Steps 2.1–2.2 of [IMPLEMENTATION.md](../../IMPLEMENTATION.md). Work only insid
 
 ## Checklist
 - [x] `groups.csv`: one row per group, paraphrased description plus source URL (2026-11-18)
-- [ ] Owner checked the descriptions against the sources
+- [x] Owner checked the descriptions against the sources (Esther confirmed Iroh's lines in *Bitter Work*, 2026-11-23)
 - [x] `tests.csv`: canonical rows, each with `gold_group` and `source_url` (28 canonical, 2026-11-23)
 - [x] 5 traits per row, only adjectives that literally appear in the source; the sentence goes in `trait_evidence`
 - [x] No trait is a group name or a word from this world's group descriptions (label leak); see `leak_words.csv`
