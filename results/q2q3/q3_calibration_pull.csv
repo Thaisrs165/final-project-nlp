@@ -27,3 +27,11 @@ hp,True,raw,no_name,gryffindor,34,1.0
 hp,True,raw,generic,gryffindor,25,1.0
 hp,True,calibrated,no_name,ravenclaw,34,0.882
 hp,True,calibrated,generic,ravenclaw,25,0.84
+invented,False,raw,no_name,osmark,32,1.0
+invented,False,raw,generic,osmark,25,1.0
+invented,False,calibrated,no_name,calwen,32,0.875
+invented,False,calibrated,generic,calwen,25,1.0
+invented,True,raw,no_name,osmark,32,0.312
+invented,True,raw,generic,osmark,25,0.88
+invented,True,calibrated,no_name,durrask,32,1.0
+invented,True,calibrated,generic,durrask,25,0.72

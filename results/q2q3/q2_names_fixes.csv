@@ -23,3 +23,9 @@ hp,mlm-large,False,0.25,0.265,0.294,0.206,0.15-0.44,-0.029,0.294,0.5078,True,Fal
 hp,mlm-large,True,0.25,0.206,0.265,0.265,0.12-0.41,-0.059,0.206,1.0,True,False,False,34
 hp,mlm-large-cal,False,0.25,0.324,0.235,0.235,0.09-0.38,0.089,0.265,1.0,True,False,False,34
 hp,mlm-large-cal,True,0.25,0.265,0.235,0.206,0.09-0.38,0.03,0.206,1.0,True,False,False,34
+invented,mlm-cal,False,0.25,0.156,0.219,0.312,0.09-0.38,-0.063,0.156,0.4531,True,False,False,32
+invented,mlm-cal,True,0.25,0.188,0.25,0.281,0.12-0.41,-0.062,0.219,1.0,True,False,False,32
+invented,mlm-large,False,0.25,0.25,0.188,0.312,0.06-0.31,0.062,0.188,0.3438,True,False,False,32
+invented,mlm-large,True,0.25,0.312,0.25,0.188,0.09-0.41,0.062,0.281,0.6875,True,False,False,32
+invented,mlm-large-cal,False,0.25,0.219,0.156,0.25,0.03-0.28,0.063,0.25,0.5078,True,False,False,32
+invented,mlm-large-cal,True,0.25,0.219,0.25,0.188,0.09-0.41,-0.031,0.281,0.5,True,False,False,32
