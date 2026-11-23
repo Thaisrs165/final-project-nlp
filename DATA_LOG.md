@@ -5,6 +5,31 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
 
 ---
 
+## 2026-11-23 · Game of Thrones: results of the MLM fixes (all reported, as fixed in advance)
+- **2,358 new predictions**, as expected. No existing row of `all.csv`, `summary_q1q2.csv` or `probe.csv` changed; HP and Avatar probe numbers are identical to the committed ones.
+- **GoT canonical accuracy, without / with descriptions** (chance 20%, n = 16):
+
+  | Method | Accuracy | Named prompts (canonical + name_swap, 32), most common answers |
+  |---|---|---|
+  | mlm (baseline) | 6% / 19% | Greyjoy 17, Tyrell 15 / **Greyjoy 32** |
+  | mlm-cal (fix A) | 6% / 31% (12–56%) | Tyrell 18, Greyjoy 13 / Greyjoy 18, Tyrell 5, Stark 4 |
+  | mlm-large (fix B) | 19% / 25% | **Greyjoy 30** / **Stark 31** |
+  | mlm-large-cal (A+B) | 12% / 25% | Greyjoy 27 / Stark 25, Targaryen 4 |
+  | *for reference:* nli | 56% / 44% | |
+
+- **Unlike HP, the fixes don't break the collapse in GoT.** Fix A spreads the answers somewhat (with descriptions: Greyjoy 18 of 32 instead of 32). Fix B only moves the collapse to another house: bert-large answers Greyjoy (without descriptions) or Stark (with) for 30–31 of 32 named prompts. Every CI includes chance (20%).
+- **Q2 with the fixes:** name_swap is never significantly different from no_name (all McNemar p ≥ 0.5).
+- **Negation (top-answer changes vs. no_name, 16 pairs):** baseline 0 / 0, mlm-cal 3 / 1, mlm-large 1 / 7, mlm-large-cal 1 / **11**. The 11 of mlm-large-cal with descriptions is the only sizeable number; step 6 should check it with total variation distance before reading it as sensitivity to "not".
+- **Probe (fix C, trained, NOT zero-shot):** raw BERT 37.5% (12–62%), MiniLM 37.5% (12–62%); **majority baseline 37.5%** (Lannister, 6 of 16). The probe does no better than always answering Lannister.
+- **Takeaway, same as HP:** calibration and model size change *where* the MLM fails, not *whether* it fails. NLI (56%) is the only method above chance, and the Game of Thrones step 5 entry shows it gets there through the names.
+
+## 2026-11-23 · Game of Thrones: the MLM fixes run too, settings fixed BEFORE running (Fardin)
+- **Decision:** run fixes A, B, A+B and C on GoT with **exactly** the settings of the entry "Fixes for the MLM collapse, fixed BEFORE running them" below. Nothing is changed or tuned for GoT.
+- **Why:** so every world is scored with the same methods, and the report can describe one method. GoT was left out of the first fix run only because it had no data yet.
+- **Expected size:** 131 rows × 3 fixes × 3 templates × 2 description variants = **2,358 predictions**.
+- **Probe (fix C):** GoT now has 16 canonical rows, above the probe's minimum of 10, so it runs too. `probe` rewrites `results/probe.csv` for the worlds it is given, so it is run for **every** world; HP and Avatar must come out identical to the committed numbers (logistic regression with leave-one-out is deterministic). With only 16 rows and Tyrell = 1, this is the weakest probe of all and is labelled as such.
+- Every result is reported, whether it helps or not.
+
 ## 2026-11-23 · Results of the fixes (all reported, as fixed in advance)
 8,460 new predictions (3 fixes × the same 470 rows × 3 templates × 2 description variants) + the probe. Original `mlm` re-checked: identical to the committed run (max difference 0).
 
@@ -56,6 +81,77 @@ Ana asked for every option to be tried and reported. To avoid tuning on the test
   - **Why it's unsure:** the model vs. real people vs. the simulated panel on vague items.
 - All numbers come from `sorter.predict`. The same attention rule as the analysis is applied (10 people, 35 simulated personas). The simulated panel is labelled as simulated in the UI.
 - `gradio==6.31.0` added to requirements. Tested headlessly: every tab returns valid output. Ana owns polishing and deployment.
+
+---
+
+## 2026-11-23 · Game of Thrones step 5: first run (not yet the analysis)
+- `run_experiments.py run got` → **1,572 predictions** (131 rows × 12 settings; the 8 `needs_review` rows are skipped). `occlusion got` → 160 rows (16 canonical × 5 traits × 2 variants). `summary` → 8 new GoT rows in `results/summary_q1q2.csv`. No existing row of any file changed.
+- **Q1/Q2, canonical accuracy** (chance 20%; n = 16, so CIs are wide):
+
+  | Method | Without descriptions | With descriptions |
+  |---|---|---|
+  | NLI | **56%** (31–81%) | 44% (19–69%) |
+  | embed | 44% (19–69%) | 31% (12–56%) |
+  | bert-mean | 31% | 12% |
+  | MLM | 6% | 19% |
+
+- **NLI's 56% comes from the names.** Without descriptions, all 6 Lannisters are right when the first name is given (Tywin, Cersei, Jaime, Tyrion, Kevan, Lancel). Without the name, accuracy drops to 25%; with a swapped name, it follows the name 56% of the time and the traits only 6%. The McNemar test (no_name vs. name_swap) is not significant (p = 0.375): 16 pairs are too few. **Starks are never recognised by name:** Eddard, Sansa, Arya and Lyanna all go to Targaryen or Lannister.
+- **Collapse onto one group, as in HP and Avatar.** Share of all GoT rows that get the single most common answer: MLM Tyrell 80% (without descriptions) and **Greyjoy 99%** (with); embed Targaryen 59% / **92%**; bert-mean Tyrell 44% / 76%; NLI Lannister 39% / Greyjoy 36%. For MLM and embed with descriptions, accuracy is therefore the share of the favoured house, not trait reading.
+- **Q3, first look:** mean normalized entropy is almost the same for clear and ambiguous inputs in every method (e.g. embed with descriptions: no_name 0.56, conflicting 0.57, generic 0.69). **Negation:** MLM never changes its top answer (0/16 in both variants). NLI without descriptions changes 14/16, but its entropy is 0.98 (nearly uniform), so those changes are noise between almost equal scores, not a response to "not". Step 6 should use total variation distance, not top-answer flips alone.
+
+## 2026-11-23 · Game of Thrones: owner rulings (Fardin), steps 2.3 and 4 re-run
+- **First names only: kept.** Claude's proposal; Fardin saw it and did not object. Not an explicit ruling.
+- **Olenna admitted as an exception to the birth rule.** She is born Redwyne and Tyrell by marriage, but she heads House Tyrell in the series, and without her the house had no canonical row. Added at the end of `trait_picks.csv` as `got-c24` (sharp, astute, outspoken, unafraid, intelligent), so no existing id changed. **For the report:** Tyrell rests on **one** character, who is not Tyrell by birth; every generated conflicting row with Tyrell uses her traits. Read the Tyrell numbers as a case study.
+- **Trait check done: all 11 borderline traits accepted**, following the HP precedents (Cho "popular", "emotional"; Pansy "anxious", "frightened"). Share accepted as extracted: **80 of 80 traits** in the 16 canonical rows, 11 of them borderline (table in the entry below).
+- **Final set: 24 rows, 16 canonical, 8 `needs_review`.** Stark 4, Lannister 6, Targaryen 2, Greyjoy 3, Tyrell 1. The imbalance goes in the limitations; use macro-F1.
+- **Step 4 re-run:** 16 no_name, 16 name_swap, 16 negation, 42 conflicting (4 per house pair for all 10 pairs + the 2 vote items), 25 generic.
+- **Step 2.3:** `agreement.py make got` wrote `data/got/agreement/sheet_A.xlsx`, `sheet_B.xlsx` and `key.csv` with **16 items** (every canonical row; the script asks for 20). 🛑 Two annotators who have **not** seen the GoT character list fill them in. Fardin can't be one of them: he reviewed the traits with the names.
+
+## 2026-11-23 · Game of Thrones steps 2.2 and 4: canonical characters
+Built with the HP tools (`fetch_personality.py`, `make_tests.py`), wiki `gameofthrones`. The points marked "pending" below were ruled on the same day: see the entry above.
+
+- **Names are first names only** ("Eddard", not "Eddard Stark"). In this world the surname *is* the house, so a full name gives the answer away, and the general rule "leave out characters whose name contains a group name" would remove every character. `page` in `characters.csv` keeps the full wiki title. *Pending: Fardin confirms.*
+- **Scan.** 27 house members by birth were looked up, plus 19 more pages: minor members (Rickard, Brandon, Rhaella, Alton, Joanna, Martyn, Rodrik, Maron, Victarion, Garlan, Willas), two known by a married name (Olenna, Alerie) and six *House of the Dragon* characters, which are outside our sources. **No Personality section:** Rickon, Benjen, Aeron, Mace (role `spare`) and all the minor ones.
+- **Wrong page caught:** "Viserys Targaryen" is Viserys I (*House of the Dragon*). The series character is "Viserys Targaryen (son of Aerys II)".
+- **Leak list:** `data/got/leak_words.csv` (56 words): house names, every description word and its word forms (honourable, proud, ambitious, defiant, independent, diplomatic…), negated forms (dishonorable, disloyal), source-quote words (devoted, wealthy, rich, fierce, rebellious, clever), house-words cues (wintry, fiery) and sigils.
+- **Trait rule, fixed before picking** (close to the Divergent rule, to avoid hand-picking): the **first 5 adjectives in text order** that (a) the article itself affirms: not negated, not "not as X as", not another character's opinion; (b) describe this character; (c) are a lasting trait, not a passing state, a physical attribute or a skill; (d) keep their meaning as a bare word (said of the character, or of their own attitude, nature, temper or humour).
+- **Result: 23 rows, 15 canonical, 8 `needs_review`** (not padded).
+
+  | House | Canonical | needs_review (valid traits) |
+  |---|---|---|
+  | Stark | 4: Eddard, Sansa, Arya, Lyanna | Robb (3), Bran (3) |
+  | Lannister | 6: Tywin, Cersei, Jaime, Tyrion, Kevan, Lancel | — |
+  | Targaryen | 2: Daenerys, Viserys | Aerys (2), Rhaegar (4), Aemon (4) |
+  | Greyjoy | 3: Theon, Yara, Euron | Balon (3) |
+  | **Tyrell** | **0** | Margaery (3), Loras (2) |
+
+- **Tyrell has no canonical row.** By birth, only Margaery and Loras have a Personality section, and neither reaches 5 valid traits. **Olenna** (born Redwyne, so excluded by the README rule) is fetched as `spare`; she would be a clean row: sharp, astute, outspoken, unafraid, intelligent. *Pending: Fardin decides whether to admit her as an exception.* Until then accuracy and macro-F1 for this world cover 4 houses.
+- **Borderline picks, kept and flagged (11 of 75 traits). Pending: Fardin marks each ✓/✗; a ✗ turns the row into `needs_review`.**
+
+  | Character | Trait | Why it is borderline |
+  |---|---|---|
+  | Sansa | susceptible | "made her tragically susceptible to the manipulations of the Lannisters" (early seasons) |
+  | Sansa | effective | "effective as Lady of Winterfell": closer to competence than personality |
+  | Arya | spirited | describes "her spirited indifference to rules" |
+  | Arya | distrustful | "clearly distrustful of Daenerys": one situation |
+  | Tywin | unfettered | "often unfettered attitude": unusual word |
+  | Jaime | cold, sarcastic | first stated as what "outsiders perceive"; confirmed later ("this cold and sarcastic attitude") |
+  | Tyrion | sharp | describes his "sharp intellect" |
+  | Kevan | content | "always content with being a follower" |
+  | Viserys | tempestuous | describes his "tempestuous temper" |
+  | Euron | unnerving | describes his "unnerving coyness" |
+
+- **Rejected after reading the sentence** (examples): negated: Kevan "decisive", Theon "malicious", Euron "impulsive", "arrogant", Sansa "cruel", Viserys "unintelligent"; another character's opinion: Robb "stupid" (Tywin), "arrogant", "foolish" (Roose Bolton), Euron "half-insane"; about someone else: Tywin "nice", "generous" (his father), Arya "fatalistic" (the Hound), Sansa "tomboyish" (Arya); not personality: Tyrion "thick" (skin), "soft" (spot), Margaery "formidable" (skill), Loras "carefree" (life).
+- **A wider extractor would not fix the thin rows.** A check that also accepts participles and mis-tagged adjectives finds at most one or two more usable words on the 8 `needs_review` pages (e.g. Robb "loving", Bran "detached"). The pages are short; the tagger is not the bottleneck.
+- **Step 4 (`make_tests.py got`):** 15 no_name, 15 name_swap, 15 negation, 26 conflicting (4 per house pair among Stark, Lannister, Targaryen, Greyjoy + the 2 vote items; **no generated pair has Tyrell**), 25 generic. Re-run after any change to the canonical rows.
+- **Not done yet:** step 2.3 (`agreement.py make got`) waits for the rulings above, so the sheets are not built from rows that may change. Only 15 canonical rows exist and the sheet wants 20.
+- **Gold labels checked against the source (2026-11-23).** Fardin doesn't know the franchise, so Claude checked every label instead of leaving it to him. For all 27 characters and Olenna, the Game of Thrones Wiki infobox gives the house and the father; `gold_source` now holds that text and the episode the wiki cites (e.g. `[S1E1]`). All 27 are born into their gold house. Members with a second house by marriage keep the birth house (Sansa, Lyanna, Cersei, Margaery); Aemon, Lancel and Loras later renounce theirs and also keep it. Olenna is confirmed as House Redwyne, Tyrell by marriage.
+- **Step 2.1 owner check, done by Claude for the same reason.** Each `source_quote` in `data/got/groups.csv` was looked up on the live pages. Found word for word: Stark "honorable devotion to duty" and Tyrell "clever leaders" (Dummies); Lannister "wealthiest region due to its abundance of gold deposits", Greyjoy "fierce raids" / "terror of the seas" and Tyrell "positive image" (Wikipedia). Targaryen is a close paraphrase (Wikipedia: "wiping out three of the seven ruling houses that refused to bend their knees"). **Not found:** the Greyjoy sentence about Balon's failed rebellion is no longer on the Wikipedia page; the quote now cites the Game of Thrones Wiki for it. Description wording is unchanged. The traits marked "our reading" stay our reading: no source lists them as house traits.
+
+## 2026-11-23 · `fetch_personality.py`: section text was being dropped (fixed)
+- **Bug.** `_Text` raised its skip counter on the edit link's inner `<a>` but lowered it only on `</span>`, `</div>` and a few other end tags. The counter stayed above zero and the text up to the next `</span>` or `</div>` was lost. On the Game of Thrones wiki this emptied 4 sections (Yara, Kevan, Aemon, Lyanna) and cut the start of the others.
+- **Fix.** Inside a skipped element every nested tag is counted, so only the matching end tag ends the skip. Void tags (`<br>`, `<img>`…) are ignored.
+- **HP is not affected in practice.** HP reads its `raw/` cache, which was not touched. On a fresh fetch the fixed parser now also drops the quote-box captions it was meant to drop (Luna Lovegood: 939 → 866 words; the lost words are the caption line). Ana decides whether to re-fetch.
 
 ---
 

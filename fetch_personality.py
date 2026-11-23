@@ -75,15 +75,28 @@ class _Text(HTMLParser):
         super().__init__()
         self.out, self.skip = [], 0
 
+    VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta",
+            "param", "source", "track", "wbr"}   # no end tag, so they never change the depth
+
     def handle_starttag(self, tag, attrs):
+        if tag in self.VOID:
+            if tag == "br" and not self.skip:
+                self.out.append("\n")
+            return
         cls = dict(attrs).get("class", "") or ""
-        if tag in self.SKIP or "mw-editsection" in cls or "quote" in cls.lower():
+        if self.skip:
+            # Inside a skipped element: count every nested tag, so the matching end tag
+            # (and only that one) ends the skip. Fixed 2026-11-23: the old version counted
+            # only some end tags, so the <a> inside the edit link left skip > 0 and the text
+            # up to the next </span> or </div> was dropped (whole sections on some pages).
             self.skip += 1
-        elif tag in ("p", "li", "br", "h2", "h3", "h4"):
+        elif tag in self.SKIP or "mw-editsection" in cls or "quote" in cls.lower():
+            self.skip = 1
+        elif tag in ("p", "li", "h2", "h3", "h4"):
             self.out.append("\n")
 
     def handle_endtag(self, tag):
-        if self.skip and (tag in self.SKIP or tag in ("span", "div")):
+        if self.skip and tag not in self.VOID:
             self.skip -= 1
 
     def handle_data(self, data):

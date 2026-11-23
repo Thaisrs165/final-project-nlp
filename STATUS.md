@@ -9,10 +9,10 @@ A one-page snapshot for everyone, and for your AI assistant. Details live in [DA
 | Data: HP (Ana) | ✅ done: 34 characters, test rows, human baseline (70%, κ 0.37) |
 | Data: Avatar (Esther) | ✅ 28 characters + shortcut pairs; 🛑 agreement sheets not scored yet |
 | Data: Divergent (Thais) | 🟡 only **4** characters (her own experiment script exists) |
-| Data: Game of Thrones (Fardin) | 🛑 **not started** (0 characters) |
+| Data: Game of Thrones (Fardin) | ✅ 16 characters (Tyrell = Olenna only) + test rows; 🛑 agreement sheets sent, not scored yet |
 | Data: Invented (Esther) | 🛑 **not started** (0 personas) |
 | Human form | ✅ 19 responses (10 after the attention rule, decided in advance) |
-| Shared runner `run_experiments.py` | ✅ 14,100 predictions done for HP, Avatar, Divergent |
+| Shared runner `run_experiments.py` | ✅ 18,030 predictions: HP, Avatar, Divergent, GoT (4 methods + 3 fixes each) |
 | Fixes for the "always Gryffindor" problem | ✅ all tried and reported (see below) |
 | App (Gradio, Ana) | 🟡 starter works (`app/app.py`); polish + deploy to do |
 | Tables and figure for the report | ⏳ next |
@@ -37,7 +37,7 @@ A one-page snapshot for everyone, and for your AI assistant. Details live in [DA
 | Who | To do |
 |---|---|
 | **Thais** | Add Divergent characters (target ~25), then `make_tests.py divergent` (**after** your `divergent.py build`), then `run_experiments.py run divergent`. Write the **Introduction** (REPORT_ROADMAP.md §5). Fill in your Avatar agreement sheet if you haven't yet. |
-| **Fardin** | Build Game of Thrones with the HP tools (IMPLEMENTATION.md "How to build your world"), then run the runner. Write **Results Q2 + Q3 / Figure 1**. |
+| **Fardin** | GoT data and first run done (DATA_LOG, 2026-11-23). Next: score the GoT agreement sheets when they come back. Write **Results Q2 + Q3 / Figure 1**. |
 | **Esther** | Build the Invented personas; score the Avatar agreement sheets (`agreement.py score avatar`). Write **Methods: models and stats** and the **Conclusion**. Note: `sorter.py` got an optional `name=` and extra fix methods (see CLAUDE.md); plain `mlm` is unchanged. |
 | **Ana** | Polish and deploy the app (`app/README.md`). Write **Methods: data** + **Results Q1 / Table 2**. |
 | **Team** | Pick the final editor. Each person reads only the papers they cite (REPORT_ROADMAP.md §6, 8 papers, the listed parts only). |
