@@ -32,5 +32,6 @@ The controls at the top (world, model, with/without descriptions) apply to every
 ## To do (owner)
 - [x] Polish the wording and look (2026-11-23, Esther)
 - [x] Per-group colours from `worlds.json` are used in the multiverse grid
-- [ ] Deploy to Hugging Face Spaces (needs a login). The Space runs `app/app.py` and needs `sorter.py`, `data/`, `app/` and `requirements.txt`
+- [ ] Deploy decision (team): Gradio Spaces now need a paid plan (checked 2026-11-23). Recommendation: run locally plus the temporary `GRADIO_SHARE=True` link. Ready-made Space files in [space/README.md](../space/README.md).
+- [ ] Optional: a 1–2 min screen recording of the app for the report's Material
 - [ ] Put the link / QR code in the report's Conclusion

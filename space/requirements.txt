@@ -1,0 +1,6 @@
+# Only what the app needs. CPU-only torch keeps the Space build small (Spaces' free tier has no GPU).
+# Gradio itself is installed by the Space from sdk_version in README.md, so it isn't listed here.
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.15.0
+transformers==5.22.2
+sentence-transformers==6.3.0
