@@ -1,0 +1,131 @@
+{
+  "world": "invented",
+  "n_items": 20,
+  "chance": 0.25,
+  "accuracy_A": 0.7,
+  "accuracy_B": 1.0,
+  "raw_agreement": 0.7,
+  "cohen_kappa": 0.6,
+  "per_item": [
+    {
+      "item": "invented-a01",
+      "gold": "veltrin",
+      "A": "veltrin",
+      "B": "veltrin"
+    },
+    {
+      "item": "invented-a02",
+      "gold": "osmark",
+      "A": "calwen",
+      "B": "osmark"
+    },
+    {
+      "item": "invented-a03",
+      "gold": "calwen",
+      "A": "calwen",
+      "B": "calwen"
+    },
+    {
+      "item": "invented-a04",
+      "gold": "durrask",
+      "A": "durrask",
+      "B": "durrask"
+    },
+    {
+      "item": "invented-a05",
+      "gold": "veltrin",
+      "A": "veltrin",
+      "B": "veltrin"
+    },
+    {
+      "item": "invented-a06",
+      "gold": "osmark",
+      "A": "osmark",
+      "B": "osmark"
+    },
+    {
+      "item": "invented-a07",
+      "gold": "calwen",
+      "A": "veltrin",
+      "B": "calwen"
+    },
+    {
+      "item": "invented-a08",
+      "gold": "durrask",
+      "A": "durrask",
+      "B": "durrask"
+    },
+    {
+      "item": "invented-a09",
+      "gold": "veltrin",
+      "A": "veltrin",
+      "B": "veltrin"
+    },
+    {
+      "item": "invented-a10",
+      "gold": "osmark",
+      "A": "osmark",
+      "B": "osmark"
+    },
+    {
+      "item": "invented-a11",
+      "gold": "calwen",
+      "A": "osmark",
+      "B": "calwen"
+    },
+    {
+      "item": "invented-a12",
+      "gold": "durrask",
+      "A": "calwen",
+      "B": "durrask"
+    },
+    {
+      "item": "invented-a13",
+      "gold": "veltrin",
+      "A": "osmark",
+      "B": "veltrin"
+    },
+    {
+      "item": "invented-a14",
+      "gold": "osmark",
+      "A": "osmark",
+      "B": "osmark"
+    },
+    {
+      "item": "invented-a15",
+      "gold": "calwen",
+      "A": "calwen",
+      "B": "calwen"
+    },
+    {
+      "item": "invented-a16",
+      "gold": "durrask",
+      "A": "veltrin",
+      "B": "durrask"
+    },
+    {
+      "item": "invented-a17",
+      "gold": "veltrin",
+      "A": "veltrin",
+      "B": "veltrin"
+    },
+    {
+      "item": "invented-a18",
+      "gold": "osmark",
+      "A": "osmark",
+      "B": "osmark"
+    },
+    {
+      "item": "invented-a19",
+      "gold": "calwen",
+      "A": "calwen",
+      "B": "calwen"
+    },
+    {
+      "item": "invented-a20",
+      "gold": "durrask",
+      "A": "durrask",
+      "B": "durrask"
+    }
+  ]
+}

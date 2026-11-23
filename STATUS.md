@@ -10,9 +10,9 @@ A one-page snapshot for everyone, and for your AI assistant. Details live in [DA
 | Data: Avatar (Esther) | ✅ 28 characters + shortcut pairs; 🛑 agreement sheets not scored yet |
 | Data: Divergent (Thais) | 🟡 only **4** characters (her own experiment script exists) |
 | Data: Game of Thrones (Fardin) | ✅ 16 characters (Tyrell = Olenna only) + test rows; 🛑 agreement sheets sent, not scored yet |
-| Data: Invented (Esther) | 🛑 **not started** (0 personas) |
+| Data: Invented (Ana + Esther) | ✅ 32 personas (8 per house) + test rows; agreement scored (85%, κ 0.60); run done |
 | Human form | ✅ 19 responses (10 after the attention rule, decided in advance) |
-| Shared runner `run_experiments.py` | ✅ 18,030 predictions: HP, Avatar, Divergent, GoT (4 methods + 3 fixes each) |
+| Shared runner `run_experiments.py` | ✅ 23,400 predictions: HP, Avatar, Divergent, GoT, Invented (4 methods + 3 fixes each) |
 | Fixes for the "always Gryffindor" problem | ✅ all tried and reported (see below) |
 | App (Gradio, Ana) | 🟡 starter works (`app/app.py`); polish + deploy to do |
 | Tables and figure for the report | ⏳ next |

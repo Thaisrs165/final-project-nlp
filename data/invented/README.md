@@ -31,5 +31,5 @@ There is no outside source, so traits are **written directly** under a fixed rul
 - [x] Generated test rows (`make_tests.py invented`)
 - [x] Ana reviewed the personas (2026-11-23)
 - [x] Agreement sheets built (`agreement/`, 20 items, 5 per house)
-- [ ] Agreement sheets filled in by two people who haven't seen the personas, then `agreement.py score invented`
-- [ ] Runner (`run_experiments.py run invented`)
+- [x] Agreement sheets scored (2026-11-23): Thais (A) 70%, Fardin (B) 100%, mean 85%, κ 0.60
+- [x] Runner, all methods + fixes (2026-11-23)

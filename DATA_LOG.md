@@ -5,6 +5,37 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
 
 ---
 
+## 2026-11-23 · Invented world: first results (not yet the analysis)
+- `run_experiments.py run invented` (4 methods + 3 fixes): 5,370 predictions; occlusion for the 32 canonical rows; probe re-run (other worlds identical).
+- **Canonical accuracy, without / with descriptions** (chance 25%):
+
+| Method | Without | With |
+|---|---|---|
+| **NLI** | 25% | **97%** (31 of 32) |
+| bert-mean | 22% | 44% |
+| embed (MiniLM) | 16% | 19% |
+| MLM | 25% | 25% |
+| MLM fixes (cal / large / large-cal) | 16–25% | 19–31% |
+
+- **Without descriptions, everything is at chance**, as designed: the names mean nothing to any model.
+- **With descriptions, NLI gets 31 of 32 right.** It reads the descriptions and matches synonyms. Its no_name and name_swap scores are also 94% (follows the swapped name 0%), so the invented names have no effect, as intended.
+- **BERT's fill-in-the-blank does not use the descriptions at all.** It stays at 25% and collapses onto one or two houses (no descriptions: Calwen 86 of 96 predictions; with descriptions: Calwen 48 / Durrask 45). The fixes don't change that.
+- **Sentence-BERT barely uses them either** (19%).
+- **Probe (trained, small-data check):** raw BERT vectors 72% (95% CI 56–88%), MiniLM 28%. That is far above the real worlds (25–38%).
+- ⚠️ **Caveat for the report and the interview.** The personas were *designed* to fit: 3 of 5 traits are direct synonyms of the description. Real characters' Fandom traits are messier (HP humans: 70%). So "NLI 97% on invented vs. 53% on HP" mixes two things: memorization vs. reading, **and** clean vs. messy traits.
+  - **The fair comparison is each model against the human baseline of the same world.**
+- **Invented human baseline (sheets returned 2026-11-23, `agreement.py score invented`):**
+  - A **70%** (95% CI 50–90%), B **100%**; **mean 85%**; raw agreement 70%; **κ 0.60** (0.31–0.86).
+  - By house (A, B out of 5): Veltrin 4, 5 · Osmark 4, 5 · Calwen 3, 5 · Durrask 3, 5.
+  - **Annotators: A = Thais, B = Fardin** (confirmed by Ana). Neither wrote the personas.
+- **So humans also find the invented personas easier than real characters** (85% vs. HP's 70%), which confirms the caveat. But the gap differs by model:
+  - **NLI with descriptions: 97% on invented, at or above humans; 53% on HP, below humans (70%).**
+  - BERT's fill-in-the-blank stays at chance in both.
+  - Read relative to humans, NLI matches people when the answer is in the descriptions and falls behind on real characters. BERT's MLM falls behind everywhere.
+  - What is already safe to say: (1) without descriptions every model is at chance on invented, so nothing there comes from memory; (2) BERT's fill-in-the-blank can't use in-prompt descriptions even when the answer is a near-synonym, while NLI can.
+
+---
+
 ## 2026-11-23 · Invented world step 2: 32 personas (drafted by Claude, Ana reviews)
 - **Method (Ana, option B):** the invented world has no outside source, so traits are **written directly** under a rule fixed before writing. They aren't "extracted" from a paragraph we would also have written, which would be circular.
 - **Rule:**
