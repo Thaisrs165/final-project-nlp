@@ -1,0 +1,9 @@
+method,variant,n_divergent,entropy_divergent,n_other,entropy_other,p
+bert-mean,names only,2,0.8406965,2,0.845529,0.667
+bert-mean,with descriptions,2,0.861005,2,0.8504689999999999,0.667
+embed,names only,2,0.6568864999999999,2,0.6548050000000001,0.667
+embed,with descriptions,2,0.7686795,2,0.8043985,0.833
+mlm,names only,2,0.5692315,2,0.7148938333333332,1.000
+mlm,with descriptions,2,0.9050265,2,0.9254376666666666,0.833
+nli,names only,2,0.9108255000000001,2,0.93675,0.833
+nli,with descriptions,2,0.5760970000000001,2,0.795457,1.000

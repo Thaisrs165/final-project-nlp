@@ -5,6 +5,29 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
 
 ---
 
+## 2026-11-23 · Divergent canonical test dropped as a measure; kept as a case study
+**What happened.** Thais pasted the Fandom "Personality" section of every character into `data/divergent/fandom_personality.txt`. 14 of 26 pages have **no Personality section**, including **every Abnegation, Amity and Candor character**.
+**Trait rule applied** (same for every row, no hand-picking): the **first 5 adjectives in text order** that describe the character's personality. Excluded: label leaks (brave, selfless, kind, intelligent…), looks ("big"), passing states ("distraught", "frustrated"), adjectives about something else ("logical response").
+**Result.** Only 4 characters reach 5 traits: Tris, Peter, Eric, Uriah, **all Dauntless**. 5 more have 2–4 traits (`needs_review`, not padded). Molly, Drew and Myra end the books factionless and are excluded.
+**Decision.** With a single class, accuracy is meaningless (always answering "Dauntless" scores 100%). The canonical test is **not used as a Divergent measure**. The Divergent evidence comes from the controlled probes (clear / conflicting / divergent_mode / generic / cross-franchise). The 4 characters are reported as a qualitative case study. Tris is the interesting case, because her three aptitude words (brave, selfless, intelligent) are removed by the leak rule.
+**For the report (Limitations):** the source describes personality almost only for Dauntless characters, because the books are narrated from inside Dauntless. This is a source bias, not a sampling choice.
+
+---
+
+## 2026-11-18 · Divergent tests built (Thais's part)
+**Decided before any model output was seen.** Changing any of this after looking at results must be a new entry here.
+
+- **Sources.** Fandom (`divergent.fandom.com`) returns HTTP 402 to automated access, so the canonical traits can't be extracted automatically. `data/divergent/characters.csv` lists 26 characters with the faction **quoted from Wikipedia** (*List of Divergent characters*, *Insurgent (novel)*). Traits are filled by hand from Fandom; `build` enforces the rules (exactly 5, evidence filled, no label leak).
+- **Gold label = faction the character belongs to after the Choosing Ceremony** (book 1), not the birth faction. The birth faction is kept in `birth_faction` for a possible "transfers" analysis. Excluded: Edward and Evelyn (factionless).
+- **Divergent characters** (per Wikipedia): Tris, Four, Marcus, Uriah, Natalie. Tris's aptitude result is Abnegation, Dauntless and Erudite (*Divergent (novel)*).
+- **Probe words** (`WORDS` in `experiments/divergent.py`), one direct adjective plus two synonyms per faction: Abnegation selfless / humble / modest · Amity peaceful / gentle / forgiving · Candor honest / truthful / blunt · Dauntless brave / fearless / daring · Erudite intelligent / studious / analytical. Direct words share a stem with the descriptions **on purpose** (easy variant); synonyms are leak-checked.
+- **Test types.** `clear` = 2 words of one faction (11 rows, incl. `k01-div`). `conflicting` = 1 word from each of 2 factions, all 10 pairs × direct/synonym × both orders (40 rows; the gold `A|B` follows the trait order, so we can measure an order effect). It includes the vote items `c01-div` and `c02-div` with identical traits. `divergent_mode` = 1 word from each of 3 factions (all 10 triples × direct/synonym = 20 rows). `generic` = `g01–g03-div` copied from `vote_items.csv` (same ids, so step 4 shouldn't add them again).
+- **Pre-registered house mapping** for the cross-franchise test: Dauntless→Gryffindor, Erudite→Ravenclaw, Abnegation→Hufflepuff, Amity→Hufflepuff, Candor→none (left out). Chance = 0.25.
+- **Metrics.** Normalized entropy by type (one-sided Mann–Whitney vs. `clear`, Holm-corrected); for mixed inputs: mass on the mixed factions (chance 0.4 / 0.6), top-k = the mixed factions, balance (min/max), share with max prob > 0.8 (“overconfident”), first-listed bonus (Wilcoxon over the 20 pairs); soft correspondence P(house | faction) = Σ P(f|x)P(h|x) / Σ P(f|x); JSD vs. the simulated panel on the 6 Divergent vote items. MLM: metrics per template, then mean (and spread) over the 3 templates. Correspondence and JSD use the template-averaged distribution.
+- **Added after the first run (inputs unchanged, only extra checks):** a sanity table (accuracy on the `clear` inputs + share of the most common answer) and a **permutation baseline** for the cross-franchise consistency. Reason: several methods collapse onto one label (e.g. bert-mean with descriptions answers Amity 91% of the time), which made the fixed 0.25 chance level misleading. The permutation keeps each label's frequency, so only real pairing beats it.
+
+---
+
 ## 2026-11-18 · Group descriptions written (step 2.1)
 **Rule.** Each `data/<world>/groups.csv` description is **word for word the one-line description the human form showed**. Humans, the simulated panel and BERT's "with descriptions" variant therefore all read the same definitions. Each row was then checked against an outside source, and the supporting text is in the new `source_quote` column. ⚠️ If anyone changed a description's wording when building the Google Form, the CSV has to be updated to match.
 
