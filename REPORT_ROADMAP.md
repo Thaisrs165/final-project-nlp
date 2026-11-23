@@ -21,22 +21,22 @@ Status keys: ✅ ready to write now · ⏳ needs step 5/6 results · 🛑 needs 
 | Grade | Rubric asks | Our answer | Status |
 |---|---|---|---|
 | Avoid **D** | No conceptual flaws such as data leakage or tiny datasets; results must address the goals | **Leakage:** leak-word filter (no group or description words as traits); names removed or swapped to test name leakage; annotators never see names. **Small n:** BERT stays frozen (no training on small data), bootstrap 95% CIs, results pooled across 5 worlds. **Goals:** Results answers the 3 objectives one by one. | ✅ design · ⏳ numbers |
-| **C** | Correct and meets goals | Measurable objective with a metric **and a target from prior work** (see 🛑 decision 1) | 🛑 |
+| **C** | Correct and meets goals | Measurable objective with a metric **and a target from prior work** (section 4) | ✅ agreed 2026-11-23 |
 | **B** | + statistical rigor, some originality | CIs on every accuracy; McNemar for name kept vs. swapped; κ for the human baseline; JSD vs. a reference distribution. Originality: invented-world control + ambiguity reference. | ⏳ |
-| **A** | + unique, **more than one track**, a literature review showing the **gap** we fill | Researcher (the experiment) + Educator (the "Unsure Hat" app that teaches that confidence ≠ understanding). Gap: probing studies test factual recall; none test trait-to-group mapping under controlled ambiguity with a memorization-free control and a reference for uncertainty. | 🛑 the app must exist |
+| **A** | + unique, **more than one track**, a literature review showing the **gap** we fill | Researcher (the experiment) + Educator (the "Unsure Hat" app that teaches that confidence ≠ understanding). Gap: probing studies test factual recall; none test trait-to-group mapping under controlled ambiguity with a memorization-free control and a reference for uncertainty. | 🟡 app: Gradio, Ana builds it |
 
 ## 3. Section by section (≈ 1,100 words of text in total)
 
-A 2-column IEEE page fits about 800–900 words of plain text. With 1 table, 1 figure and ~15 references, that leaves roughly **1,100 words** of text. Word budgets below are the maximum.
+A 2-column IEEE page fits about 800–900 words of plain text. With 2 tables, 1 figure and 8 references, that leaves roughly **1,100 words** of text. Word budgets below are the maximum.
 
 ### I. Introduction: ~250 words
 | Content | Source | Status |
 |---|---|---|
 | Hook: "When BERT puts us in Gryffindor, is it reading our traits or recognizing words?" | PLAN.md §7 | ✅ |
 | The 3 questions: Q1 correct? Q2 traits or names? Q3 what happens under ambiguity? | PLAN.md §1 | ✅ |
-| Related work in one sentence each: probing (Petroni 2019), PLL scoring (Salazar 2020; Kauf & Ivanova 2023), calibration (Zhao 2021), negation (Ettinger 2020; Kassner & Schütze 2020), human disagreement (Nie 2020; Pavlick & Kwiatkowski 2019), occlusion vs. attention (Jain & Wallace 2019) | RELATED_WORK.md, references.bib | ✅ |
+| Related work, one sentence each, from the 8 papers in section 6: probing (Petroni 2019), names (Poerner 2020), made-up control (Misra 2023), group–trait association (Kurita 2019), human disagreement (Nie 2020), negation (Ettinger 2020) | section 6 | ✅ |
 | **The gap** (one explicit sentence; this is the A criterion) | PLAN.md §7 | ✅ |
-| **Objective with targets** (decision 1) | PLAN.md §1 | 🛑 |
+| **Objective with targets** (copy from section 4 below) | section 4 | ✅ |
 
 ### II. Methods and datasets: ~400 words, includes Table 1 (data)
 | Content | Source | Status |
@@ -65,33 +65,112 @@ A 2-column IEEE page fits about 800–900 words of plain text. With 1 table, 1 f
 |---|---|---|
 | Direct answers to Q1–Q3 | Results | ⏳ |
 | **Limitations:**<br>• small n per world<br>• Ravenclaw is hard by construction (the leak filter removes its defining words; humans 3/10)<br>• the form's attention items were ambiguous (9 of 19 excluded)<br>• Fandom is fan-written (gold labels are canon)<br>• Hufflepuff has only 6 characters<br>• "kind" in generic g02 is an HP leak word<br>• the panel is simulated, not human<br>• English-only, one model family | DATA_LOG | ✅ |
-| The app (Educator track): one sentence + link/QR | step 8 | 🛑 |
+| The app (Educator track): one sentence + link/QR | step 8 (Gradio, Ana) | ⏳ |
 | Lessons learned | team | ⏳ |
 
 ### References: ~¼ page
-About 12–15 entries from `references.bib`. IEEE numeric style. Don't cite anything the text doesn't use.
+The 8 papers in section 6, IEEE numeric style (~¼ column). Don't cite anything the text doesn't use.
 
 ### What goes to the appendix (not graded, not cited)
-Per-template spread, bert-mean details, clustering (ARI/NMI, UMAP), per-character tables, the panel's construction details, the full test counts.
-**PLAN.md §3 keeps clustering in scope, but it won't fit in 2 pages. Suggest moving it to the appendix (decision 3).**
+Per-template spread, bert-mean details, per-character tables, the panel's construction details, the full test counts, Thais's Divergent-specific analyses (cross-franchise mapping, divergent_mode).
+**Clustering (ARI/NMI, UMAP) was dropped (2026-11-23):** it doesn't answer Q1–Q3, and there's no room for it.
 
-## 4. Decisions needed before writing (🛑)
+## 4. Objective and targets (agreed 2026-11-23)
 
-1. **Objective targets from prior work.** The rubric requires a target; PLAN.md only says "report X with CIs". Proposed:
-   - **Q1:** BERT's accuracy on canonical rows reaches the human baseline (from the agreement sheets) on real franchises, and the gap to the invented world is > 0 with a 95% CI that excludes 0 (LAMA-style probing, Petroni 2019).
-   - **Q2:** if BERT reads traits, name_swap accuracy is not significantly lower than no_name (McNemar, p ≥ 0.05).
-   - **Q3:** negation flip rate compared with Ettinger (2020), who found BERT largely insensitive to negation; on ambiguous items, BERT's JSD to the reference is lower than a uniform baseline's.
-2. **Section owners.** IMPLEMENTATION.md says one paragraph each, and Claude formats and checks the page limit. Proposed:
-   - Intro: Thais
-   - Methods (data): Ana
-   - Methods (models and stats): Esther
-   - Results: Fardin + Ana
-   - Conclusion: Esther
-   - Final editor: one person
-3. **Clustering to the appendix?** (recommended)
-4. **The app must exist for the Educator track.** Node vs. Gradio is still undecided (IMPLEMENTATION step 8). Without the app we are single-track, which caps us at a B.
+Paste this into the Introduction, shortened if needed:
 
-## 5. Interview prep: everyone must be able to explain these
+> We test whether a frozen BERT sorts people into fictional groups from their traits. The project succeeds if, with 95% CIs, we can say:
+> - **Q1 (correct?):** whether BERT reaches the **human baseline** on canonical characters (HP: 70%, from two annotators), and whether it does better on real franchises than on an **invented world** it can't have memorized (fill-in-the-blank probing as in Petroni et al. 2019; made-up control as in Misra et al. 2023).
+> - **Q2 (traits or names?):** if BERT reads traits, swapping in a character name from another group should **not** lower accuracy significantly (McNemar, p ≥ 0.05 between no_name and name_swap). This is the name-artifact test of Poerner et al. 2020.
+> - **Q3 (ambiguity?):** on vague and mixed inputs, BERT's distribution should be **closer to the human votes than a uniform guess** (JSD; Nie et al. 2020). Its negation flip rate is compared with Ettinger (2020), who found BERT largely insensitive to "not".
+
+## 5. Who writes what
+
+Everyone writes their part as plain text (or in the Overleaf project) using the sources listed. Claude puts it into the IEEE template and checks the 2-page limit. **The final editor is still to be picked by the team.** Each person must be able to explain their own part in the interview (section 7).
+
+### Thais: I. Introduction (~250 words)
+- Hook, from PLAN.md §7: "When BERT puts us in Gryffindor, is it reading our traits or just recognizing words?"
+- The 3 questions (Q1–Q3), one line each.
+- Related work, one sentence per thread (RELATED_WORK.md has the wording):
+  - **probing:** Petroni 2019;
+  - **name artifacts:** Poerner 2020;
+  - **made-up control:** Misra 2023;
+  - **group–trait association:** Kurita 2019;
+  - **human disagreement:** Nie 2020;
+  - **negation:** Ettinger 2020.
+- **The gap**, in one explicit sentence (RELATED_WORK.md "The gap"). This is the A criterion.
+- The objective with targets (section 4).
+
+### Ana: II-A. Methods, data (~200 words + Table 1)
+- **Worlds:** 4 franchises + the invented control, and why the control is needed.
+- **Group descriptions:** official sources, same wording as the human form.
+- **Traits:**
+  - 5 adjectives taken literally from Fandom "Personality" sections;
+  - each sentence read in context;
+  - leak-word filter;
+  - trait check (HP 97.6%; Avatar 100%).
+- **Gold labels:** canon only.
+- **Test types**, all generated by one script: no_name, name_swap, negation, conflicting, generic (25 shared sets), plus Avatar's shortcut pairs.
+- **Human references:**
+  - 2 annotators per world (accuracy, κ);
+  - human form (19 responses, 10 after the pre-set attention rule);
+  - simulated panel, **always labelled as simulated**.
+- **Table 1, one row per world:** characters, rows per test type, human accuracy, κ.
+- Sources: DATA_LOG.md, `data/<world>/README.md`, `results.json`.
+
+### Esther: II-B. Methods, models and statistics (~200 words)
+- **MLM scoring:** PLL-word-l2r (Kauf & Ivanova 2023).
+- **Calibration:** content-free "N/A" prompt (Zhao 2021); with a name, the prior uses "N/A" for the name too.
+- 3 prompt wordings, reporting the mean.
+- **Baselines:** Sentence-BERT similarity, raw BERT mean-pooling, NLI zero-shot (BART-MNLI). Name the models; no citation needed.
+- With vs. without group descriptions.
+- **Stats:** bootstrap 95% CI, exact McNemar, JSD, normalized entropy, negation flip rate.
+- **Occlusion** for trait importance: remove one trait at a time and measure the change. No citation needed in 2 pages.
+- Sources: `sorter.py` docstring, `run_experiments.py` docstring, PLAN.md §2.
+
+### Ana + Fardin: III. Results (~300 words + Table 2 + Figure 1)
+- **Ana: Q1 and Table 2.**
+  - Accuracy (95% CI) per world × method, with and without descriptions, against chance and the human baseline;
+  - real franchises vs. invented.
+  - Source: `results/summary_q1q2.csv`.
+- **Fardin: Q2 and Q3.**
+  - Q2: name kept / removed / swapped, the "follows the name" rate, the McNemar p, and one sentence on occlusion.
+  - Q3, Figure 1: BERT vs. human and panel distributions on generic and conflicting items (JSD), the negation flip rate vs. Ettinger, and the calibration "Gryffindor pull".
+  - Sources: `results/all.csv` and step 6 notebooks.
+- **Both:** say for each target whether it was met or not.
+
+### Esther: IV. Conclusion (~150 words)
+- Direct answers to Q1–Q3.
+- **Limitations** (list in section 3 above).
+- **The app:** one sentence + link/QR (Ana sends it).
+- Lessons learned.
+
+### Claude
+- IEEE LaTeX template, Table 1/2 and Figure 1 from `results/`.
+- References in IEEE style from `references.bib`.
+- Page-count check.
+
+## 6. Papers: 8, and only the parts we use
+
+- **Why we need papers at all:** the rubric gives an **F** for "no review of prior work", and an **A** needs a review that shows the gap we fill.
+- **Why only 8:** 2 pages leave room for about 8 references, and nobody has time to read more.
+- **They're all conference papers.** About 5 pages for the short ones and 8–9 pages of main text for the long ones; skip the appendices. **You don't read them cover to cover.** Read the abstract plus the one part listed, about 20–30 minutes each.
+
+| # | Paper | Length | Cited by | Read only | What we take from it |
+|---|---|---|---|---|---|
+| 1 | Petroni et al. 2019, *Language Models as Knowledge Bases?* (EMNLP) | long | Thais | abstract + intro | Fill-in-the-blank probing of a frozen BERT (that's what our MLM method is) |
+| 2 | Poerner et al. 2020, *E-BERT* / *BERT is Not a Knowledge Base (Yet)* (Findings of EMNLP) | long | Thais, Fardin | abstract + the LAMA-UHN section | BERT guesses from **names**; filtering those out drops its score. This is why we test no_name / name_swap. |
+| 3 | Misra et al. 2023, *COMPS* (EACL) | long | Thais | abstract + intro | Made-up concepts as a control against memorization: our invented world |
+| 4 | Kurita et al. 2019, *Measuring Bias in Contextualized Word Representations* (workshop) | short | Thais, Esther | abstract + method section | Measuring group–trait association with BERT's fill-in-the-blank, divided by a prior: closest to our method |
+| 5 | Kauf & Ivanova 2023, *A Better Way to Do Masked Language Model Scoring* (ACL) | short | Esther | whole paper | How we score group names made of several word pieces (PLL-word-l2r) |
+| 6 | Zhao et al. 2021, *Calibrate Before Use* (ICML) | long | Esther, Fardin | abstract + the "N/A" calibration section | Models favour common answers; the "N/A" prompt corrects it. This explains the Gryffindor pull. |
+| 7 | Nie et al. 2020, *What Can We Learn from Collective Human Opinions…* (ChaosNLI, EMNLP) | long | Thais, Fardin | abstract + results | Compare a model with the **spread** of human votes, not one right answer (JSD) |
+| 8 | Ettinger 2020, *What BERT Is Not* (TACL) | long | Thais, Fardin | abstract + the negation section only | BERT largely ignores "not": our negation target |
+
+- **Rule:** whoever cites a paper reads its listed part first, because the interview can ask about it.
+- Everything else in RELATED_WORK.md (34 papers) is **background only**. It isn't cited and nobody has to read it. If the interviewer asks "why occlusion and not attention?", the one-line answer is in RELATED_WORK.md (Jain & Wallace 2019); no need to read the paper.
+
+## 7. Interview prep: everyone must be able to explain these
 
 - Why PLL-word-l2r and not a single `[MASK]` (group names are several word pieces; plain PLL inflates long names).
 - What calibration does, and why the named prior uses "N/A" for the name.
@@ -103,10 +182,10 @@ Per-template spread, bert-mean details, clustering (ARI/NMI, UMAP), per-characte
 - "Explain the project in 30 seconds."
 - "How does MLM compare with NLI?"
 
-## 6. Timeline (PLAN.md §6)
+## 8. Timeline (PLAN.md §6)
 
 | When | What |
 |---|---|
-| Now | HP done except the κ sheets. Other worlds build their data with the HP tools. |
-| Next | Step 5 runner (HP first, others as they land), then step 6 tables and figures. |
+| Now | HP and Avatar data done; Divergent partial (4 characters); GoT and Invented still empty. Step 5 runner built (`run_experiments.py`). |
+| Next | Step 6 tables and figures; Ana builds the Gradio app; the remaining worlds add data and re-run the runner. |
 | Report (~4 days) | Fill sections from this roadmap, check the page count in the IEEE PDF, then do a dry run of the interview questions. |

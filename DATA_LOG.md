@@ -5,6 +5,36 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
 
 ---
 
+## 2026-11-23 · Team decisions: targets, writers, clustering, app; step 5 runner
+- **Objective targets agreed** (Ana): full wording in REPORT_ROADMAP.md §4, short form in PLAN.md §1. Q1 vs. the human baseline and the invented world; Q2 McNemar no_name vs. name_swap; Q3 JSD vs. a uniform guess, negation compared with Ettinger 2020.
+- **Who writes what:**
+  - Intro: Thais
+  - Methods, data: Ana
+  - Methods, models and stats: Esther
+  - Results: Ana (Q1, Table 2) + Fardin (Q2, Q3, Figure 1)
+  - Conclusion: Esther
+  - The final editor is still to be picked. Details in REPORT_ROADMAP.md §5.
+- **Clustering dropped** (ARI/NMI, UMAP): it doesn't answer any of Q1–Q3 and there's no room in 2 pages.
+- **App: Gradio, built by Ana.** Chosen over Node because it's faster: plain Python calling `sorter.py` directly, no separate `api.py`, free hosting on Hugging Face Spaces.
+- **Papers:** the rubric requires a review of prior work (F without it; an A needs the gap). RELATED_WORK.md already has 34 papers; the 2-page list is **8 papers**, with the part to read in each (REPORT_ROADMAP.md §6). Whoever cites a paper opens the PDF first.
+- **Step 5: `run_experiments.py`**, the one shared runner.
+  - Every world's `tests.csv` × 4 methods × (3 templates for MLM, 1 otherwise) × with/without descriptions.
+  - The name is passed only for canonical and name_swap rows; `needs_review` is skipped.
+  - Output columns follow Thais's `results/divergent/predictions.csv`, plus `name` and `name_group`.
+  - Cached, so re-runs only compute new rows.
+  - `occlusion` (canonical, MLM, template 0, no name, both description variants) → `results/occlusion.csv`.
+  - `summary` → `results/summary_q1q2.csv`: accuracy per world × method × descriptions on canonical, no_name and name_swap. MLM probabilities are averaged over the 3 templates first. Bootstrap 95% CI (2,000 resamples, seed 42); "follows the name" rate on name_swap; exact McNemar no_name vs. name_swap, paired by character.
+  - All models stay in `sorter.py`; CLAUDE.md tells every assistant not to write another runner.
+- **First full run (2026-11-23):** 5,640 predictions (HP 189 rows, Avatar 203, Divergent 78; × 12 settings each). Occlusion done for 66 canonical rows. 3 fast tests added for the runner.
+- **First look at Q1/Q2 (not yet the analysis; step 6 does that properly):**
+  - **HP canonical accuracy** (chance 25%, humans 70%): NLI 53% / 50% (without / with descriptions), embed 41% / 44%, MLM 29% / 24%, bert-mean 24% / 35%.
+  - **Avatar** is near chance for every method (11–32%).
+  - **Divergent** has only 4 canonical rows, which is too few to report.
+  - **MLM collapses onto one group.** With a name and no descriptions, it answers Gryffindor in 97 of 102 HP predictions, whatever the name (name_swap: 96 of 102). Calibration doesn't remove it: the "N/A" prior doesn't capture the pull that a real name adds. With descriptions it **never** answers Gryffindor. Avatar shows the same pattern (no descriptions → mostly Earth; with descriptions → only Fire and Air).
+  - So for MLM, accuracy equals the share of the favoured group, and the McNemar test can't show a name effect, because the model ignores both the traits and *which* name it is. That is a Q2/Q3 finding (a frequency fallback, as Zhao 2021 describe), not a bug.
+
+---
+
 ## 2026-11-23 · `make_tests.py` no longer touches hand-made rows that have an `origin_id`
 - After pulling Divergent: Thais's reversed conflicting probes (`cnf-…-ba`) have an `origin_id`, and `make_tests.py` treated any generated-type row with an `origin_id` as its own, so running it on Divergent would have **deleted 20 of her rows**. It wasn't run on Divergent, so nothing was lost.
 - Fix: generated rows are now recognised only by their id patterns (`-nn`, `-ns`, `-neg`, `<world>-x..`, `<world>-v-..`, `<world>-g-..`). Extra columns already in a world's `tests.csv` are kept. HP and Avatar output is byte-for-byte identical; a dry run keeps all 78 Divergent rows.

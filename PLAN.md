@@ -19,7 +19,10 @@ We use fictional sorting systems (HP, Divergent, Game of Thrones, Avatar, and on
 For an ambiguous input like "smart and nice", we can't simply assume the right answer is a uniform split. The original plan was a Google Form answered by about 30 classmates, following ChaosNLI. **Changed 2026-11-18:** there wasn't time or enough respondents, so `make_votes.py` builds a **simulated panel of 40 voters** with distinct personalities (Big Five profile, franchise familiarity, reading style, self-projection, fan bias) who answer the same 39 items. The panel's vote split is the reference: a good model is uncertain where the panel is. **It is not human data**, and the report must say so and list it as a limitation. Details and assumptions: [DATA_LOG.md](DATA_LOG.md).
 
 **Measurable objective (for the report):**
-> The project succeeds if we report, with 95% CIs: (1) the accuracy gap between real franchises and the invented-world control; (2) the JSD between BERT's and the simulated panel's distributions on ambiguous inputs, compared with the canonical ones; and (3) BERT's negation flip rate, compared with Ettinger (2020).
+> **Targets (agreed 2026-11-23; full wording in [REPORT_ROADMAP.md](REPORT_ROADMAP.md) §4).** With 95% CIs:
+> - **Q1:** BERT vs. the human baseline (HP: 70%), and real franchises vs. the invented world (Petroni 2019; Misra 2023).
+> - **Q2:** name_swap accuracy is not significantly below no_name (McNemar, p ≥ 0.05) if BERT reads traits (Poerner 2020).
+> - **Q3:** BERT's JSD to the human votes is below a uniform guess's (Nie 2020); the negation flip rate is compared with Ettinger (2020).
 
 ---
 
@@ -38,7 +41,7 @@ For an ambiguous input like "smart and nice", we can't simply assume the right a
 
 ## 3. Scope: keep or cut
 
-**Keep:** 3 methods (MLM pseudo-log-likelihood, embedding similarity with BERT mean-pooling vs. MiniLM, NLI zero-shot with `bart-large-mnli`), 5 worlds, 6 test types, clustering (ARI/NMI plus one UMAP plot).
+**Keep:** 3 methods (MLM pseudo-log-likelihood, embedding similarity with BERT mean-pooling vs. MiniLM, NLI zero-shot with `bart-large-mnli`), 5 worlds, 6 test types. **Clustering (ARI/NMI, UMAP) dropped 2026-11-23:** it doesn't answer Q1–Q3 and doesn't fit in 2 pages.
 **Cut / appendix only:** ModernBERT comparison (only if time allows), extra franchises, the linear probe.
 
 **One change to the member split:** keep franchise ownership for *data*, but **every test type runs on every franchise**, generated automatically from the canonical rows:
@@ -75,7 +78,7 @@ data/simulated_votes.csv  item_id, world, voter_id, group, source       # make_v
 
 ## 5. The interactive part: "The Unsure Hat"
 
-> **Proposal (not built yet):** a small Node interface with a personality quiz in front, a playground and an explainer. It would be backed by the same `sorter.py` through `api.py`. See [IMPLEMENTATION.md](IMPLEMENTATION.md), steps 7–8. The tab ideas below still apply.
+> **Decided 2026-11-23: Gradio, built by Ana** (faster than Node: plain Python, calls `sorter.py` directly, no separate `api.py` needed, free hosting on Hugging Face Spaces). The tab ideas below still apply.
 
 Originally planned as a Gradio app on Hugging Face Spaces built on the same `sorter.py` the experiments use. It has three tabs, and each one demonstrates one of our questions live.
 
