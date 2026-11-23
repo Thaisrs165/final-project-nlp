@@ -5,6 +5,13 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
 
 ---
 
+## 2026-11-23 · Game of Thrones: the MLM fixes run too, settings fixed BEFORE running (Fardin)
+- **Decision:** run fixes A, B, A+B and C on GoT with **exactly** the settings of the entry "Fixes for the MLM collapse, fixed BEFORE running them" below. Nothing is changed or tuned for GoT.
+- **Why:** so every world is scored with the same methods, and the report can describe one method. GoT was left out of the first fix run only because it had no data yet.
+- **Expected size:** 131 rows × 3 fixes × 3 templates × 2 description variants = **2,358 predictions**.
+- **Probe (fix C):** GoT now has 16 canonical rows, above the probe's minimum of 10, so it runs too. `probe` rewrites `results/probe.csv` for the worlds it is given, so it is run for **every** world; HP and Avatar must come out identical to the committed numbers (logistic regression with leave-one-out is deterministic). With only 16 rows and Tyrell = 1, this is the weakest probe of all and is labelled as such.
+- Every result is reported, whether it helps or not.
+
 ## 2026-11-23 · Results of the fixes (all reported, as fixed in advance)
 8,460 new predictions (3 fixes × the same 470 rows × 3 templates × 2 description variants) + the probe. Original `mlm` re-checked: identical to the committed run (max difference 0).
 
