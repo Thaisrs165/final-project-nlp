@@ -1,0 +1,21 @@
+pair_id,gold_group,element_traits,neutral_traits,note
+s01,fire,fiery; hot-headed; explosive,intense; short-tempered; volatile,temper
+s02,fire,hot-blooded; heated; smoldering,excitable; agitated; quietly resentful,anger held in
+s03,fire,inflammatory; scorching; combustible,provocative; harsh; irritable,provoking others
+s04,fire,warm; glowing; radiant,kind; contented; cheerful,positive heat
+s05,fire,sparky; flaring; quick to ignite,lively; quick to anger; easily provoked,quick reactions
+s06,water,fluid; flowing; still,flexible; relaxed; composed,going with the flow
+s07,water,icy; frosty; cool-headed,aloof; unfriendly; level-headed,cold manner
+s08,water,bubbly; buoyant; gushing,cheerful; upbeat; effusive,overflowing mood
+s09,water,deep; unfathomable; calm on the surface,profound; mysterious; outwardly composed,hidden depths
+s10,water,soothing; healing; drifting,comforting; caring; aimless,gentle care
+s11,earth,rock-solid; grounded; immovable,reliable; sensible; determined,steadiness
+s12,earth,stony; hard-headed; gritty,unemotional; obstinate; tough,hardness
+s13,earth,earthy; rooted; firmly planted,unpretentious; practical; settled,simplicity
+s14,earth,rocky; craggy; rough-edged,difficult; gruff; unpolished,roughness
+s15,earth,sturdy as stone; weathered; rugged,hardy; seasoned; tough,plain toughness
+s16,air,airy; breezy; light-hearted,casual; relaxed; cheerful,lightness
+s17,air,flighty; head in the clouds; floaty,fickle; absent-minded; unfocused,distraction
+s18,air,windswept; wandering; untethered,restless; roaming; unattached,wandering
+s19,air,gusty; whirlwind; flyaway,impulsive; hectic; scatterbrained,sudden bursts
+s20,air,lofty; soaring; uplifted,idealistic; optimistic; inspired,high-minded

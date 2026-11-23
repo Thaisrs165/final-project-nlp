@@ -41,6 +41,7 @@ from pathlib import Path
 
 # ---- Models (pinned in ONE place) -------------------------------------------
 MLM_MODEL = "bert-base-uncased"                         # main subject of the study
+MLM_LARGE_MODEL = "bert-large-uncased"                  # fix B (2026-11-23): does size help?
 EMBED_MODEL = "sentence-transformers/all-MiniLM-L6-v2"   # Sentence-BERT similarity
 NLI_MODEL = "facebook/bart-large-mnli"                  # zero-shot NLI baseline
 
@@ -89,6 +90,18 @@ CONTENT_FREE = "N/A"  # used for calibration (Zhao et al. 2021)
 EMBED_TEMPERATURE = 0.05
 
 METHODS = ("mlm", "embed", "bert-mean", "nli")
+# Fixes for the MLM collapse, fixed in DATA_LOG.md BEFORE they were run (2026-11-23).
+# Each is reported next to plain "mlm", which stays the baseline.
+#   method          model            calibration prior
+MLM_VARIANTS = {
+    "mlm":           (MLM_MODEL,       "na"),     # traits "N/A" (and name "N/A" if named)
+    "mlm-cal":       (MLM_MODEL,       "multi"),  # fix A: mean over CF_TRAITS x CF_NAMES
+    "mlm-large":     (MLM_LARGE_MODEL, "na"),     # fix B
+    "mlm-large-cal": (MLM_LARGE_MODEL, "multi"),  # fix A + B
+}
+FIX_METHODS = ("mlm-cal", "mlm-large", "mlm-large-cal")
+CF_TRAITS = ("N/A", "[MASK]", "")            # Zhao et al. 2021's content-free inputs
+CF_NAMES = ("N/A", "Alex", "Sam", "Jordan")  # neutral names, for named prompts only
 SEED = 42
 DATA_DIR = Path(__file__).resolve().parent / "data"
 BATCH_SIZE = 64
@@ -153,12 +166,12 @@ def _device():
 
 
 @lru_cache(maxsize=None)
-def _mlm():
+def _mlm(model_name: str = MLM_MODEL):
     import torch
     from transformers import AutoModelForMaskedLM, AutoTokenizer
     torch.manual_seed(SEED)
-    tok = AutoTokenizer.from_pretrained(MLM_MODEL)
-    model = AutoModelForMaskedLM.from_pretrained(MLM_MODEL).to(_device()).eval()
+    tok = AutoTokenizer.from_pretrained(model_name)
+    model = AutoModelForMaskedLM.from_pretrained(model_name).to(_device()).eval()
     return tok, model
 
 
@@ -209,10 +222,14 @@ def l2r_mask_plan(word_ids: list[int]) -> list[list[int]]:
 def _filled(world, group, traits, template, descriptions, name=None):
     """Prompt text with the group name filled in, plus the name's character span."""
     ctx = _context(world, descriptions)
+    # "" is one of the content-free inputs (fix A): keep it empty instead of "N/A"
+    ttext = "" if traits == "" else format_traits(traits)
     if name:
-        s = NAMED_TEMPLATES[template].format(name=name, traits=format_traits(traits), group="\x00")
+        s = NAMED_TEMPLATES[template].format(name=name, traits=ttext, group="\x00")
     else:
-        s = TEMPLATES[template].format(traits=format_traits(traits), group="\x00")
+        s = TEMPLATES[template].format(traits=ttext, group="\x00")
+    if ttext == "":
+        s = s.replace("  ", " ").replace(" ,", ",").replace(" :", ":").lstrip(": ")
     if s[0].islower():
         s = s[0].upper() + s[1:]
     i = s.index("\x00")
@@ -231,10 +248,10 @@ def name_pieces(world: str, group: str) -> list[str]:
             if s >= a and e <= b and e > s]
 
 
-def _pll(texts_spans: dict[str, tuple[str, tuple[int, int]]]) -> dict[str, float]:
+def _pll(texts_spans: dict[str, tuple[str, tuple[int, int]]], model_name: str = MLM_MODEL) -> dict[str, float]:
     """PLL-word-l2r of each group name in its sentence, all groups in one batch."""
     import torch
-    tok, model = _mlm()
+    tok, model = _mlm(model_name)
     seqs, targets = [], []
     for g, (text, (a, b)) in texts_spans.items():
         enc = tok(text, return_offsets_mapping=True)
@@ -267,14 +284,36 @@ def _pll(texts_spans: dict[str, tuple[str, tuple[int, int]]]) -> dict[str, float
     return scores
 
 
-def mlm_scores(traits, world, template=0, descriptions=None, name=None) -> dict[str, float]:
+def mlm_scores(traits, world, template=0, descriptions=None, name=None,
+               model_name=MLM_MODEL) -> dict[str, float]:
     """Raw PLL-word-l2r score of each group name (log-probability, higher = better)."""
-    return _pll({g: _filled(world, g, traits, template, descriptions, name) for g in WORLDS[world]})
+    return _pll({g: _filled(world, g, traits, template, descriptions, name) for g in WORLDS[world]},
+                model_name)
 
 
-def _prior(world, template, descriptions, name):
-    """Content-free prompt: traits 'N/A', and name 'N/A' when the prompt is the named one."""
-    return mlm_scores([CONTENT_FREE], world, template, descriptions, CONTENT_FREE if name else None)
+@lru_cache(maxsize=None)
+def _prior_cached(world, template, desc_items, named, calibration, model_name):
+    descriptions = dict(desc_items) if desc_items else None
+    if calibration == "na":
+        combos = [([CONTENT_FREE], CONTENT_FREE if named else None)]
+    elif calibration == "multi":
+        combos = [("" if t == "" else [t], n) for t in CF_TRAITS
+                  for n in (CF_NAMES if named else (None,))]
+    else:
+        raise ValueError(calibration)
+    total = {g: 0.0 for g in WORLDS[world]}
+    for traits, n in combos:
+        for g, v in mlm_scores(traits, world, template, descriptions, n, model_name).items():
+            total[g] += v / len(combos)
+    return total
+
+
+def _prior(world, template, descriptions, name, calibration="na", model_name=MLM_MODEL):
+    """Content-free prior (cached per setting).
+    "na":    traits 'N/A', and name 'N/A' when the prompt is the named one.
+    "multi": mean over CF_TRAITS (x CF_NAMES when named), fix A."""
+    items = tuple(sorted(descriptions.items())) if descriptions else None
+    return dict(_prior_cached(world, template, items, bool(name), calibration, model_name))
 
 
 def score_mlm(traits, world, template=0, descriptions=None, calibrate=True, name=None) -> dict[str, float]:
@@ -367,9 +406,10 @@ def predict(traits, world, method="mlm", *, template=0, descriptions=None, calib
     """
     if world not in WORLDS:
         raise ValueError(f"unknown world {world!r}")
-    if method == "mlm":
-        raw = mlm_scores(traits, world, template, descriptions, name)
-        prior = _prior(world, template, descriptions, name)
+    if method in MLM_VARIANTS:
+        model_name, calibration = MLM_VARIANTS[method]
+        raw = mlm_scores(traits, world, template, descriptions, name, model_name)
+        prior = _prior(world, template, descriptions, name, calibration, model_name)
         cal = {g: raw[g] - prior[g] for g in raw}
         scores = cal if calibrate else raw
         return {"probs": to_probs(scores), "raw_probs": to_probs(raw), "scores": scores}
@@ -382,7 +422,7 @@ def predict(traits, world, method="mlm", *, template=0, descriptions=None, calib
         s = score_nli(traits, world, descriptions, name)
         p = to_probs(s)
         return {"probs": p, "raw_probs": p, "scores": s}
-    raise ValueError(f"unknown method {method!r}; use one of {METHODS}")
+    raise ValueError(f"unknown method {method!r}; use one of {METHODS + FIX_METHODS}")
 
 
 def occlusion(traits, world, method="mlm", **kwargs) -> list[dict]:

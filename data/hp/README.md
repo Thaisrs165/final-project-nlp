@@ -34,4 +34,4 @@ Steps 2.1–2.2 of [IMPLEMENTATION.md](../../IMPLEMENTATION.md). Work only insid
 - [x] No trait is a group name or a word from this world's group descriptions (label leak)
 - [x] Rows with fewer than 5 usable adjectives marked `needs_review`, not padded
 - [x] Trait check done (2026-11-21; 4 of 165 swapped, 97.6% accepted); share accepted noted in [DATA_LOG.md](../../DATA_LOG.md)
-- [ ] Step 2.3: two annotators fill `agreement/sheet_A.xlsx` and `sheet_B.xlsx` independently; `agreement.py score hp` run; accuracy and κ noted in DATA_LOG.md
+- [x] Step 2.3: sheets returned 2026-11-23. Human accuracy A 55%, B 85% (mean 70%, chance 25%); Cohen's κ 0.37 (95% CI 0.08–0.64). Details in DATA_LOG.md and `agreement/results.json`.

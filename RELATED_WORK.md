@@ -79,6 +79,6 @@ We found no peer-reviewed work on "sorting" fictional groups. The only things th
 ### Non-academic prior art (mention in one sentence to show we looked)
 Hobby "sorting hat" projects exist: IBM Watson demo (2016), the NatLibFi fastText model on Hugging Face, and several blog classifiers. All of them **train** on house labels, and none studies ambiguity or memorization. This supports our gap claim.
 
-### Which to cite in the 2-page report (budget: ~12)
-Petroni 2019 · Poerner 2020 · Shwartz 2020 · Misra 2023 · Kurita 2019 · Nie 2020 · Baan 2022 · Zhao 2021 · Ettinger 2020 · Kauf & Ivanova 2023 · Jain & Wallace 2019 · Sang 2022.
-Everything else goes in the appendix or is kept for the interview.
+### Which to cite in the 2-page report: 8 (decided 2026-11-23)
+Petroni 2019 · Poerner 2020 · Misra 2023 · Kurita 2019 · Kauf & Ivanova 2023 · Zhao 2021 · Nie 2020 · Ettinger 2020.
+What to read in each, and who cites it: [REPORT_ROADMAP.md](REPORT_ROADMAP.md) §6. Everything else here is background only: not cited, no need to read it.

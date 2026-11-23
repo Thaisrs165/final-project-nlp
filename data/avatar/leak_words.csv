@@ -1,0 +1,54 @@
+word,group,found_in
+fire,fire,nation name
+nation,fire,nation name
+firebender,fire,nation name
+firebending,fire,nation name
+water,water,nation name
+tribe,water,nation name
+waterbender,water,nation name
+waterbending,water,nation name
+earth,earth,nation name
+kingdom,earth,nation name
+earthbender,earth,nation name
+earthbending,earth,nation name
+air,air,nation name
+nomad,air,nation name
+nomads,air,nation name
+airbender,air,nation name
+airbending,air,nation name
+ambitious,fire,form description (word form)
+driven,fire,form description (word form)
+passionate,fire,form description (word form)
+powerful,fire,Iroh's speech (live-action / animated)
+power,fire,Iroh's speech (live-action / animated)
+desire,fire,Iroh's speech (live-action / animated)
+energetic,fire,Iroh's speech (live-action / animated)
+energy,fire,Iroh's speech (live-action / animated)
+fiery,fire,literal element word (shortcut test only)
+flame,fire,literal element word (shortcut test only)
+flaming,fire,literal element word (shortcut test only)
+fierce,fire,literal element word (shortcut test only)
+adaptable,water,form description (word form)
+adaptive,water,form description (word form)
+adapting,water,form description (word form)
+changeable,water,form description (word form)
+communal,water,form description (word form)
+community-minded,water,form description (word form)
+watery,water,literal element word (shortcut test only)
+fluid,water,literal element word (shortcut test only)
+flowing,water,literal element word (shortcut test only)
+enduring,earth,form description (word form) / Iroh's speech
+persistent,earth,form description (word form) / Iroh's speech
+resilient,earth,form description (word form) / Iroh's speech
+strong,earth,Iroh's speech (live-action)
+strength,earth,Iroh's speech (live-action)
+earthy,earth,literal element word (shortcut test only)
+grounded,earth,literal element word (shortcut test only)
+rocky,earth,literal element word (shortcut test only)
+free,air,form description (word form) / Iroh's speech
+free-spirited,air,form description (word form) / Iroh's speech
+detached,air,form description (word form) / Iroh's speech
+peaceful,air,form description (word form) / Iroh's speech
+peaceable,air,form description (word form) / Iroh's speech
+airy,air,literal element word (shortcut test only)
+breezy,air,literal element word (shortcut test only)
