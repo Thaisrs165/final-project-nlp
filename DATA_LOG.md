@@ -5,6 +5,14 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
 
 ---
 
+## 2026-11-24 · Game of Thrones step 2.3: human baseline and κ (sheets returned)
+- The two filled sheets (16 nameless canonical items each) replaced the blank ones in `data/got/agreement/`; `key.csv` unchanged. Every row was checked against the key (identical traits) before scoring.
+- `agreement.py score got`: **accuracy A 25%, B 31% (chance 20%); raw agreement 38%; Cohen's κ 0.22.**
+- **Reading:** people barely beat chance on GoT, unlike HP (70%) and the invented world (85%). This fits the known caveat that GoT houses are decided by **birth**, not personality (DATA_LOG, "Pokémon GO replaced by Game of Thrones"): the traits don't point to a house even for humans. In the report, GoT is a world where the task itself is hard, so BERT's low score there says little on its own.
+- `make_tables.py` re-run: Table 1 now has GoT's human accuracy (28%) and κ. Only Avatar is still missing.
+
+---
+
 ## 2026-11-24 · Avatar agreement: sheet A returned (Fardin commits it)
 - `data/avatar/agreement/sheet_A.xlsx` replaced by the filled copy: **annotator A = Ana Helena**, 20 of 20 items answered.
 - **Accuracy of A alone: 7 of 20 (35%)**, chance 25%. By nation (right out of 5): Fire 3 · Water 2 · Air 1 · Earth 1.
