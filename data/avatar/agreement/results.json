@@ -1,0 +1,131 @@
+{
+  "world": "avatar",
+  "n_items": 20,
+  "chance": 0.25,
+  "accuracy_A": 0.35,
+  "accuracy_B": 0.4,
+  "raw_agreement": 0.35,
+  "cohen_kappa": 0.10652920962199308,
+  "per_item": [
+    {
+      "item": "avatar-a01",
+      "gold": "fire",
+      "A": "earth",
+      "B": "fire"
+    },
+    {
+      "item": "avatar-a02",
+      "gold": "water",
+      "A": "water",
+      "B": "earth"
+    },
+    {
+      "item": "avatar-a03",
+      "gold": "earth",
+      "A": "fire",
+      "B": "earth"
+    },
+    {
+      "item": "avatar-a04",
+      "gold": "air",
+      "A": "air",
+      "B": "air"
+    },
+    {
+      "item": "avatar-a05",
+      "gold": "fire",
+      "A": "fire",
+      "B": "earth"
+    },
+    {
+      "item": "avatar-a06",
+      "gold": "water",
+      "A": "water",
+      "B": "fire"
+    },
+    {
+      "item": "avatar-a07",
+      "gold": "earth",
+      "A": "fire",
+      "B": "fire"
+    },
+    {
+      "item": "avatar-a08",
+      "gold": "air",
+      "A": "water",
+      "B": "air"
+    },
+    {
+      "item": "avatar-a09",
+      "gold": "fire",
+      "A": "air",
+      "B": "earth"
+    },
+    {
+      "item": "avatar-a10",
+      "gold": "water",
+      "A": "earth",
+      "B": "fire"
+    },
+    {
+      "item": "avatar-a11",
+      "gold": "earth",
+      "A": "fire",
+      "B": "fire"
+    },
+    {
+      "item": "avatar-a12",
+      "gold": "air",
+      "A": "earth",
+      "B": "fire"
+    },
+    {
+      "item": "avatar-a13",
+      "gold": "fire",
+      "A": "fire",
+      "B": "fire"
+    },
+    {
+      "item": "avatar-a14",
+      "gold": "water",
+      "A": "air",
+      "B": "water"
+    },
+    {
+      "item": "avatar-a15",
+      "gold": "earth",
+      "A": "earth",
+      "B": "air"
+    },
+    {
+      "item": "avatar-a16",
+      "gold": "air",
+      "A": "fire",
+      "B": "earth"
+    },
+    {
+      "item": "avatar-a17",
+      "gold": "fire",
+      "A": "fire",
+      "B": "fire"
+    },
+    {
+      "item": "avatar-a18",
+      "gold": "water",
+      "A": "air",
+      "B": "air"
+    },
+    {
+      "item": "avatar-a19",
+      "gold": "earth",
+      "A": "water",
+      "B": "water"
+    },
+    {
+      "item": "avatar-a20",
+      "gold": "air",
+      "A": "earth",
+      "B": "air"
+    }
+  ]
+}

@@ -10,7 +10,7 @@ Step 1 setup ─► Step 2 data ─► Step 3 sorter.py ─► Step 4 test gener
 ```
 Steps 2 and 3 can run in parallel. Step 8's front end can start alongside them if it shows only the quiz key until the API exists.
 
-## Status (updated 2026-11-18)
+## Status (updated 2026-11-18; **superseded by [STATUS.md](STATUS.md)**, the team's live status page)
 
 | Step | State | Notes |
 |---|---|---|

@@ -5,6 +5,32 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
 
 ---
 
+## 2026-11-23 · Avatar step 2.3: human baseline and κ (sheets returned)
+**Annotators:** Ana (sheet A, already on main since PR #10) and Thais (sheet B). Neither had seen the Avatar character list. Each sorted the 20 nameless trait sets (5 per nation), using only the 4 nation descriptions. Scored with `agreement.py score avatar` → `data/avatar/agreement/results.json`.
+
+| | Ana (A) | Thais (B) |
+|---|---|---|
+| Accuracy | **35%** (7/20) | **40%** (8/20) |
+| Chance | 25% | 25% |
+
+- **Raw agreement 35%, Cohen's κ = 0.11** (slight agreement).
+- By nation (A / B correct out of 5): Fire 3 / 3, Air 1 / 3, Water 2 / 1, Earth 1 / 1.
+- **Fire was the most common answer** (15 of 40).
+  - Villains were the easiest: Azula and Zhao were correct for both.
+  - Controlling or harsh characters were pulled toward Fire: Lao and Suyin Beifong (Earth) both went to Fire.
+  - Gentle characters were pulled toward Air: Yue (Water) went to Air for both.
+  - Aang, Katara, Tenzin, Ursa and Jet were missed by both.
+
+**Reading.** As with GoT (28%, κ 0.22), people barely beat chance. That fits the same caveat: **nation is decided by birth**, personalities vary a lot inside each nation, and the descriptions are cultural values. For the report:
+- **Personality-sorted worlds:** HP 70% and invented 85% for humans.
+- **Birth-sorted worlds:** Avatar about 38% and GoT 28%.
+
+So in Avatar the realistic ceiling for BERT is about 35–40%, not 100%, and BERT should be compared with that.
+
+**Caveat:** 20 items, 2 annotators, so the confidence interval is wide.
+
+---
+
 ## 2026-11-24 · Game of Thrones step 2.3: human baseline and κ (sheets returned)
 - The two filled sheets (16 nameless canonical items each) replaced the blank ones in `data/got/agreement/`; `key.csv` unchanged. Every row was checked against the key (identical traits) before scoring.
 - `agreement.py score got`: **accuracy A 25%, B 31% (chance 20%); raw agreement 38%; Cohen's κ 0.22.**
@@ -459,7 +485,7 @@ Built with the HP tools (`fetch_personality.py`, `make_tests.py`, `agreement.py`
 **Step 4:** `make_tests.py avatar` → 28 no_name, 28 name_swap, 28 negation, 26 conflicting, 25 generic (168 rows in total).
 **Step 2.3:** `agreement.py make avatar` → 20 nameless sets, 5 per nation. 🛑 Two people who haven't seen the character list fill them in (not Esther).
 **Trait check (Esther, 2026-11-23):** all 8 borderline picks **kept**. Accepted as extracted: 140 of 140 canonical traits (100%), after the 20 rejections above were made while reading the sentences.
-**Still to do:** the agreement sheets (sent to Ana and Thais); the shortcut pairs.
+**Still to do:** nothing for Avatar 2.2–2.3 (agreement scored, shortcut pairs approved; see the entries above).
 
 ---
 
