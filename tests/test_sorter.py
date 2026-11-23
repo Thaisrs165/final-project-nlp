@@ -91,6 +91,18 @@ def test_name_goes_into_the_prompt_and_none_changes_nothing():
     assert sorter.person(["brave"], "Ginny Weasley") == "Ginny Weasley, who is brave."
 
 
+def test_fix_methods_are_declared():
+    assert set(sorter.FIX_METHODS) <= set(sorter.MLM_VARIANTS)
+    assert sorter.MLM_VARIANTS["mlm"] == (sorter.MLM_MODEL, "na")   # baseline unchanged
+
+
+def test_empty_content_free_prompt_reads_cleanly():
+    text, (a, b) = sorter._filled("hp", "gryffindor", "", 0, None)
+    assert text == "Someone who is belongs to Gryffindor." and text[a:b] == "Gryffindor"
+    text, (a, b) = sorter._filled("hp", "gryffindor", "", 0, None, name="Alex")
+    assert text == "Alex, who is, belongs to Gryffindor." and text[a:b] == "Gryffindor"
+
+
 # --------------------------------------------------------------- model tests
 @pytest.mark.models
 def test_every_group_name_is_found_in_the_prompt():
@@ -128,6 +140,18 @@ def test_calibrated_content_free_named_prompt_is_uniform(template):
     out = sorter.predict([sorter.CONTENT_FREE], "hp", "mlm", template=template, name=sorter.CONTENT_FREE)
     for p in out["probs"].values():
         assert math.isclose(p, 1 / 4, abs_tol=1e-6)
+
+
+@pytest.mark.models
+@pytest.mark.parametrize("named", [False, True])
+def test_multi_calibration_prior_is_uniform_on_its_own_inputs_average(named):
+    # the prior is an average, so a single content-free input needn't be uniform,
+    # but the calibrated probs must still be valid and the baseline must be untouched
+    out = sorter.predict(["brave"], "hp", "mlm-cal", name="Ginny Weasley" if named else None)
+    assert math.isclose(sum(out["probs"].values()), 1, abs_tol=1e-6)
+    base = sorter.predict(["brave"], "hp", "mlm")["probs"]
+    again = sorter.predict(["brave"], "hp", "mlm")["probs"]
+    assert all(math.isclose(base[g], again[g], abs_tol=1e-6) for g in base)
 
 
 @pytest.mark.models
