@@ -1,0 +1,11 @@
+world,descriptions,n_characters,share_any_single_flip,share_top_trait_first,chance,binom_p
+avatar,False,28,0.464,0.107,0.2,0.342
+avatar,True,28,0.179,0.071,0.2,0.1002
+divergent,False,4,0.5,0.5,0.2,0.1808
+divergent,True,4,0.0,0.25,0.2,1.0
+got,False,16,0.0,0.125,0.2,0.7537
+got,True,16,0.625,0.125,0.2,0.7537
+hp,False,34,0.618,0.265,0.2,0.3888
+hp,True,34,0.088,0.235,0.2,0.667
+invented,False,32,0.562,0.281,0.2,0.2677
+invented,True,32,0.469,0.125,0.2,0.379

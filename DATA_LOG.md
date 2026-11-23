@@ -5,6 +5,25 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
 
 ---
 
+## 2026-11-23 · Step 6 results: Q2 and Q3 (Fardin)
+Computed with `analysis_q2q3.py` exactly as fixed in the entry further down (committed first, 3599562). Output: `results/q2q3/` (`SUMMARY.md` has every table; fix methods in `*_fixes.csv`). **Worlds: hp, divergent, got, avatar, invented.** The invented world's predictions landed on main while this was in review; the fixed rule says every world in `all.csv` is included, so the analysis was re-run with it. Checked: no_name accuracies with template-averaged probabilities match `summary_q1q2.csv` exactly; 8 new tests in `tests/test_analysis_q2q3.py`.
+
+**Q2 (traits or names?)**
+- The target "McNemar p ≥ 0.05" is met in **32 of 32** world × method × variant rows, but **informative in only 3**: nli with descriptions on HP (no_name 0.50, chance 0.25; name_swap 0.41; p = 0.25) and, on the invented world, nli (0.94 / 0.94, p = 1.0) and bert-mean (0.53 / 0.47) with descriptions. Everywhere else no_name accuracy is at chance, so the name can't take anything away.
+- Largest name effect (own name − no name): nli on GoT, +0.31 without descriptions. On the invented world the names carry nothing (effects −0.19 to +0.03), as designed.
+- **Occlusion: no word-order bias.** The most influential trait is the first one for 7–28% of characters vs. 20% by chance (divergent, n = 4: up to 50%); all binomial p > 0.1. The share of characters where removing one trait changes the answer moves with the variant (HP 0.62 without descriptions, 0.09 with; GoT 0.00 vs. 0.62): it follows where the collapse sits, not trait reading.
+
+**Q3 (ambiguity)**
+- **JSD target met only by nli with descriptions**, against every reference: humans d = −0.103 (95% CI −0.156 to −0.050, Wilcoxon p < 0.001, 20 items); all 19 respondents d = −0.047 (−0.083 to −0.012); simulated panel d = −0.070 (−0.119 to −0.021, 32 items). mlm without descriptions is *further* than a uniform guess (d = +0.113, CI 0.035 to 0.196). Best JSD (nli, 0.206) is still above the human split-half floor (0.153; 95% of splits 0.111–0.219).
+- **Context: the robustness check leans on the invented items.** Before the invented world arrived (4 real worlds, 17 human items) the all-19 check was not met (d = −0.036, CI −0.076 to 0.002). The 3 invented items have the largest gains (mean d −0.11 vs. all 19, −0.18 vs. the 10). So: nli with descriptions is reliably closer to the 10 kept humans and to the panel; against all 19 it holds only with the invented items included.
+- **Entropy:** higher on ambiguous inputs in only 6 of 32 testable rows after Holm (avatar bert-mean and mlm with descriptions; hp bert-mean without; invented bert-mean without, mlm and nli with). Divergent has no `no_name` rows, so it is not testable there.
+- **Negation (TV vs. the different-character baseline):** embed moves 0.19–0.44 of the baseline (the "not" is largely ignored); mlm 0.56–1.29, bert-mean 0.41–1.32; nli 0.87–1.21 (flip rate 0.36–1.00). The plain-BERT methods agree with Ettinger (2020); nli is the exception, as expected from a model fine-tuned on MNLI.
+- **Calibration pull (mlm):** raw scores give one answer to 100% of no_name rows in HP (gryffindor), GoT (stark), the invented world (osmark) and Avatar without descriptions (earth). Calibration moves the collapse to another group (GoT: tyrell / greyjoy, 100%; invented: durrask, 100% with descriptions) instead of removing it. The predicted "more pull on vague inputs" can't be seen: raw is already at 100% on both input types.
+
+**Clarifications (not changes):** the Q2 target count leaves out divergent (no no_name / name_swap rows). Figure 1 (b) averages the per-world means over the four worlds with negation rows. In Figure 1 (a) each dashed line is the uniform guess measured against its own reference (blue = humans, orange = panel).
+
+---
+
 ## 2026-11-23 · Invented world: first results (not yet the analysis)
 - `run_experiments.py run invented` (4 methods + 3 fixes): 5,370 predictions; occlusion for the 32 canonical rows; probe re-run (other worlds identical).
 - **Canonical accuracy, without / with descriptions** (chance 25%):
@@ -33,6 +52,37 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
   - BERT's fill-in-the-blank stays at chance in both.
   - Read relative to humans, NLI matches people when the answer is in the descriptions and falls behind on real characters. BERT's MLM falls behind everywhere.
   - What is already safe to say: (1) without descriptions every model is at chance on invented, so nothing there comes from memory; (2) BERT's fill-in-the-blank can't use in-prompt descriptions even when the answer is a near-synonym, while NLI can.
+
+---
+
+## 2026-11-23 · Step 6, Q2 and Q3: analysis choices fixed BEFORE computing them (Fardin)
+Written before any of these numbers was computed, so the choices can't follow the results. One script, `analysis_q2q3.py`, reads `results/all.csv`, `results/occlusion.csv`, `results/summary_q1q2.csv` and the vote files, and writes `results/q2q3/` (tables, Figure 1, `SUMMARY.md`). Every world in `all.csv` is included automatically (the invented world joins once it has predictions).
+
+**Common settings**
+- **Main methods:** mlm, embed, bert-mean, nli. The three MLM fixes get their own table (appendix), never mixed into the main one.
+- **MLM:** probabilities averaged over the 3 templates, per row, before any metric (as in `summary`).
+- **Both description variants are reported.** The figure uses **with descriptions**: humans and the panel read the descriptions, so that is the fair comparison (entry of 2026-11-18).
+- **CIs:** bootstrap 95%, 2,000 resamples over items, seed 42. **Entropy:** normalized (0 = certain, 1 = uniform), compared within a method only.
+
+**Q2: traits or names?**
+- From `summary_q1q2.csv` (already computed): accuracy on canonical (own name) / no_name / name_swap, the "follows the name" rate, McNemar no_name vs. name_swap.
+- **Reading of the target:** the target is "McNemar p ≥ 0.05". It is formally met when p ≥ 0.05, but it is **only informative where no_name accuracy is above chance** (its 95% CI lower bound > chance): a model at chance can't lose accuracy when the name changes. Both facts are reported together.
+- **Name effect:** accuracy(canonical, own name) − accuracy(no_name), same characters.
+- **Occlusion** (`occlusion.csv`: MLM, template 0, no name, canonical rows). There is no annotation of which trait "should" matter, so instead: (a) the share of characters for which removing **one** trait changes the top answer; (b) the **position** of the most influential trait (largest delta): share at position 1 (the first trait), against 1/5 by chance, exact binomial test. (b) checks a word-order bias, which the panel also models (`first_trait_weight`).
+
+**Q3: ambiguity**
+- **Items:** the `generic` and `conflicting` vote items (`data/vote_items.csv`), matched to scored rows by world and exact trait text. `clear` items are not scored by the runner and are left out.
+- **References:**
+  - **humans**, primary: the 10 respondents kept by the pre-set attention rule; sensitivity: all 19. The form only has `generic` items.
+  - **simulated panel**: the 35 voters kept by its own pre-set rule (≥ 2 of 7 clear items wrong → dropped), recomputed from the votes. `generic` and `conflicting` items. Always labelled **simulated**.
+- **JSD** (base 2, 0 = identical, 1 = disjoint) between BERT's distribution and the reference vote shares, per item.
+- **Target (REPORT_ROADMAP §4):** BERT closer to the reference than a **uniform guess**. Per item, d = JSD(BERT, ref) − JSD(uniform, ref). **Met if the 95% CI of mean d is entirely below 0.** One-sided Wilcoxon signed-rank p as well.
+- **Human floor:** split the 10 kept humans at random into two halves of 5, JSD between the halves' vote shares, averaged over items; 1,000 random splits. This is the distance expected between people themselves.
+- **Entropy under ambiguity:** BERT's entropy on `generic` and `conflicting` rows vs. `no_name` rows, per world × method × variant, one-sided Mann-Whitney U (ambiguous > no_name), Holm-corrected over the whole table. Reference: the humans' and the panel's entropy on the same vote items.
+- **Negation:** each `negation` row is paired with the `no_name` row of the same character (same traits, no name, no "not"). Report the **flip rate** (top answer changes) and the **mean total variation distance** (TV, 0–1). **Baseline:** the mean TV between the `no_name` rows of two *different* characters of the same world (all pairs), i.e. how far the answer moves when the traits change completely. Negation TV far below that baseline = "not" is largely ignored, which is Ettinger's (2020) finding.
+- **Calibration pull (original mlm only):** the share of rows given the world's single most common answer, before (raw) and after calibration, on `no_name` vs. `generic` rows. Zhao et al. (2021) predict that raw scores fall back to a frequent label, more so on uninformative inputs.
+
+**Figure 1** (one IEEE column): (a) mean JSD to the humans and to the panel per method, with descriptions, with the uniform-guess level and the human floor as reference lines; (b) negation TV vs. the different-character baseline per method.
 
 ---
 
