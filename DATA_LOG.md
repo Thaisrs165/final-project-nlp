@@ -5,6 +5,75 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
 
 ---
 
+## 2026-11-23 · Human form responses imported
+**Source.** Google Forms export ("Forms NLP.xlsx", downloaded 2026-11-23): **19 responses** (2026-11-18 onward). The raw export isn't committed (it has submission timestamps); the anonymized data is:
+- `data/human_votes.csv`: `item_id, world, voter_id, group, source=human`. 19 × 25 = 475 votes; voter ids h01–h19 in submission order. Columns were mapped to item ids in form order, and every answer was checked to be a group of that item's world.
+- `data/human_respondents.csv`: `voter_id`, familiarity per franchise (0 = not at all, 1 = a little, 2 = well), `clear_wrong` (attention items missed, out of 5), `excluded` (1 if 2 or more missed).
+
+**Attention rule, as set in advance (≥ 2 of 5 wrong → drop): 9 of 19 excluded, 10 kept.** That's exactly the useful minimum.
+
+**⚠️ The attention items weren't obvious to people.** Correct answers per item, all 19 respondents:
+
+| Item | Expected | Correct | Most common other answer |
+|---|---|---|---|
+| k01-hp "witty, bookish, original" | Ravenclaw | **8/19** | Slytherin 7 |
+| k01-ava "never gives up, can endure anything" | Earth | 11/19 | Fire 8 |
+| k01-got "always keeps their word" | Stark | 12/19 | Greyjoy 3 |
+| k01-div "always tells the truth" | Candor | 14/19 | — |
+| k01-inv "watches carefully…" | Veltrin | 14/19 | — |
+
+So the rule removes people who **genuinely read the item differently**, not only random clickers. That pushes the kept sample toward consensus:
+- mean normalized entropy on the 20 generic items: **0.46 with the rule (n = 10)** vs **0.67 with everyone (n = 19)**;
+- simulated panel on the same items: 0.49.
+
+**Proposed (not yet decided by the team):** keep the rule as the **primary** analysis, because it was set before the data, and changing it now would be choosing the rule after seeing results. Report **all 19** as a sensitivity analysis, and say in the report that the attention items turned out to be ambiguous (k01-hp especially). This is a finding about the items, not a reason to drop people silently.
+
+**First look (not a result).**
+- With the rule, humans are about as consensual as the panel (H 0.46 vs 0.49). Several generic items are near-unanimous for people too: "smart and nice" → Ravenclaw 10/10, "funny and kind" → Amity 10/10 in Divergent. The earlier worry (2026-11-18) that the panel was too unanimous doesn't hold for these items.
+- They disagree on specific items: "creative and talkative" (HP) is Gryffindor 60% for humans but Ravenclaw 91% for the panel; "easygoing and polite" is Air 50% vs 100% (Avatar) and Hufflepuff 90% vs 54% (HP).
+- Familiarity ("well"): HP 14, GoT 9, Avatar 9, Divergent 3 of 19.
+
+---
+
+## 2026-11-23 · Avatar step 2.2: canonical characters (+ step 4 rows, 2.3 sheets)
+Built with the HP tools (`fetch_personality.py`, `make_tests.py`, `agreement.py`), wiki `avatar`.
+
+**Gold-label rule (Esther to confirm).** Gold = the nation in the character's **Avatar Wiki infobox** (`nation =` field), cross-checked against the `ethnicity` field. The wiki pages block scripts, so the fields were read through the MediaWiki API.
+- Includes both *Avatar: The Last Airbender* (2005–08) and *The Legend of Korra* (2012–14). Both are pre-2018.
+- **Excluded:** characters whose ethnicity doesn't match their nation, or who changed nation: Kyoshi (Air Nomad–Earth Kingdom), Kai and Opal (Earth Kingdom-born, later Air Nation), Pema, Zaheer, Kya, and LoK Bumi (Aang's son).
+- **Exception:** Tenzin, Jinora and Meelo (nation = air, Air Nomad ancestry mixed with Water Tribe) are kept, because without them the Air Nomads would have only 3 characters. In the story the Air Nomads were almost wiped out, so the imbalance is canon, not sampling.
+- `characters.csv` → `gold_source` records the infobox fields for each character.
+
+**Leak words (`data/avatar/leak_words.csv`, 53 words).**
+- Nation names and bending words.
+- Word forms of the description words: ambitious, passionate, adaptable, enduring, persistent, free, detached, peaceful… The automatic filter catches "bravely" from "brave" but **not** "ambitious" from "ambition", so forms must be listed.
+- Words from Iroh's speech: power, strong, resilient…
+- **Literal element words:** fiery, watery, fluid, earthy, grounded, airy… These belong only in the planned **shortcut test**, so canonical rows stay clean of them.
+- Metaphors like "hot-headed", "warm" and "cold" aren't on the list but were **avoided by hand** in the picks for the same reason (Zuko's "hot-headed", Roku's "warm", Sozin's "cold").
+
+**Result: 44 characters fetched → 33 rows: 28 canonical, 5 `needs_review`.**
+
+| Nation | Canonical | needs_review |
+|---|---|---|
+| Fire | 7 (Zuko, Iroh, Azula, Mai, Zhao, Sozin, Ursa) | 3 (Ozai, Roku, Ty Lee) |
+| Water | 7 (Katara, Sokka, Yue, Korra, Kuruk, Varrick, Noatak) | 1 (Tarrlok) |
+| Earth | 8 (Toph, King Bumi, Haru, Kuei, Jet, Lin, Suyin, Lao) | 1 (Suki) |
+| Air | 6 (Aang, Gyatso, Yangchen, Tenzin, Jinora, Meelo) | 0 |
+
+- Not usable: Long Feng and Tashi (empty Personality sections); Jeong Jeong, Piandao, Izumi, Hakoda, Hama, Tonraq, Yakone (fewer than 5 adjectives).
+- **Picks rejected after reading the sentence:**
+  - about someone else: Mai "callous" (Azula), Sozin "manipulative"/"petty" (his father), Ty Lee "pessimistic" (Mai), "traitorous" (Zuko), Ozai "moralistic" (Zuko), Toph "goofy" (Sokka), Kuvira "forgiving" (Suyin), Yangchen "wise" (other Air Nomads), Ikki "authoritarian" (Meelo);
+  - not personality: Ozai "evil" (about concepts), Zhao "sharp" ("sharp contrast"), Roku "noble" (upbringing), "volatile" (situations), "warm" (a hug), Varrick "irritable" (a rash), Suki "formidable" (her opponents), Sozin "cold" ("in cold blood"), Ikki "testy" (questions);
+  - public perception only: Tarrlok "fair-minded".
+- **Borderline picks for Esther's trait check:** Zuko "protective" (as a child), Mai "bitter" (one confrontation), Ursa "loving" (a relationship), Aang "carefree" (his "exterior"), Gyatso "wistful" ("wistful determination"), Kuei "fearful" (one moment), Roku "indecisive" (how he saw himself), Tarrlok "immoral" (his actions).
+
+**Step 4:** `make_tests.py avatar` → 28 no_name, 28 name_swap, 28 negation, 26 conflicting, 25 generic (168 rows in total).
+**Step 2.3:** `agreement.py make avatar` → 20 nameless sets, 5 per nation. 🛑 Two people who haven't seen the character list fill them in (not Esther).
+**Trait check (Esther, 2026-11-23):** all 8 borderline picks **kept**. Accepted as extracted: 140 of 140 canonical traits (100%), after the 20 rejections above were made while reading the sentences.
+**Still to do:** the agreement sheets (sent to Ana and Thais); the shortcut pairs; Esther to confirm the gold-label rule.
+
+---
+
 ## 2026-11-21 · Name slot in `sorter.py` (Q2) and shared `generic.csv` (step 2.5)
 - **Name slot.** `predict(..., name=None)` (and `score_mlm`, `score_embed`, `score_nli`). With a name, every MLM template uses its named twin in `sorter.NAMED_TEMPLATES` ("Ginny Weasley, who is …, belongs to Gryffindor."); embed and NLI use "Ginny Weasley, who is …." as the person sentence. Without a name, the prompts are exactly as before, so existing results don't change.
   - **Calibration with a name:** the prior uses the named template with **both** name and traits set to "N/A". The prior removes the template's own bias but not what the name carries; using the real name in the prior would calibrate away the very effect Q2 measures.

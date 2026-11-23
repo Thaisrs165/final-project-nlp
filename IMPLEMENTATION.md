@@ -15,16 +15,15 @@ Steps 2 and 3 can run in parallel. Step 8's front end can start alongside them i
 | Step | State | Notes |
 |---|---|---|
 | 1. Setup | ✅ done | venv, pinned requirements, folder layout |
-| 2. Data | 🟡 in progress | Per-world folders exist. **2.1 group descriptions written for all 5 worlds** (owners still to check). Owners: HP Ana, Divergent Thais, GoT Fardin, Avatar Esther, Invented Esther. Simulated panel done. **Short human form (25 items) is live**, collecting responses. |
+| 2. Data | 🟡 in progress | Per-world folders exist. **2.1 group descriptions written for all 5 worlds** (owners still to check). **2.2 done for HP (34) and Avatar (28)**; Divergent, GoT and Invented still empty. Owners: HP Ana, Divergent Thais, GoT Fardin, Avatar Esther, Invented Esther. Simulated panel done. **Human form: 19 responses imported** (`data/human_votes.csv`; 10 kept by the attention rule, all 19 as sensitivity). |
 | 3. `sorter.py` | ✅ done | 4 methods, with and without descriptions, PLL-word-l2r, calibration, occlusion. Optional `name=` for Q2 (named prompt twins in `NAMED_TEMPLATES`, added 2026-11-21). **40/40 tests pass**; one MLM call takes about 0.1 s on the Mac GPU. |
-| 4. `make_tests.py` | ✅ built | HP: 34 no_name, 34 name_swap, 34 negation, 28 conflicting, 8 generic. Other worlds: re-run once their canonical rows exist. |
+| 4. `make_tests.py` | ✅ built | HP: 34 no_name, 34 name_swap, 34 negation, 28 conflicting, 25 generic. Avatar: 28 / 28 / 28 / 26 / 25. Other worlds: re-run once their canonical rows exist. |
 | 5–6. Experiments, analysis | ⏳ waiting | Need steps 2 and 4. |
 | 7–8. API, interface | ⏳ not started | Node vs. Gradio still to decide. |
 | 9–10. Report, presentation | ⏳ not started | |
 
 **Waiting on people (🛑):**
 - Each owner checks their world's `data/<world>/groups.csv` against the `source_quote` column (about 10 min). GoT and Avatar need the most attention: see DATA_LOG.md.
-- Form: send the reminder 2–3 days after launch. When responses arrive, link them to a Google Sheet and share the link so `data/human_votes.csv` can be built.
 - Review the simulated panel's assumptions (step 2.6).
 
 **Next for Claude, once approved:**
