@@ -5,6 +5,15 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
 
 ---
 
+## 2026-11-24 · Avatar agreement: sheet A returned (Fardin commits it)
+- `data/avatar/agreement/sheet_A.xlsx` replaced by the filled copy: **annotator A = Ana Helena**, 20 of 20 items answered.
+- **Accuracy of A alone: 7 of 20 (35%)**, chance 25%. By nation (right out of 5): Fire 3 · Water 2 · Air 1 · Earth 1.
+- **Not scored yet:** `agreement.py score avatar` needs both sheets; sheet B is still blank. Cohen's κ and the mean human accuracy come when B is back.
+- ⚠️ **To confirm with Ana:** that she had not seen the Avatar character list with names (the rule of step 2.3; for HP she was left out for that reason).
+- A second file sent at the same time, the invented world's sheet B, is byte-identical to the committed one (99b7f30), so nothing changed there.
+
+---
+
 ## 2026-11-24 · Report tables re-run with the invented world
 `run_experiments.py summary` + `make_tables.py` re-run after the invented world was merged. Nothing in the code or the choices changed.
 - **Table 1:** invented 32 personas, human accuracy 85%, κ 0.60. Avatar and GoT κ still missing.
