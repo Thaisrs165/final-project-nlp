@@ -1,0 +1,9 @@
+method,variant,n,accuracy,ci_low,ci_high,macro_f1,tmpl_sd
+bert-mean,names only,4,0.75,0.25,1.0,0.17142857142857143,
+bert-mean,with descriptions,4,0.0,0.0,0.0,0.0,
+embed,names only,4,0.75,0.25,1.0,0.17142857142857143,
+embed,with descriptions,4,0.25,0.0,0.75,0.08,
+mlm,names only,4,0.5,0.3333333333333333,0.6666666666666666,0.11111111111111112,0.5
+mlm,with descriptions,4,0.6666666666666666,0.6666666666666666,0.6666666666666666,0.13333333333333333,0.5773502691896258
+nli,names only,4,0.0,0.0,0.0,0.0,
+nli,with descriptions,4,0.0,0.0,0.0,0.0,
