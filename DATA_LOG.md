@@ -5,6 +5,15 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
 
 ---
 
+## 2026-11-24 · Report tables re-run with the invented world
+`run_experiments.py summary` + `make_tables.py` re-run after the invented world was merged. Nothing in the code or the choices changed.
+- **Table 1:** invented 32 personas, human accuracy 85%, κ 0.60. Avatar and GoT κ still missing.
+- **Table 2 (with descriptions):** invented world: NLI **97%** [91, 100], BERT fill-in 25%, Sentence-BERT 19%, BERT + fixes 22% (chance 25%).
+- **Figure 1:** now 20 vague items (invented added) and 110 negation pairs. JSD to humans: NLI 0.21, BERT fill-in 0.35, uniform 0.31. Negation: BERT fill-in TVD 0.08 (11% flips), NLI 0.46 (88%).
+- **Caveat for Q1 (must be in the report):** the invented personas were written from synonyms of the house descriptions, so with descriptions in the prompt the invented world is easier **by construction**. NLI's 97% there vs. 29–50% on the real franchises says NLI reads in-prompt descriptions well; it is not evidence that BERT "reasons better without memory". The fill-in BERT stays at chance in every world, invented included.
+
+---
+
 ## 2026-11-23 · Step 6 results: Q2 and Q3 (Fardin)
 Computed with `analysis_q2q3.py` exactly as fixed in the entry further down (committed first, 3599562). Output: `results/q2q3/` (`SUMMARY.md` has every table; fix methods in `*_fixes.csv`). **Worlds: hp, divergent, got, avatar, invented.** The invented world's predictions landed on main while this was in review; the fixed rule says every world in `all.csv` is included, so the analysis was re-run with it. Checked: no_name accuracies with template-averaged probabilities match `summary_q1q2.csv` exactly; 8 new tests in `tests/test_analysis_q2q3.py`.
 
