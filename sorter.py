@@ -5,7 +5,7 @@ own version of a method (IMPLEMENTATION.md, step 3).
 
 Main entry point
 ----------------
-    predict(traits, world, method, template=0, descriptions=None, calibrate=True)
+    predict(traits, world, method, template=0, descriptions=None, calibrate=True, name=None)
         -> {"probs": {group: p}, "raw_probs": {group: p}, "scores": {group: s}}
 
     method:
@@ -22,6 +22,13 @@ Main entry point
                                 (the model can read what each group stands for)
       The invented world only makes sense WITH descriptions: BERT has never seen
       "Veltrin", so without them it can only guess.
+
+    name: None, or a character name (research question 2: traits vs. names).
+      None   -> "Someone who is brave, loyal and kind belongs to Gryffindor."
+      "Ginny Weasley" -> "Ginny Weasley, who is brave, loyal and kind, belongs to Gryffindor."
+      Every template has a named twin in NAMED_TEMPLATES (same index). For the
+      calibration prior the name is replaced by "N/A" too, so calibration removes
+      the template's bias but NOT the information carried by the name.
 
 Other helpers: entropy, top, occlusion, load_descriptions, format_traits.
 """
@@ -65,6 +72,13 @@ TEMPLATES = [
     "Someone who is {traits} belongs to {group}.",
     "A person described as {traits} would be sorted into {group}.",
     "{traits}: this sounds like a member of {group}.",
+]
+# Same prompts with a character name (decision 2026-11-21, DATA_LOG.md). Index i
+# here is the named twin of TEMPLATES[i].
+NAMED_TEMPLATES = [
+    "{name}, who is {traits}, belongs to {group}.",
+    "{name}, described as {traits}, would be sorted into {group}.",
+    "{name} is {traits}: this sounds like a member of {group}.",
 ]
 CONTENT_FREE = "N/A"  # used for calibration (Zhao et al. 2021)
 
@@ -110,6 +124,13 @@ def load_descriptions(world: str) -> dict[str, str]:
     if missing:
         raise ValueError(f"{path}: no description for {missing} (step 2.1 not done yet?)")
     return {g: rows[g] for g in WORLDS[world]}
+
+
+def person(traits, name=None) -> str:
+    """The person sentence used by the embedding and NLI methods."""
+    if name:
+        return f"{name}, who is {format_traits(traits)}."
+    return f"Someone who is {format_traits(traits)}."
 
 
 def _context(world: str, descriptions: dict[str, str] | None) -> str:
@@ -185,10 +206,13 @@ def l2r_mask_plan(word_ids: list[int]) -> list[list[int]]:
     return plan
 
 
-def _filled(world, group, traits, template, descriptions):
+def _filled(world, group, traits, template, descriptions, name=None):
     """Prompt text with the group name filled in, plus the name's character span."""
     ctx = _context(world, descriptions)
-    s = TEMPLATES[template].format(traits=format_traits(traits), group="\x00")
+    if name:
+        s = NAMED_TEMPLATES[template].format(name=name, traits=format_traits(traits), group="\x00")
+    else:
+        s = TEMPLATES[template].format(traits=format_traits(traits), group="\x00")
     if s[0].islower():
         s = s[0].upper() + s[1:]
     i = s.index("\x00")
@@ -243,17 +267,22 @@ def _pll(texts_spans: dict[str, tuple[str, tuple[int, int]]]) -> dict[str, float
     return scores
 
 
-def mlm_scores(traits, world, template=0, descriptions=None) -> dict[str, float]:
+def mlm_scores(traits, world, template=0, descriptions=None, name=None) -> dict[str, float]:
     """Raw PLL-word-l2r score of each group name (log-probability, higher = better)."""
-    return _pll({g: _filled(world, g, traits, template, descriptions) for g in WORLDS[world]})
+    return _pll({g: _filled(world, g, traits, template, descriptions, name) for g in WORLDS[world]})
 
 
-def score_mlm(traits, world, template=0, descriptions=None, calibrate=True) -> dict[str, float]:
+def _prior(world, template, descriptions, name):
+    """Content-free prompt: traits 'N/A', and name 'N/A' when the prompt is the named one."""
+    return mlm_scores([CONTENT_FREE], world, template, descriptions, CONTENT_FREE if name else None)
+
+
+def score_mlm(traits, world, template=0, descriptions=None, calibrate=True, name=None) -> dict[str, float]:
     """MLM score; calibrated = score(name | traits) - score(name | 'N/A') (Zhao 2021; Kurita 2019)."""
-    raw = mlm_scores(traits, world, template, descriptions)
+    raw = mlm_scores(traits, world, template, descriptions, name)
     if not calibrate:
         return raw
-    prior = mlm_scores([CONTENT_FREE], world, template, descriptions)
+    prior = _prior(world, template, descriptions, name)
     return {g: raw[g] - prior[g] for g in raw}
 
 
@@ -276,11 +305,10 @@ def _bert_mean(texts):
     return ((hidden * m).sum(1) / m.sum(1)).cpu()
 
 
-def score_embed(traits, world, descriptions=None, model="minilm") -> dict[str, float]:
+def score_embed(traits, world, descriptions=None, model="minilm", name=None) -> dict[str, float]:
     """Cosine similarity between the person and each group (name, or name + description)."""
     import torch
-    person = f"Someone who is {format_traits(traits)}."
-    texts = [person] + _group_texts(world, descriptions)
+    texts = [person(traits, name)] + _group_texts(world, descriptions)
     if model == "minilm":
         v = torch.tensor(_sbert().encode(texts, convert_to_numpy=True))
     elif model == "bert-mean":
@@ -295,16 +323,16 @@ def score_embed(traits, world, descriptions=None, model="minilm") -> dict[str, f
 # =============================================================================
 # Method 3: zero-shot NLI (Yin et al. 2019)
 # =============================================================================
-def score_nli(traits, world, descriptions=None) -> dict[str, float]:
+def score_nli(traits, world, descriptions=None, name=None) -> dict[str, float]:
     """Entailment logit of 'This person belongs to <group>.' for each group."""
     import torch
     tok, model, ent = _nli()
-    premise = f"Someone who is {format_traits(traits)}."
+    premise = person(traits, name)
     hyps = []
     for g in WORLDS[world]:
-        name = NAMES[world][g]
-        hyps.append(f"This person belongs to {name} ({descriptions[g].rstrip('.')})."
-                    if descriptions else f"This person belongs to {name}.")
+        gname = NAMES[world][g]
+        hyps.append(f"This person belongs to {gname} ({descriptions[g].rstrip('.')})."
+                    if descriptions else f"This person belongs to {gname}.")
     enc = tok([premise] * len(hyps), hyps, padding=True, truncation=True,
               return_tensors="pt").to(model.device)
     with torch.no_grad():
@@ -331,7 +359,8 @@ def top(probs: dict[str, float]) -> str:
     return max(probs, key=probs.get)
 
 
-def predict(traits, world, method="mlm", *, template=0, descriptions=None, calibrate=True) -> dict:
+def predict(traits, world, method="mlm", *, template=0, descriptions=None, calibrate=True,
+            name=None) -> dict:
     """One prediction. See the module docstring for the arguments.
 
     raw_probs differs from probs only for "mlm" (before vs. after calibration).
@@ -339,17 +368,18 @@ def predict(traits, world, method="mlm", *, template=0, descriptions=None, calib
     if world not in WORLDS:
         raise ValueError(f"unknown world {world!r}")
     if method == "mlm":
-        raw = mlm_scores(traits, world, template, descriptions)
-        prior = mlm_scores([CONTENT_FREE], world, template, descriptions)
+        raw = mlm_scores(traits, world, template, descriptions, name)
+        prior = _prior(world, template, descriptions, name)
         cal = {g: raw[g] - prior[g] for g in raw}
         scores = cal if calibrate else raw
         return {"probs": to_probs(scores), "raw_probs": to_probs(raw), "scores": scores}
     if method in ("embed", "bert-mean"):
-        s = score_embed(traits, world, descriptions, model="minilm" if method == "embed" else "bert-mean")
+        s = score_embed(traits, world, descriptions, model="minilm" if method == "embed" else "bert-mean",
+                        name=name)
         p = to_probs(s, EMBED_TEMPERATURE)
         return {"probs": p, "raw_probs": p, "scores": s}
     if method == "nli":
-        s = score_nli(traits, world, descriptions)
+        s = score_nli(traits, world, descriptions, name)
         p = to_probs(s)
         return {"probs": p, "raw_probs": p, "scores": s}
     raise ValueError(f"unknown method {method!r}; use one of {METHODS}")

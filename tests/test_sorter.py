@@ -73,6 +73,24 @@ def test_load_descriptions_fails_loudly_when_missing(tmp_path, monkeypatch):
         sorter.load_descriptions("hp")
 
 
+def test_named_templates_match_unnamed_ones():
+    assert len(sorter.NAMED_TEMPLATES) == len(sorter.TEMPLATES)
+    for tpl in sorter.NAMED_TEMPLATES:
+        assert "{name}" in tpl and "{traits}" in tpl and "{group}" in tpl
+
+
+def test_name_goes_into_the_prompt_and_none_changes_nothing():
+    for i in range(len(sorter.TEMPLATES)):
+        plain, (a, b) = sorter._filled("hp", "gryffindor", ["brave"], i, None)
+        assert plain[a:b] == "Gryffindor" and "Ginny" not in plain
+        named, (a, b) = sorter._filled("hp", "gryffindor", ["brave"], i, None, name="Ginny Weasley")
+        assert named.startswith("Ginny Weasley") and named[a:b] == "Gryffindor"
+        ctx, (a, b) = sorter._filled("hp", "gryffindor", ["brave"], i, HP_DESC, name="Ginny Weasley")
+        assert ctx[a:b] == "Gryffindor" and "Ginny Weasley" in ctx
+    assert sorter.person(["brave"]) == "Someone who is brave."
+    assert sorter.person(["brave"], "Ginny Weasley") == "Ginny Weasley, who is brave."
+
+
 # --------------------------------------------------------------- model tests
 @pytest.mark.models
 def test_every_group_name_is_found_in_the_prompt():
@@ -102,6 +120,22 @@ def test_calibrated_content_free_prompt_is_uniform(world, desc, template):
     k = len(sorter.WORLDS[world])
     for p in out["probs"].values():
         assert math.isclose(p, 1 / k, abs_tol=1e-6)
+
+
+@pytest.mark.models
+@pytest.mark.parametrize("template", range(len(sorter.TEMPLATES)))
+def test_calibrated_content_free_named_prompt_is_uniform(template):
+    out = sorter.predict([sorter.CONTENT_FREE], "hp", "mlm", template=template, name=sorter.CONTENT_FREE)
+    for p in out["probs"].values():
+        assert math.isclose(p, 1 / 4, abs_tol=1e-6)
+
+
+@pytest.mark.models
+@pytest.mark.parametrize("method", sorter.METHODS)
+def test_name_changes_the_input(method):
+    a = sorter.predict(["brave", "loyal"], "hp", method)["scores"]
+    b = sorter.predict(["brave", "loyal"], "hp", method, name="Draco Malfoy")["scores"]
+    assert any(not math.isclose(a[g], b[g], abs_tol=1e-6) for g in a)
 
 
 @pytest.mark.models

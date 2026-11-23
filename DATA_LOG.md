@@ -5,26 +5,80 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
 
 ---
 
-## 2026-11-23 · Divergent canonical test dropped as a measure; kept as a case study
-**What happened.** Thais pasted the Fandom "Personality" section of every character into `data/divergent/fandom_personality.txt`. 14 of 26 pages have **no Personality section**, including **every Abnegation, Amity and Candor character**.
-**Trait rule applied** (same for every row, no hand-picking): the **first 5 adjectives in text order** that describe the character's personality. Excluded: label leaks (brave, selfless, kind, intelligent…), looks ("big"), passing states ("distraught", "frustrated"), adjectives about something else ("logical response").
-**Result.** Only 4 characters reach 5 traits: Tris, Peter, Eric, Uriah, **all Dauntless**. 5 more have 2–4 traits (`needs_review`, not padded). Molly, Drew and Myra end the books factionless and are excluded.
-**Decision.** With a single class, accuracy is meaningless (always answering "Dauntless" scores 100%). The canonical test is **not used as a Divergent measure**. The Divergent evidence comes from the controlled probes (clear / conflicting / divergent_mode / generic / cross-franchise). The 4 characters are reported as a qualitative case study. Tris is the interesting case, because her three aptitude words (brave, selfless, intelligent) are removed by the leak rule.
-**For the report (Limitations):** the source describes personality almost only for Dauntless characters, because the books are narrated from inside Dauntless. This is a source bias, not a sampling choice.
+## 2026-11-21 · Name slot in `sorter.py` (Q2) and shared `generic.csv` (step 2.5)
+- **Name slot.** `predict(..., name=None)` (and `score_mlm`, `score_embed`, `score_nli`). With a name, every MLM template uses its named twin in `sorter.NAMED_TEMPLATES` ("Ginny Weasley, who is …, belongs to Gryffindor."); embed and NLI use "Ginny Weasley, who is …." as the person sentence. Without a name, the prompts are exactly as before, so existing results don't change.
+  - **Calibration with a name:** the prior uses the named template with **both** name and traits set to "N/A". The prior removes the template's own bias but not what the name carries; using the real name in the prior would calibrate away the very effect Q2 measures.
+  - 4 new tests (named templates line up with the plain ones; the name reaches the prompt; the named content-free prompt calibrates to uniform; a name changes the scores for every method). All 40 tests pass (8 fast, 32 with models).
+  - The step 5 runner must pass `name=row["name"]` for canonical and name_swap rows and no name for every other type.
+  - **First look (one example, not a result):** Ginny's traits without a name give Ravenclaw 0.57. With "Ginny Weasley" they give Gryffindor 0.99, and with "Draco Malfoy" Gryffindor 0.97. So the named prompt may simply push everything to Gryffindor, which step 5 has to check across all rows.
+  - `sorter.py` is Esther's: **Ana tells her about this change.**
+- **`data/generic.csv`** (columns `id, traits, source`): 25 vague two-trait sets, shared by every world. g01–g08 are the 8 distinct generic sets in `vote_items.csv`, word for word; g09 is the PLAN.md example; g10–g25 are new everyday words.
+  - The new sets were checked against the HP leak list. **g02 "funny; kind" contains the HP leak word "kind" (Hufflepuff).** It stays (Ana, decision 1A): the panel and the live form already use it; the report flags its HP result.
+  - `make_tests.py` skips a set that a world already has from its vote items, so nothing is counted twice. **HP generic: 8 → 25** (8 vote items + 17 from `generic.csv`). Every other world gets 25 (3 vote items + 22 from `generic.csv`) once it has canonical rows.
 
 ---
 
-## 2026-11-18 · Divergent tests built (Thais's part)
-**Decided before any model output was seen.** Changing any of this after looking at results must be a new entry here.
+## 2026-11-21 · Step 4: generated test sets (`make_tests.py`)
+- `make_tests.py` reads each world's canonical rows and **appends** generated rows to `data/<world>/tests.csv`. Two new columns: `origin_id` (the source row or rows) and `name_group` (name_swap only). Re-running gives an identical file; `fetch_personality.py build` now keeps these rows.
+- **HP output:** 34 no_name, 34 name_swap, 34 negation, 28 conflicting, 8 generic.
+  - **name_swap:** each character's traits get a name from another house (gold = the traits' house, `name_group` = the name's house). Names are spread out (33 distinct, none used more than twice).
+  - **negation:** "not" before every trait. Gold is empty; the metric is how far the answer moves from `origin_id`.
+  - **conflicting:** 24 generated (4 per house pair: 2–3 traits from a character of house A plus 2–3 from house B; gold `A|B`), plus the 4 HP conflicting items from `vote_items.csv`, so BERT is scored on exactly what the panel and the form saw. Pair order is normalized to `sorter.WORLDS` order (`c04-hp` was `slytherin|hufflepuff`, now `hufflepuff|slytherin`).
+  - **generic:** the 8 HP generic items from `vote_items.csv`. The shared `data/generic.csv` (step 2.5, ~25 sets) doesn't exist yet; `make_tests.py` picks it up automatically once it does.
+- ~~Open issue: no name slot in `sorter.py`~~ → fixed, see the entry above.
 
-- **Sources.** Fandom (`divergent.fandom.com`) returns HTTP 402 to automated access, so the canonical traits can't be extracted automatically. `data/divergent/characters.csv` lists 26 characters with the faction **quoted from Wikipedia** (*List of Divergent characters*, *Insurgent (novel)*). Traits are filled by hand from Fandom; `build` enforces the rules (exactly 5, evidence filled, no label leak).
-- **Gold label = faction the character belongs to after the Choosing Ceremony** (book 1), not the birth faction. The birth faction is kept in `birth_faction` for a possible "transfers" analysis. Excluded: Edward and Evelyn (factionless).
-- **Divergent characters** (per Wikipedia): Tris, Four, Marcus, Uriah, Natalie. Tris's aptitude result is Abnegation, Dauntless and Erudite (*Divergent (novel)*).
-- **Probe words** (`WORDS` in `experiments/divergent.py`), one direct adjective plus two synonyms per faction: Abnegation selfless / humble / modest · Amity peaceful / gentle / forgiving · Candor honest / truthful / blunt · Dauntless brave / fearless / daring · Erudite intelligent / studious / analytical. Direct words share a stem with the descriptions **on purpose** (easy variant); synonyms are leak-checked.
-- **Test types.** `clear` = 2 words of one faction (11 rows, incl. `k01-div`). `conflicting` = 1 word from each of 2 factions, all 10 pairs × direct/synonym × both orders (40 rows; the gold `A|B` follows the trait order, so we can measure an order effect). It includes the vote items `c01-div` and `c02-div` with identical traits. `divergent_mode` = 1 word from each of 3 factions (all 10 triples × direct/synonym = 20 rows). `generic` = `g01–g03-div` copied from `vote_items.csv` (same ids, so step 4 shouldn't add them again).
-- **Pre-registered house mapping** for the cross-franchise test: Dauntless→Gryffindor, Erudite→Ravenclaw, Abnegation→Hufflepuff, Amity→Hufflepuff, Candor→none (left out). Chance = 0.25.
-- **Metrics.** Normalized entropy by type (one-sided Mann–Whitney vs. `clear`, Holm-corrected); for mixed inputs: mass on the mixed factions (chance 0.4 / 0.6), top-k = the mixed factions, balance (min/max), share with max prob > 0.8 (“overconfident”), first-listed bonus (Wilcoxon over the 20 pairs); soft correspondence P(house | faction) = Σ P(f|x)P(h|x) / Σ P(f|x); JSD vs. the simulated panel on the 6 Divergent vote items. MLM: metrics per template, then mean (and spread) over the 3 templates. Correspondence and JSD use the template-averaged distribution.
-- **Added after the first run (inputs unchanged, only extra checks):** a sanity table (accuracy on the `clear` inputs + share of the most common answer) and a **permutation baseline** for the cross-franchise consistency. Reason: several methods collapse onto one label (e.g. bert-mean with descriptions answers Amity 91% of the time), which made the fixed 0.25 chance level misleading. The permutation keeps each label's frequency, so only real pairing beats it.
+---
+
+## 2026-11-21 · HP step 2.3: agreement sheets
+- **`agreement.py`** (new, any world) builds two annotator sheets from the canonical rows: 20 trait sets with the names removed, stratified by house (HP: 5 per house), drawn with seed 42, in a different order per sheet, with a dropdown of the houses. The house descriptions are shown at the top, the same text as the form and BERT's "with descriptions" variant.
+- `score` reads both filled sheets and reports each annotator's accuracy against gold (the human baseline for Table 1), raw agreement and Cohen's κ. Results go to `data/hp/agreement/results.json`. The scoring path was tested on throwaway copies with fake answers, which were then discarded.
+- Annotators: **Thais and Fardin**. They haven't seen the HP character list; Ana didn't annotate because she reviewed every character with names and traits, so her answers would measure memory. Sheets sent 2026-11-21.
+- 🛑 Waiting on their sheets.
+
+---
+
+## 2026-11-21 · HP step 2.2: canonical characters
+- **`fetch_personality.py`** (new, works for any world) reads each character's "Personality and traits" section through the Fandom API (the pages themselves return HTTP 402 to scripts) and caches it in `data/<world>/raw/`. It lists every adjective with its sentence (nltk POS tagger, `nltk==3.10.4` added to requirements), filters non-personality words and leak words, and builds `tests.csv` from hand-picked traits. It **refuses** any pick that isn't literally in the section or that leaks the label.
+- Leak filter fixed for hyphenated words: "hard-working" = "hardworking", and "kind-hearted", "fair-minded", "quick-witted" contain banned words.
+- **48 characters fetched → 41 rows in `tests.csv`: 33 canonical, 8 `needs_review`.**
+
+  | House | Canonical | needs_review |
+  |---|---|---|
+  | Gryffindor | 10 | 0 |
+  | Ravenclaw | 8 | 2 (Ollivander, Padma) |
+  | Hufflepuff | **5** | 5 (Hannah, Ernie, Justin, Susan, Fat Friar) |
+  | Slytherin | 10 | 1 (Regulus) |
+
+- **Hufflepuff is thin on Fandom.** Its minor characters have short Personality sections (Susan Bones has none at all). That's a class imbalance to report and to handle with macro-F1.
+- Excluded on purpose: founders and ghosts whose name contains the house (Helga Hufflepuff, Helena Ravenclaw), because the name gives the answer away.
+- **Picks rejected after reading the sentence** (the tagger finds adjectives, not who they describe):
+  - negated: Hermione "short-tempered", Padma "outgoing", Regulus "exemplary";
+  - about someone else: Riddle "murderous" (Gaunt), Marietta "eager", Pansy "hostile", "offensive";
+  - not personality: Dumbledore "flamboyant" (clothes), McGonagall "strict" ("strict orders"), Cho "romantic" (relationship), Sirius "rash" (advice), Hagrid "emotional" (caption).
+- Gold labels: `characters.csv` → `gold_source` gives the book chapter or Wizarding World writing for each. Several come from Wizarding World writing rather than the books (Dumbledore, McGonagall, Hagrid, Flitwick, Lockhart, Trelawney, Quirrell, Myrtle, Ollivander, Sprout, Lucius, Bellatrix, Umbridge, Narcissa).
+- **Trait check (Ana, 2026-11-21).** All 165 traits were read in context by Claude; Ana ruled on 6 borderline ones:
+  - swapped: Cho "irrational" → "popular", Luna "dreamy" → "perceptive", Newt "astute" → "courteous", Riddle "compulsive" → "unpredictable";
+  - kept: Cho "emotional", Pansy "anxious" and "frightened".
+  - Accepted as extracted: 161 of 165 traits (97.6%).
+- The `raw/` cache is committed for traceability (Fandom text, CC BY-SA).
+- **More Hufflepuffs and Ravenclaws (Ana's choice).** All 330 pages in Fandom's Hufflepuff and Ravenclaw categories were scanned; 11 have a Personality section with at least 5 usable words. Only **Silvanus Kettleburn** passes the gold rule: Hufflepuff per Rowling's *Short Stories from Hogwarts*. Added as `hp-c42` (cheerful, dutiful, reckless, careful, professorial; the last two are borderline but approved).
+  - Rejected: Theseus Scamander (house from a cast interview on a fan channel), Bilton Bilmes (Hogwarts Mystery), Constance Pickering (Wizards Unite), plus game-only characters (Beatrice Haywood, Mirabel Garlick, Sage Bragnam, Isidora Morganach).
+  - **Final HP set: 34 canonical** (Gryffindor 10, Ravenclaw 8, Hufflepuff 6, Slytherin 10). The imbalance is accepted and goes in the report's limitations; macro-F1 weights each house equally.
+
+---
+
+## 2026-11-21 · HP: description wording follows the live form
+- On 2026-11-18 Ana's branch (`hp-data`) had drafted HP descriptions as full sentences from the official harrypotter.com fact files. They were **never committed**, and main's rule supersedes them: descriptions must be word for word what the live form showed. Kept in `git stash` ("hp 2.1 sentence-version") in case they're needed.
+- A side check on that draft found description *format* barely matters. On 6 clear HP cases, sentences vs. word lists: MLM 2/6 vs 1/6, embedding 5/6 vs 4/6, NLI 5/6 vs 5/6. So keeping the form wording costs nothing.
+- Same check: MLM ranks **Gryffindor first for almost every input**, even after calibration (e.g. "patient, fair, hardworking" → Gryffindor 0.64 without descriptions), and goes near-uniform with descriptions (H ≈ 0.95–0.99). It's an early observation to confirm on the full data.
+- **New: `data/hp/leak_words.csv`** (49 words). Step 2.2 drops any character trait on this list: house names, every description word, plus trait words in the Wikipedia quotes, the official fact files and the Sorting Hat song.
+- **Things to know for the analysis:**
+  - Two items deliberately use leak words. Clear item k01-hp ("witty, bookish, original"), the HP attention check on the form, uses "witty". Generic item g02-hp ("funny and kind") uses "kind", an official Hufflepuff word, so it isn't fully neutral in HP.
+- **Owner check done (Ana, 2026-11-21).** Wording unchanged, sources strengthened:
+  - Gryffindor's "bravery, daring" had only synonyms in the Wikipedia quote. It now cites the official fact file ("courage, bravery and determination") and the Sorting Hat song ("daring").
+  - Hufflepuff now cites the official fact file, which has "hard work, patience, loyalty and fairness" word for word.
+  - Ravenclaw and Slytherin keep Wikipedia, which matches them word for word.
+- Common words on the leak list (kind, true, just, fair, humble, individual) **stay banned**: stricter, but no label leaks.
 
 ---
 
