@@ -5,6 +5,59 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
 
 ---
 
+## 2026-11-24 · Report tables and Figure 1 (step 6, Thais)
+**Script.** `make_tables.py` reads `results/` and `data/` only (no model). Run `run_experiments.py summary` first, then `make_tables.py`. Output in `results/report/`: `table1_data.tex/.csv`, `table2_q1q2.tex/.csv`, `fig1_q3.pdf/.png/.tex`, plus `q3_jsd.csv` and `q3_negation.csv` with every method and both variants. Re-run it when the invented world and the Avatar/GoT κ arrive; nothing else changes.
+**Choices, fixed before reading the numbers:**
+- Main variant **with descriptions**: the annotators and the form respondents saw them too.
+- Methods shown: BERT fill-in (`mlm`), BERT + both fixes (`mlm-large-cal`), Sentence-BERT, NLI. The other variants stay in the CSVs.
+- MLM averaged over the 3 templates first, as in `run_experiments.summary`.
+- Table 2 keeps worlds with ≥ 10 characters (the same cut as the probe), so Divergent (4) is out of Q1/Q2.
+- Q3 vague items = the 17 generic form items of the 4 worlds with data (HP 8, others 3). Humans = the 10 respondents kept by the attention rule; all 19 are in `q3_jsd.csv` as the sensitivity analysis. References: a uniform guess, and a **human split-half floor** (JSD between two random halves of the respondents, 1000 splits).
+- **Negation is compared with the `no_name` row, not the canonical one.** Canonical rows are scored with the character's name and negation rows without it, so canonical-vs-negation would mix the name effect into the "not" effect. Metric: total variation distance (as decided in the GoT first look), with the top-answer flip rate next to it.
+**First reading (with descriptions):**
+- Q1: NLI is best (HP 50%, GoT 44%, Avatar 29%), all below the HP human baseline (70%). BERT fill-in is 14–24%, around chance; the fixes add 2–7 points.
+- Q2: swapping in another group's name changes no accuracy significantly (no McNemar p < 0.05), and only 12–29% of answers follow the swapped name.
+- Q3 vague items: JSD to humans: NLI 0.23, BERT fill-in 0.35, BERT + fixes 0.35, Sentence-BERT 0.39; **uniform guess 0.32**, humans vs. humans 0.17. Only NLI is clearly closer to people than a uniform guess; the BERT variants are not.
+- Negation (78 characters, HP + Avatar + GoT): BERT fill-in moves 0.08 TVD and changes its top answer in 14% of cases; NLI moves 0.40 (83% flips). Consistent with Ettinger (2020): BERT barely reacts to "not".
+
+---
+
+*(Restored 2026-11-24: these three Divergent entries were lost in a merge; text copied unchanged from commits 8ed39ce and fcd10d3.)*
+
+## 2026-11-23 · Divergent step 2.3: human baseline and κ (on probes)
+**Why probes.** `agreement.py make` draws 20 canonical rows, and Divergent has only 4 (all Dauntless), so the sheets use 20 of the hand-written probes instead: 10 single-faction (`clr-*`, 5 direct + 5 synonym) and 10 conflicting (`cnf-*-syn-ab`, one per faction pair). The sheets show the same `groups.csv` descriptions as every other world.
+**Scoring rule.** On a conflicting item (gold `a|b`) either faction counts as correct. `agreement.py score` would count those as wrong, so the score was computed outside it and saved in `data/divergent/agreement/results.json` (same fields, plus a single/conflicting breakdown). Code was not changed.
+**Annotators.** Two friends of Thais, each alone, without names or the key.
+**Result.** Accuracy A 90%, B 90% (single 90%/90%, chance 20%; conflicting 90%/90%, chance 40%). Raw agreement 75% (single 80%, conflicting 70%). **Cohen's κ = 0.69** (single items only: 0.75).
+**Worth noting.** On conflicting items both people picked the same faction in 7 of 10. "Fearless" won every pair it was in (Dauntless, 4/4 for both), so humans also let one word dominate. On the same 20 items NLI with descriptions gets 80% single / 90% conflicting; the MLM 30–40% / 40–70%.
+**Not comparable to HP's κ as-is:** HP sorted canonical characters; Divergent sorted designed probes. Report it as a separate row with that note.
+**Note.** The first `key.csv` was lost with the untracked folder; it was rebuilt from the item list printed when the sheets were made, and every sheet row was checked to match it (identical traits).
+
+---
+
+## 2026-11-23 · Divergent canonical test dropped as a measure; kept as a case study
+**What happened.** Thais pasted the Fandom "Personality" section of every character into `data/divergent/fandom_personality.txt`. 14 of 26 pages have **no Personality section**, including **every Abnegation, Amity and Candor character**.
+**Trait rule applied** (same for every row, no hand-picking): the **first 5 adjectives in text order** that describe the character's personality. Excluded: label leaks (brave, selfless, kind, intelligent…), looks ("big"), passing states ("distraught", "frustrated"), adjectives about something else ("logical response").
+**Result.** Only 4 characters reach 5 traits: Tris, Peter, Eric, Uriah, **all Dauntless**. 5 more have 2–4 traits (`needs_review`, not padded). Molly, Drew and Myra end the books factionless and are excluded.
+**Decision.** With a single class, accuracy is meaningless (always answering "Dauntless" scores 100%). The canonical test is **not used as a Divergent measure**. The Divergent evidence comes from the controlled probes (clear / conflicting / divergent_mode / generic / cross-franchise). The 4 characters are reported as a qualitative case study. Tris is the interesting case, because her three aptitude words (brave, selfless, intelligent) are removed by the leak rule.
+**For the report (Limitations):** the source describes personality almost only for Dauntless characters, because the books are narrated from inside Dauntless. This is a source bias, not a sampling choice.
+
+---
+
+## 2026-11-18 · Divergent tests built (Thais's part)
+**Decided before any model output was seen.** Changing any of this after looking at results must be a new entry here.
+
+- **Sources.** Fandom (`divergent.fandom.com`) returns HTTP 402 to automated access, so the canonical traits can't be extracted automatically. `data/divergent/characters.csv` lists 26 characters with the faction **quoted from Wikipedia** (*List of Divergent characters*, *Insurgent (novel)*). Traits are filled by hand from Fandom; `build` enforces the rules (exactly 5, evidence filled, no label leak).
+- **Gold label = faction the character belongs to after the Choosing Ceremony** (book 1), not the birth faction. The birth faction is kept in `birth_faction` for a possible "transfers" analysis. Excluded: Edward and Evelyn (factionless).
+- **Divergent characters** (per Wikipedia): Tris, Four, Marcus, Uriah, Natalie. Tris's aptitude result is Abnegation, Dauntless and Erudite (*Divergent (novel)*).
+- **Probe words** (`WORDS` in `experiments/divergent.py`), one direct adjective plus two synonyms per faction: Abnegation selfless / humble / modest · Amity peaceful / gentle / forgiving · Candor honest / truthful / blunt · Dauntless brave / fearless / daring · Erudite intelligent / studious / analytical. Direct words share a stem with the descriptions **on purpose** (easy variant); synonyms are leak-checked.
+- **Test types.** `clear` = 2 words of one faction (11 rows, incl. `k01-div`). `conflicting` = 1 word from each of 2 factions, all 10 pairs × direct/synonym × both orders (40 rows; the gold `A|B` follows the trait order, so we can measure an order effect). It includes the vote items `c01-div` and `c02-div` with identical traits. `divergent_mode` = 1 word from each of 3 factions (all 10 triples × direct/synonym = 20 rows). `generic` = `g01–g03-div` copied from `vote_items.csv` (same ids, so step 4 shouldn't add them again).
+- **Pre-registered house mapping** for the cross-franchise test: Dauntless→Gryffindor, Erudite→Ravenclaw, Abnegation→Hufflepuff, Amity→Hufflepuff, Candor→none (left out). Chance = 0.25.
+- **Metrics.** Normalized entropy by type (one-sided Mann–Whitney vs. `clear`, Holm-corrected); for mixed inputs: mass on the mixed factions (chance 0.4 / 0.6), top-k = the mixed factions, balance (min/max), share with max prob > 0.8 (“overconfident”), first-listed bonus (Wilcoxon over the 20 pairs); soft correspondence P(house | faction) = Σ P(f|x)P(h|x) / Σ P(f|x); JSD vs. the simulated panel on the 6 Divergent vote items. MLM: metrics per template, then mean (and spread) over the 3 templates. Correspondence and JSD use the template-averaged distribution.
+- **Added after the first run (inputs unchanged, only extra checks):** a sanity table (accuracy on the `clear` inputs + share of the most common answer) and a **permutation baseline** for the cross-franchise consistency. Reason: several methods collapse onto one label (e.g. bert-mean with descriptions answers Amity 91% of the time), which made the fixed 0.25 chance level misleading. The permutation keeps each label's frequency, so only real pairing beats it.
+
+---
+
 ## 2026-11-23 · HP: caption traits checked after Fardin's parser fix; Cho "cheerful" → "irrational" (Ana: Rule 2)
 - **Why:** Fardin fixed a bug in `fetch_personality.py` (entry below): the old parser could drop section text, and it let quote-box captions through.
 - **Re-fetched every HP page with the fixed parser** into a scratch folder (`data/hp/raw/` was not touched). **No page gains text**, so no HP text had been lost; each page only shrinks by its caption lines. The 8 `needs_review` pages really are short.
