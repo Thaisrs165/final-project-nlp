@@ -9,6 +9,7 @@ so it's safe to run again after a world adds rows.
   .venv/bin/python run_experiments.py run hp --methods mlm --limit 20   # quick try
   .venv/bin/python run_experiments.py occlusion           # Q2b: leave-one-trait-out, canonical rows
   .venv/bin/python run_experiments.py summary             # Q1/Q2 accuracy table + 95% CIs
+  .venv/bin/python run_experiments.py probe               # fix C: small-data sanity check (trained!)
 
 What each row is scored with (IMPLEMENTATION.md step 5)
   methods       sorter.METHODS (mlm, embed, bert-mean, nli); models pinned in sorter.py
@@ -40,6 +41,7 @@ OUT = ROOT / "results"
 PRED = OUT / "all.csv"
 SUMMARY = OUT / "summary_q1q2.csv"
 OCCL = OUT / "occlusion.csv"
+PROBE = OUT / "probe.csv"
 OCCL_COLS = ["world", "id", "descriptions", "traits", "gold", "pred_full", "trait", "position",
              "delta", "flips_to"]
 COLS = ["world", "id", "origin_id", "test_type", "method", "template", "descriptions",
@@ -66,7 +68,7 @@ def jobs_for(world, rows, methods):
     for r in rows:
         name = r.get("name", "").strip() if r["test_type"] in NAMED_TYPES else ""
         for method in methods:
-            for template in (range(len(sorter.TEMPLATES)) if method == "mlm" else [0]):
+            for template in (range(len(sorter.TEMPLATES)) if method in sorter.MLM_VARIANTS else [0]):
                 for desc in (False, True):
                     yield r, method, template, desc, name
 
@@ -147,6 +149,45 @@ def occlusion(worlds):
     print(f"done -> {OCCL.relative_to(ROOT)}")
 
 
+# -------------------------------------------------------------------- probe
+def probe(worlds):
+    """Fix C (DATA_LOG 2026-11-23): logistic regression on sentence vectors of
+    "Someone who is <traits>." (no names), leave-one-character-out per world, canonical
+    rows only. A SMALL-DATA SANITY CHECK, not zero-shot: report it separately."""
+    import numpy as np
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.model_selection import LeaveOneOut, cross_val_predict
+    out = []
+    for w in worlds:
+        rows = [r for r in load_tests(w) if r["test_type"] == "canonical"]
+        y = [r["gold_group"] for r in rows]
+        if len(rows) < 10 or len(set(y)) < 2:
+            print(f"{w}: {len(rows)} canonical rows, too few for a probe, skipped")
+            continue
+        texts = [sorter.person(r["traits"]) for r in rows]
+        for feats in ("bert-mean", "minilm"):
+            if feats == "bert-mean":
+                X = sorter._bert_mean(texts).numpy()
+            else:
+                X = sorter._sbert().encode(texts, convert_to_numpy=True)
+            clf = LogisticRegression(C=1.0, max_iter=1000)
+            pred = cross_val_predict(clf, np.asarray(X), y, cv=LeaveOneOut())
+            hits = [int(p == g) for p, g in zip(pred, y)]
+            lo, hi = bootstrap_ci(hits)
+            majority = max(y.count(g) for g in set(y)) / len(y)
+            out.append({"world": w, "features": feats, "n": len(y), "accuracy": round(sum(hits) / len(y), 3),
+                        "ci95": f"{lo:.2f}-{hi:.2f}", "majority_baseline": round(majority, 3),
+                        "chance": round(1 / len(sorter.WORLDS[w]), 3)})
+            print(f"{w:9s} {feats:9s} n={len(y)} acc={out[-1]['accuracy']} ({out[-1]['ci95']}) "
+                  f"majority={out[-1]['majority_baseline']}")
+    with open(PROBE, "w", newline="") as f:
+        wr = csv.DictWriter(f, fieldnames=["world", "features", "n", "accuracy", "ci95",
+                                           "majority_baseline", "chance"])
+        wr.writeheader()
+        wr.writerows(out)
+    print(f"-> {PROBE.relative_to(ROOT)}  (small-data sanity check: trained, NOT zero-shot)")
+
+
 # ------------------------------------------------------------------ summary
 def bootstrap_ci(hits, n=N_BOOT, seed=sorter.SEED):
     rng = random.Random(seed)
@@ -224,9 +265,11 @@ def summary():
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument("command", choices=["run", "occlusion", "summary"])
+    ap.add_argument("command", choices=["run", "occlusion", "summary", "probe"])
     ap.add_argument("worlds", nargs="*", help="default: every world")
-    ap.add_argument("--methods", nargs="+", default=list(sorter.METHODS), choices=sorter.METHODS)
+    ap.add_argument("--methods", nargs="+", default=list(sorter.METHODS),
+                    choices=sorter.METHODS + sorter.FIX_METHODS,
+                    help="default: the 4 main methods; add the fixes with e.g. --methods mlm-cal mlm-large")
     ap.add_argument("--limit", type=int, help="first N rows per world (for a quick try)")
     a = ap.parse_args()
     for w in a.worlds:
@@ -234,6 +277,8 @@ if __name__ == "__main__":
             sys.exit(f"unknown world {w!r}")
     if a.command == "run":
         run(a.worlds or list(sorter.WORLDS), a.methods, a.limit)
+    elif a.command == "probe":
+        probe(a.worlds or list(sorter.WORLDS))
     elif a.command == "occlusion":
         occlusion(a.worlds or list(sorter.WORLDS))
     else:

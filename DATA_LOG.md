@@ -5,6 +5,60 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
 
 ---
 
+## 2026-11-23 · Results of the fixes (all reported, as fixed in advance)
+8,460 new predictions (3 fixes × the same 470 rows × 3 templates × 2 description variants) + the probe. Original `mlm` re-checked: identical to the committed run (max difference 0).
+
+**HP canonical accuracy, without / with descriptions** (chance 25%, humans 70%):
+
+| Method | Accuracy | Most common answer, named prompts, no descriptions |
+|---|---|---|
+| mlm (baseline) | 29% / 24% | Gryffindor 97 of 102 |
+| mlm-cal (fix A) | 29% / 21% | Gryffindor 49, Slytherin 49 |
+| mlm-large (fix B) | 26% / 21% | Gryffindor 50, Slytherin 34, Hufflepuff 18 |
+| mlm-large-cal (A+B) | 32% / 26% | Hufflepuff 43, Slytherin 40, Gryffindor 17 |
+| *for reference:* nli | 53% / 50% | |
+
+- **Avatar:** every MLM variant stays between 11% and 36% (chance 25%).
+- **What the fixes do:** they **break the one-house collapse**, from 97% Gryffindor down to splits across 2–3 houses. But accuracy stays at chance. The answers spread out without following the traits. Neither calibration nor model size is the bottleneck: BERT's fill-in-the-blank doesn't link these traits to these groups.
+- **Q2 with the fixes:** name_swap is never significantly different from no_name (all McNemar p ≥ 0.39). With the fixes this is no longer just "always Gryffindor", but it still isn't evidence that BERT reads traits, because accuracy is at chance either way.
+- **Fix C, probe (small-data sanity check, trained, NOT zero-shot):** leave-one-character-out logistic regression on sentence vectors of the traits.
+  - HP: raw BERT 29% (95% CI 15–47%), MiniLM 18% (6–32%); majority-class baseline 29%.
+  - Avatar: raw BERT 25% (11–43%), MiniLM 0% (0–0%); majority 29%.
+  - Divergent, GoT and Invented were skipped (fewer than 10 canonical rows).
+  - So even a classifier trained on our characters can't find the groups in these vectors at this sample size.
+  - **Below chance is expected when there is no signal:** leaving one example out shifts the class balance *against* that example's class, a known leave-one-out artefact. MiniLM's 0% on Avatar is that artefact, not a bug.
+  - In the report this goes in one sentence or the appendix, clearly labelled.
+- **Takeaway for the report:** the best zero-shot method (NLI, 53% on HP) is still well below humans (70%). Fixes A and B change *how* BERT fails (one house → several), not *whether* it fails.
+
+---
+
+## 2026-11-23 · Fixes for the MLM collapse, fixed BEFORE running them
+Ana asked for every option to be tried and reported. To avoid tuning on the test set, the exact settings are written here **before any of them is run**. Every variant is reported, including ones that don't help, and the original `mlm` stays the baseline. Nothing is trained on our data except fix C, which is a labelled small-data check.
+
+- **Fix A, `mlm-cal`: fuller calibration** (Zhao et al. 2021, who average several content-free inputs).
+  - The prior is the mean MLM score over the content-free traits **"N/A", "[MASK]" and ""** (empty), instead of "N/A" alone.
+  - For named prompts, the prior also averages over **neutral names "Alex", "Sam", "Jordan"**, plus "N/A". The prior then captures "any name pulls Gryffindor" but keeps what a *specific* name adds (Draco vs. Ginny), which is what Q2 tests.
+  - Same model (bert-base), same 3 templates, both description variants.
+- **Fix B, `mlm-large`: bigger model.** `bert-large-uncased` instead of `bert-base-uncased`, with the original "N/A" calibration. Tests whether size helps.
+- **Fix A+B, `mlm-large-cal`:** bert-large with fix A's calibration.
+- **Fix C, `probe`: does BERT's representation contain the groups, even when fill-in-the-blank fails?**
+  - Logistic regression (scikit-learn defaults, C = 1.0, max_iter = 1000) on sentence vectors of "Someone who is <traits>." (no names), with **leave-one-character-out** cross-validation per world, on canonical rows only.
+  - Features from raw BERT mean-pooling (`bert-base-uncased`) and from MiniLM.
+  - Reported with a bootstrap 95% CI and labelled **small-data sanity check** (PLAN.md §2.5). It is **not** zero-shot and is never put in the same column as the zero-shot methods.
+- All run through `run_experiments.py` on the same rows as the original run.
+
+---
+
+## 2026-11-23 · Starter app (step 8, Gradio)
+- `app/app.py` + `app/README.md`: 3 tabs, one per question.
+  - **Sort me:** the 12-question quiz from `questions.json`; it shows the hidden traits BERT saw.
+  - **Trick BERT:** the same traits with a name, no name, another name, and "not".
+  - **Why it's unsure:** the model vs. real people vs. the simulated panel on vague items.
+- All numbers come from `sorter.predict`. The same attention rule as the analysis is applied (10 people, 35 simulated personas). The simulated panel is labelled as simulated in the UI.
+- `gradio==6.31.0` added to requirements. Tested headlessly: every tab returns valid output. Ana owns polishing and deployment.
+
+---
+
 ## 2026-11-23 · Game of Thrones step 5: first run (not yet the analysis)
 - `run_experiments.py run got` → **1,572 predictions** (131 rows × 12 settings; the 8 `needs_review` rows are skipped). `occlusion got` → 160 rows (16 canonical × 5 traits × 2 variants). `summary` → 8 new GoT rows in `results/summary_q1q2.csv`. No existing row of any file changed.
 - **Q1/Q2, canonical accuracy** (chance 20%; n = 16, so CIs are wide):

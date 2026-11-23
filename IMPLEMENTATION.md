@@ -19,8 +19,8 @@ Steps 2 and 3 can run in parallel. Step 8's front end can start alongside them i
 | 3. `sorter.py` | ✅ done | 4 methods, with and without descriptions, PLL-word-l2r, calibration, occlusion. Optional `name=` for Q2 (named prompt twins in `NAMED_TEMPLATES`, added 2026-11-21). **40/40 tests pass**; one MLM call takes about 0.1 s on the Mac GPU. |
 | 4. `make_tests.py` | ✅ built | HP: 34 no_name, 34 name_swap, 34 negation, 28 conflicting, 25 generic. Avatar: 28 / 28 / 28 / 26 / 25. Other worlds: re-run once their canonical rows exist. |
 | 5. `run_experiments.py` | ✅ built 2026-11-23 | **The one shared runner** for every world: `run`, `occlusion`, `summary`. Results in `results/all.csv`. HP, Avatar and Divergent run; others re-run once their data lands. |
-| 6. Analysis | ⏳ next | Reads `results/all.csv`. Clustering dropped. |
-| 7–8. App | ⏳ not started | **Gradio, Ana builds it** (decided 2026-11-23). No separate `api.py` needed. |
+| 6. Analysis | ⏳ next | Reads `results/all.csv`. Fixes A/B/C and the probe already run (DATA_LOG.md). Clustering dropped. |
+| 7–8. App | 🟡 starter built 2026-11-23 | **Gradio, Ana.** `app/app.py` works end to end (3 tabs); polish + deploy to do. No separate `api.py` needed. |
 | 9–10. Report, presentation | ⏳ not started | |
 
 **Waiting on people (🛑):**
