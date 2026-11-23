@@ -5,6 +5,34 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
 
 ---
 
+## 2026-11-23 · `make_tests.py` no longer touches hand-made rows that have an `origin_id`
+- After pulling Divergent: Thais's reversed conflicting probes (`cnf-…-ba`) have an `origin_id`, and `make_tests.py` treated any generated-type row with an `origin_id` as its own, so running it on Divergent would have **deleted 20 of her rows**. It wasn't run on Divergent, so nothing was lost.
+- Fix: generated rows are now recognised only by their id patterns (`-nn`, `-ns`, `-neg`, `<world>-x..`, `<world>-v-..`, `<world>-g-..`). Extra columns already in a world's `tests.csv` are kept. HP and Avatar output is byte-for-byte identical; a dry run keeps all 78 Divergent rows.
+- **Still open, in Thais's `experiments/divergent.py` (her file, not changed here):**
+  - its `build` drops every `conflicting`/`generic` row, including the ones `make_tests.py` adds;
+  - it writes without the `name_group` column, which name_swap rows need.
+  - So for now, run `make_tests.py divergent` **after** her `build`, never before.
+
+---
+
+## 2026-11-23 · HP step 2.3: human baseline and κ (sheets returned)
+- Both sheets came back complete (20/20 answers each, all from the dropdown). Scored with `agreement.py score hp` → `data/hp/agreement/results.json`. Bootstrap 95% CIs (5,000 resamples of the 20 items, seed 42).
+
+| | Accuracy (95% CI) | Notes |
+|---|---|---|
+| A (Thais) | **55%** (35–75%) | never chose Ravenclaw (0/5 Ravenclaws right) |
+| B (Fardin) | **85%** (70–100%) | |
+| Mean (human baseline) | **70%** | chance = 25% |
+| A vs. B | raw agreement 55%, **Cohen's κ = 0.37** (0.08–0.64) | "fair" agreement (Landis & Koch 1977) |
+
+- **By house (A, B correct out of 5):** Slytherin 5, 5 · Gryffindor 3, 5 · Hufflepuff 3, 4 · **Ravenclaw 0, 3**. Both annotators were right on 10 items: 5 Slytherin, 3 Gryffindor, 2 Hufflepuff, **0 Ravenclaw**.
+- **Ravenclaw is hard by construction:** the leak filter bans the words that define it ("intelligent", "wise", "witty", "learning"), so Ravenclaw rows keep traits like "quirky, serene" (Luna) or "timid, gullible" (Quirrell). Slytherin rows keep openly negative traits ("sadistic", "spiteful"), which read as "villain" without any leak word. This asymmetry is a limitation of literal Fandom traits plus the leak filter. Read BERT's per-house accuracy with it in mind.
+- **Annotators:** A = Thais, B = Fardin. Ana confirmed Fardin doesn't know the books well, so his 85% isn't explained by recognising characters. Both results are kept as they are.
+- **The human form points the same way:** the HP attention item k01-hp "witty, bookish, original" (gold Ravenclaw) was answered correctly by only 8/19 people, even though it uses words close to the description (see the form entry below). People find Ravenclaw hard to recognise from traits.
+- The wide κ CI comes from n = 20. The report gives the CI, not just the point value.
+
+---
+
 ## 2026-11-23 · Human form responses imported
 **Source.** Google Forms export ("Forms NLP.xlsx", downloaded 2026-11-23): **19 responses** (2026-11-18 onward). The raw export isn't committed (it has submission timestamps); the anonymized data is:
 - `data/human_votes.csv`: `item_id, world, voter_id, group, source=human`. 19 × 25 = 475 votes; voter ids h01–h19 in submission order. Columns were mapped to item ids in form order, and every answer was checked to be a group of that item's world.
@@ -102,7 +130,7 @@ Built with the HP tools (`fetch_personality.py`, `make_tests.py`, `agreement.py`
 - **`agreement.py`** (new, any world) builds two annotator sheets from the canonical rows: 20 trait sets with the names removed, stratified by house (HP: 5 per house), drawn with seed 42, in a different order per sheet, with a dropdown of the houses. The house descriptions are shown at the top, the same text as the form and BERT's "with descriptions" variant.
 - `score` reads both filled sheets and reports each annotator's accuracy against gold (the human baseline for Table 1), raw agreement and Cohen's κ. Results go to `data/hp/agreement/results.json`. The scoring path was tested on throwaway copies with fake answers, which were then discarded.
 - Annotators: **Thais and Fardin**. They haven't seen the HP character list; Ana didn't annotate because she reviewed every character with names and traits, so her answers would measure memory. Sheets sent 2026-11-21.
-- 🛑 Waiting on their sheets.
+- ~~Waiting on their sheets~~ → returned 2026-11-23, see the entry above.
 
 ---
 

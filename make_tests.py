@@ -27,6 +27,7 @@ Randomness uses sorter.SEED, so the output is identical on every run.
 import csv
 import itertools
 import random
+import re
 import sys
 from collections import Counter
 from pathlib import Path
@@ -38,6 +39,17 @@ COLS = ["id", "test_type", "name", "traits", "gold_group", "source_url", "trait_
         "origin_id", "name_group"]
 GENERATED = {"no_name", "name_swap", "negation", "conflicting", "generic"}
 CONFLICTING_PER_PAIR = 4   # HP: 6 group pairs x 4 = 24 generated conflicting rows
+
+
+def is_generated(row, world):
+    """True only for rows this script wrote, recognised by their id pattern.
+
+    Not by origin_id: hand-made rows can have one too (e.g. Divergent's reversed
+    conflicting probes "cnf-...-ba"), and those must never be deleted here.
+    """
+    i = row["id"]
+    return row["test_type"] in GENERATED and bool(
+        re.search(r"-(nn|ns|neg)$", i) or re.match(rf"{re.escape(world)}-(x\d+|v-.+|g-.+)$", i))
 
 
 def split(traits):
@@ -127,16 +139,17 @@ def run(world):
     path = DATA / world / "tests.csv"
     with open(path) as f:
         existing = list(csv.DictReader(f))
-    kept = [r for r in existing if r["test_type"] not in GENERATED or not r.get("origin_id")]
+    kept = [r for r in existing if not is_generated(r, world)]
     canon = [r for r in kept if r["test_type"] == "canonical"]
     if not canon:
         print(f"{world}: no canonical rows yet, skipped")
         return
     rows = generate(world, canon, random.Random(SEED))
+    cols = COLS + [c for c in (existing[0].keys() if existing else []) if c not in COLS]
     with open(path, "w", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=COLS, extrasaction="ignore")
+        w = csv.DictWriter(f, fieldnames=cols, extrasaction="ignore")
         w.writeheader()
-        w.writerows({c: r.get(c, "") for c in COLS} for r in kept + rows)
+        w.writerows({c: r.get(c, "") for c in cols} for r in kept + rows)
     counts = Counter(r["test_type"] for r in kept + rows)
     print(f"{world}: " + ", ".join(f"{t} {n}" for t, n in sorted(counts.items())))
 

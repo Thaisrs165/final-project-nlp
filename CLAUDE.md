@@ -1,6 +1,6 @@
 # Notes for AI assistants working in this repo
 
-Read these first: [PLAN.md](PLAN.md) (research design), [IMPLEMENTATION.md](IMPLEMENTATION.md) (steps, status, owners), [DATA_LOG.md](DATA_LOG.md) (every data decision, newest on top).
+Read these first: [PLAN.md](PLAN.md) (research design), [IMPLEMENTATION.md](IMPLEMENTATION.md) (steps, status, owners), [DATA_LOG.md](DATA_LOG.md) (every data decision, newest on top). For anything report-related: [REPORT_ROADMAP.md](REPORT_ROADMAP.md) (**2 pages max, IEEE template, references included; going over = F**; the appendix isn't graded and can't be cited).
 
 ## ⚑ Building a world's data (steps 2.2–2.3): use the existing tools
 Harry Potter was built with two reusable scripts. **For Divergent, Game of Thrones, Avatar or the invented world, use these. Don't write new extraction or agreement code.** Follow "How to build your world" in IMPLEMENTATION.md step 2, and use `data/hp/` as the worked example.
