@@ -1,0 +1,29 @@
+name,page,gold_group,gold_source,role
+Eddard,Eddard Stark,stark,"Game of Thrones Wiki infobox, checked 2026-11-23: House Stark [S1E1]; father Rickard Stark [S6E2]",main
+Robb,Robb Stark,stark,"Game of Thrones Wiki infobox, checked 2026-11-23: House Stark [S1E1]; father Eddard Stark [S1E1]",main
+Sansa,Sansa Stark,stark,"Game of Thrones Wiki infobox, checked 2026-11-23: House Stark; Lannister (by marriage); Bolton (by marriage) [S1E1]; father Eddard Stark [S1E1]",main
+Arya,Arya Stark,stark,"Game of Thrones Wiki infobox, checked 2026-11-23: House Stark [S1E1]; father Eddard Stark [S1E1]",main
+Bran,Bran Stark,stark,"Game of Thrones Wiki infobox, checked 2026-11-23: House Stark [S1E1]; father Eddard Stark [S1E1]",main
+Rickon,Rickon Stark,stark,"Game of Thrones Wiki infobox, checked 2026-11-23: House Stark; father Eddard Stark",spare
+Benjen,Benjen Stark,stark,"Game of Thrones Wiki infobox, checked 2026-11-23: House Stark; father Rickard Stark",spare
+Lyanna,Lyanna Stark,stark,"Game of Thrones Wiki infobox, checked 2026-11-23: House Stark; Targaryen (by marriage) [S1E1]; father Rickard Stark",main
+Tywin,Tywin Lannister,lannister,"Game of Thrones Wiki infobox, checked 2026-11-23: House Lannister [S1E7]; father Tytos Lannister [S1E8]",main
+Cersei,Cersei Lannister,lannister,"Game of Thrones Wiki infobox, checked 2026-11-23: House Lannister; Baratheon of King's Landing (by marriage) [S1E1]; father Tywin Lannister [S1E7]",main
+Jaime,Jaime Lannister,lannister,"Game of Thrones Wiki infobox, checked 2026-11-23: House Lannister [S1E1]; father Tywin Lannister [S1E7]",main
+Tyrion,Tyrion Lannister,lannister,"Game of Thrones Wiki infobox, checked 2026-11-23: House Lannister [S1E1]; father Tywin Lannister [S1E7]",main
+Kevan,Kevan Lannister,lannister,"Game of Thrones Wiki infobox, checked 2026-11-23: House Lannister; father Tytos Lannister",main
+Lancel,Lancel Lannister,lannister,"Game of Thrones Wiki infobox, checked 2026-11-23: House Lannister (renounced); father Kevan Lannister",main
+Daenerys,Daenerys Targaryen,targaryen,"Game of Thrones Wiki infobox, checked 2026-11-23: House Targaryen [S1E1]; father Aerys II Targaryen [S5E2]",main
+Viserys,Viserys Targaryen (son of Aerys II),targaryen,"Game of Thrones Wiki infobox, checked 2026-11-23: House Targaryen [S1E1]; father Aerys II Targaryen",main
+Aerys,Aerys II Targaryen,targaryen,"Game of Thrones Wiki infobox, checked 2026-11-23: House Targaryen [S1E1]; father Aegon V Targaryen [S1E9]",main
+Rhaegar,Rhaegar Targaryen,targaryen,"Game of Thrones Wiki infobox, checked 2026-11-23: House Targaryen [S1E1]; father Aerys II Targaryen",main
+Aemon,Aemon,targaryen,"Game of Thrones Wiki infobox, checked 2026-11-23: House Targaryen (renounced) [S1E9]; father Maekar I Targaryen [S1E9]",main
+Theon,Theon Greyjoy,greyjoy,"Game of Thrones Wiki infobox, checked 2026-11-23: House Greyjoy [S1E4]; father Balon Greyjoy [S2E3]",main
+Yara,Yara Greyjoy,greyjoy,"Game of Thrones Wiki infobox, checked 2026-11-23: House Greyjoy; father Balon Greyjoy",main
+Balon,Balon Greyjoy,greyjoy,"Game of Thrones Wiki infobox, checked 2026-11-23: House Greyjoy; father Quellon Greyjoy",main
+Euron,Euron Greyjoy,greyjoy,"Game of Thrones Wiki infobox, checked 2026-11-23: House Greyjoy [S6E2]; father Quellon Greyjoy",main
+Aeron,Aeron Greyjoy,greyjoy,"Game of Thrones Wiki infobox, checked 2026-11-23: House Greyjoy; father Quellon Greyjoy",spare
+Margaery,Margaery Tyrell,tyrell,"Game of Thrones Wiki infobox, checked 2026-11-23: House Tyrell; Baratheon (by marriage); Baratheon of King's Landing (by marriage) [S2E3]; father Mace Tyrell [S4E2]",main
+Loras,Loras Tyrell,tyrell,"Game of Thrones Wiki infobox, checked 2026-11-23: House Tyrell (renounced) [S1E5]; father Mace Tyrell [S4E2]",main
+Mace,Mace Tyrell,tyrell,"Game of Thrones Wiki infobox, checked 2026-11-23: House Tyrell; father Luthor Tyrell",spare
+Olenna,Olenna Tyrell,tyrell,"Game of Thrones Wiki infobox, checked 2026-11-23: House Redwyne; Tyrell (by marriage) [S3E2]",main

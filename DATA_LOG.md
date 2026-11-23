@@ -5,6 +5,62 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
 
 ---
 
+## 2026-11-23 · Game of Thrones: owner rulings (Fardin), steps 2.3 and 4 re-run
+- **First names only: kept.** Claude's proposal; Fardin saw it and did not object. Not an explicit ruling.
+- **Olenna admitted as an exception to the birth rule.** She is born Redwyne and Tyrell by marriage, but she heads House Tyrell in the series, and without her the house had no canonical row. Added at the end of `trait_picks.csv` as `got-c24` (sharp, astute, outspoken, unafraid, intelligent), so no existing id changed. **For the report:** Tyrell rests on **one** character, who is not Tyrell by birth; every generated conflicting row with Tyrell uses her traits. Read the Tyrell numbers as a case study.
+- **Trait check done: all 11 borderline traits accepted**, following the HP precedents (Cho "popular", "emotional"; Pansy "anxious", "frightened"). Share accepted as extracted: **80 of 80 traits** in the 16 canonical rows, 11 of them borderline (table in the entry below).
+- **Final set: 24 rows, 16 canonical, 8 `needs_review`.** Stark 4, Lannister 6, Targaryen 2, Greyjoy 3, Tyrell 1. The imbalance goes in the limitations; use macro-F1.
+- **Step 4 re-run:** 16 no_name, 16 name_swap, 16 negation, 42 conflicting (4 per house pair for all 10 pairs + the 2 vote items), 25 generic.
+- **Step 2.3:** `agreement.py make got` wrote `data/got/agreement/sheet_A.xlsx`, `sheet_B.xlsx` and `key.csv` with **16 items** (every canonical row; the script asks for 20). 🛑 Two annotators who have **not** seen the GoT character list fill them in. Fardin can't be one of them: he reviewed the traits with the names.
+
+## 2026-11-23 · Game of Thrones steps 2.2 and 4: canonical characters
+Built with the HP tools (`fetch_personality.py`, `make_tests.py`), wiki `gameofthrones`. The points marked "pending" below were ruled on the same day: see the entry above.
+
+- **Names are first names only** ("Eddard", not "Eddard Stark"). In this world the surname *is* the house, so a full name gives the answer away, and the general rule "leave out characters whose name contains a group name" would remove every character. `page` in `characters.csv` keeps the full wiki title. *Pending: Fardin confirms.*
+- **Scan.** 27 house members by birth were looked up, plus 19 more pages: minor members (Rickard, Brandon, Rhaella, Alton, Joanna, Martyn, Rodrik, Maron, Victarion, Garlan, Willas), two known by a married name (Olenna, Alerie) and six *House of the Dragon* characters, which are outside our sources. **No Personality section:** Rickon, Benjen, Aeron, Mace (role `spare`) and all the minor ones.
+- **Wrong page caught:** "Viserys Targaryen" is Viserys I (*House of the Dragon*). The series character is "Viserys Targaryen (son of Aerys II)".
+- **Leak list:** `data/got/leak_words.csv` (56 words): house names, every description word and its word forms (honourable, proud, ambitious, defiant, independent, diplomatic…), negated forms (dishonorable, disloyal), source-quote words (devoted, wealthy, rich, fierce, rebellious, clever), house-words cues (wintry, fiery) and sigils.
+- **Trait rule, fixed before picking** (close to the Divergent rule, to avoid hand-picking): the **first 5 adjectives in text order** that (a) the article itself affirms: not negated, not "not as X as", not another character's opinion; (b) describe this character; (c) are a lasting trait, not a passing state, a physical attribute or a skill; (d) keep their meaning as a bare word (said of the character, or of their own attitude, nature, temper or humour).
+- **Result: 23 rows, 15 canonical, 8 `needs_review`** (not padded).
+
+  | House | Canonical | needs_review (valid traits) |
+  |---|---|---|
+  | Stark | 4: Eddard, Sansa, Arya, Lyanna | Robb (3), Bran (3) |
+  | Lannister | 6: Tywin, Cersei, Jaime, Tyrion, Kevan, Lancel | — |
+  | Targaryen | 2: Daenerys, Viserys | Aerys (2), Rhaegar (4), Aemon (4) |
+  | Greyjoy | 3: Theon, Yara, Euron | Balon (3) |
+  | **Tyrell** | **0** | Margaery (3), Loras (2) |
+
+- **Tyrell has no canonical row.** By birth, only Margaery and Loras have a Personality section, and neither reaches 5 valid traits. **Olenna** (born Redwyne, so excluded by the README rule) is fetched as `spare`; she would be a clean row: sharp, astute, outspoken, unafraid, intelligent. *Pending: Fardin decides whether to admit her as an exception.* Until then accuracy and macro-F1 for this world cover 4 houses.
+- **Borderline picks, kept and flagged (11 of 75 traits). Pending: Fardin marks each ✓/✗; a ✗ turns the row into `needs_review`.**
+
+  | Character | Trait | Why it is borderline |
+  |---|---|---|
+  | Sansa | susceptible | "made her tragically susceptible to the manipulations of the Lannisters" (early seasons) |
+  | Sansa | effective | "effective as Lady of Winterfell": closer to competence than personality |
+  | Arya | spirited | describes "her spirited indifference to rules" |
+  | Arya | distrustful | "clearly distrustful of Daenerys": one situation |
+  | Tywin | unfettered | "often unfettered attitude": unusual word |
+  | Jaime | cold, sarcastic | first stated as what "outsiders perceive"; confirmed later ("this cold and sarcastic attitude") |
+  | Tyrion | sharp | describes his "sharp intellect" |
+  | Kevan | content | "always content with being a follower" |
+  | Viserys | tempestuous | describes his "tempestuous temper" |
+  | Euron | unnerving | describes his "unnerving coyness" |
+
+- **Rejected after reading the sentence** (examples): negated: Kevan "decisive", Theon "malicious", Euron "impulsive", "arrogant", Sansa "cruel", Viserys "unintelligent"; another character's opinion: Robb "stupid" (Tywin), "arrogant", "foolish" (Roose Bolton), Euron "half-insane"; about someone else: Tywin "nice", "generous" (his father), Arya "fatalistic" (the Hound), Sansa "tomboyish" (Arya); not personality: Tyrion "thick" (skin), "soft" (spot), Margaery "formidable" (skill), Loras "carefree" (life).
+- **A wider extractor would not fix the thin rows.** A check that also accepts participles and mis-tagged adjectives finds at most one or two more usable words on the 8 `needs_review` pages (e.g. Robb "loving", Bran "detached"). The pages are short; the tagger is not the bottleneck.
+- **Step 4 (`make_tests.py got`):** 15 no_name, 15 name_swap, 15 negation, 26 conflicting (4 per house pair among Stark, Lannister, Targaryen, Greyjoy + the 2 vote items; **no generated pair has Tyrell**), 25 generic. Re-run after any change to the canonical rows.
+- **Not done yet:** step 2.3 (`agreement.py make got`) waits for the rulings above, so the sheets are not built from rows that may change. Only 15 canonical rows exist and the sheet wants 20.
+- **Gold labels checked against the source (2026-11-23).** Fardin doesn't know the franchise, so Claude checked every label instead of leaving it to him. For all 27 characters and Olenna, the Game of Thrones Wiki infobox gives the house and the father; `gold_source` now holds that text and the episode the wiki cites (e.g. `[S1E1]`). All 27 are born into their gold house. Members with a second house by marriage keep the birth house (Sansa, Lyanna, Cersei, Margaery); Aemon, Lancel and Loras later renounce theirs and also keep it. Olenna is confirmed as House Redwyne, Tyrell by marriage.
+- **Step 2.1 owner check, done by Claude for the same reason.** Each `source_quote` in `data/got/groups.csv` was looked up on the live pages. Found word for word: Stark "honorable devotion to duty" and Tyrell "clever leaders" (Dummies); Lannister "wealthiest region due to its abundance of gold deposits", Greyjoy "fierce raids" / "terror of the seas" and Tyrell "positive image" (Wikipedia). Targaryen is a close paraphrase (Wikipedia: "wiping out three of the seven ruling houses that refused to bend their knees"). **Not found:** the Greyjoy sentence about Balon's failed rebellion is no longer on the Wikipedia page; the quote now cites the Game of Thrones Wiki for it. Description wording is unchanged. The traits marked "our reading" stay our reading: no source lists them as house traits.
+
+## 2026-11-23 · `fetch_personality.py`: section text was being dropped (fixed)
+- **Bug.** `_Text` raised its skip counter on the edit link's inner `<a>` but lowered it only on `</span>`, `</div>` and a few other end tags. The counter stayed above zero and the text up to the next `</span>` or `</div>` was lost. On the Game of Thrones wiki this emptied 4 sections (Yara, Kevan, Aemon, Lyanna) and cut the start of the others.
+- **Fix.** Inside a skipped element every nested tag is counted, so only the matching end tag ends the skip. Void tags (`<br>`, `<img>`…) are ignored.
+- **HP is not affected in practice.** HP reads its `raw/` cache, which was not touched. On a fresh fetch the fixed parser now also drops the quote-box captions it was meant to drop (Luna Lovegood: 939 → 866 words; the lost words are the caption line). Ana decides whether to re-fetch.
+
+---
+
 ## 2026-11-21 · Name slot in `sorter.py` (Q2) and shared `generic.csv` (step 2.5)
 - **Name slot.** `predict(..., name=None)` (and `score_mlm`, `score_embed`, `score_nli`). With a name, every MLM template uses its named twin in `sorter.NAMED_TEMPLATES` ("Ginny Weasley, who is …, belongs to Gryffindor."); embed and NLI use "Ginny Weasley, who is …." as the person sentence. Without a name, the prompts are exactly as before, so existing results don't change.
   - **Calibration with a name:** the prior uses the named template with **both** name and traits set to "N/A". The prior removes the template's own bias but not what the name carries; using the real name in the prior would calibrate away the very effect Q2 measures.

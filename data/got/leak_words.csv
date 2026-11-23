@@ -1,0 +1,57 @@
+word,group,found_in
+stark,stark,house name
+honor,stark,our description
+honour,stark,our description (British spelling)
+honorable,stark,source quote (Dummies)
+honourable,stark,source quote (British spelling)
+duty,stark,our description; source quote
+dutiful,stark,our description (word form)
+loyalty,stark,our description
+loyal,stark,our description (word form)
+dishonorable,stark,our description (negated form)
+dishonourable,stark,our description (negated form)
+disloyal,stark,our description (negated form)
+devotion,stark,source quote (Dummies)
+devoted,stark,source quote (word form)
+wintry,stark,house words (Winter Is Coming)
+wolf,stark,house sigil
+direwolf,stark,house sigil
+lannister,lannister,house name
+pride,lannister,our description
+proud,lannister,our description (word form)
+wealth,lannister,our description
+wealthy,lannister,source quote (Wikipedia: wealthiest)
+rich,lannister,source quote (synonym of wealthy)
+golden,lannister,source quote (Wikipedia: gold deposits)
+cunning,lannister,our description
+lion,lannister,house sigil
+targaryen,targaryen,house name
+passion,targaryen,our description
+passionate,targaryen,our description (word form)
+boldness,targaryen,our description
+bold,targaryen,our description (word form)
+ambition,targaryen,our description
+ambitious,targaryen,our description (word form)
+fiery,targaryen,house words (Fire and Blood)
+dragon,targaryen,house sigil
+greyjoy,greyjoy,house name
+defiance,greyjoy,our description
+defiant,greyjoy,our description (word form)
+toughness,greyjoy,our description
+tough,greyjoy,our description (word form)
+independence,greyjoy,our description
+independent,greyjoy,our description (word form)
+fierce,greyjoy,source quote (Wikipedia: fierce raids)
+rebellious,greyjoy,source quote (Wikipedia: rebellion)
+ironborn,greyjoy,people of the Iron Islands
+kraken,greyjoy,house sigil
+tyrell,tyrell,house name
+charm,tyrell,our description
+charming,tyrell,our description (word form)
+diplomacy,tyrell,our description
+diplomatic,tyrell,our description (word form)
+quiet,tyrell,our description
+scheming,tyrell,our description
+scheme,tyrell,our description (word form)
+clever,tyrell,source quote (Dummies: clever leaders)
+rose,tyrell,house sigil
