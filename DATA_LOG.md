@@ -5,63 +5,68 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
 
 ---
 
-## 2026-11-24 · Divergent round 2: every faction page checked, still 4 characters
-**What was done.** Thais ran the team's `fetch_personality` API helpers over **every page in the wiki's faction categories** (10 categories, 56 pages; output in `data/divergent/fandom_round2_auto.txt`). Only **17 pages have a Personality section**, and 11 of them were already in round 1.
-**New characters, same rule (first 5 personality adjectives in text order, no leaks):** Marcus Eaton (Abnegation) 1 trait (hypocritical) · Zeke 3 · Marlene 2 · Lauren 2 · Bud 1 · Shauna 0 (only "brave", a leak). None reaches 5; all are `needs_review` in `characters.csv`.
-**Conclusion.** Under the team's trait rule the Divergent canon gives 4 usable characters, all Dauntless. Category sizes (Abnegation 14 pages, Candor 13, Amity 7) show the other factions exist on the wiki but have no personality text. Reaching ~25 would need a **team decision to change the rule** (fewer than 5 traits, or other sections of the page); with ≥ 3 traits the additions would be Zeke, Lynn and Al, all Dauntless again.
+## 2026-11-23 · Invented world: first results (not yet the analysis)
+- `run_experiments.py run invented` (4 methods + 3 fixes): 5,370 predictions; occlusion for the 32 canonical rows; probe re-run (other worlds identical).
+- **Canonical accuracy, without / with descriptions** (chance 25%):
+
+| Method | Without | With |
+|---|---|---|
+| **NLI** | 25% | **97%** (31 of 32) |
+| bert-mean | 22% | 44% |
+| embed (MiniLM) | 16% | 19% |
+| MLM | 25% | 25% |
+| MLM fixes (cal / large / large-cal) | 16–25% | 19–31% |
+
+- **Without descriptions, everything is at chance**, as designed: the names mean nothing to any model.
+- **With descriptions, NLI gets 31 of 32 right.** It reads the descriptions and matches synonyms. Its no_name and name_swap scores are also 94% (follows the swapped name 0%), so the invented names have no effect, as intended.
+- **BERT's fill-in-the-blank does not use the descriptions at all.** It stays at 25% and collapses onto one or two houses (no descriptions: Calwen 86 of 96 predictions; with descriptions: Calwen 48 / Durrask 45). The fixes don't change that.
+- **Sentence-BERT barely uses them either** (19%).
+- **Probe (trained, small-data check):** raw BERT vectors 72% (95% CI 56–88%), MiniLM 28%. That is far above the real worlds (25–38%).
+- ⚠️ **Caveat for the report and the interview.** The personas were *designed* to fit: 3 of 5 traits are direct synonyms of the description. Real characters' Fandom traits are messier (HP humans: 70%). So "NLI 97% on invented vs. 53% on HP" mixes two things: memorization vs. reading, **and** clean vs. messy traits.
+  - **The fair comparison is each model against the human baseline of the same world.**
+- **Invented human baseline (sheets returned 2026-11-23, `agreement.py score invented`):**
+  - A **70%** (95% CI 50–90%), B **100%**; **mean 85%**; raw agreement 70%; **κ 0.60** (0.31–0.86).
+  - By house (A, B out of 5): Veltrin 4, 5 · Osmark 4, 5 · Calwen 3, 5 · Durrask 3, 5.
+  - **Annotators: A = Thais, B = Fardin** (confirmed by Ana). Neither wrote the personas.
+- **So humans also find the invented personas easier than real characters** (85% vs. HP's 70%), which confirms the caveat. But the gap differs by model:
+  - **NLI with descriptions: 97% on invented, at or above humans; 53% on HP, below humans (70%).**
+  - BERT's fill-in-the-blank stays at chance in both.
+  - Read relative to humans, NLI matches people when the answer is in the descriptions and falls behind on real characters. BERT's MLM falls behind everywhere.
+  - What is already safe to say: (1) without descriptions every model is at chance on invented, so nothing there comes from memory; (2) BERT's fill-in-the-blank can't use in-prompt descriptions even when the answer is a near-synonym, while NLI can.
 
 ---
 
-## 2026-11-24 · Report tables and Figure 1 (step 6, Thais)
-**Script.** `make_tables.py` reads `results/` and `data/` only (no model). Run `run_experiments.py summary` first, then `make_tables.py`. Output in `results/report/`: `table1_data.tex/.csv`, `table2_q1q2.tex/.csv`, `fig1_q3.pdf/.png/.tex`, plus `q3_jsd.csv` and `q3_negation.csv` with every method and both variants. Re-run it when the invented world and the Avatar/GoT κ arrive; nothing else changes.
-**Choices, fixed before reading the numbers:**
-- Main variant **with descriptions**: the annotators and the form respondents saw them too.
-- Methods shown: BERT fill-in (`mlm`), BERT + both fixes (`mlm-large-cal`), Sentence-BERT, NLI. The other variants stay in the CSVs.
-- MLM averaged over the 3 templates first, as in `run_experiments.summary`.
-- Table 2 keeps worlds with ≥ 10 characters (the same cut as the probe), so Divergent (4) is out of Q1/Q2.
-- Q3 vague items = the 17 generic form items of the 4 worlds with data (HP 8, others 3). Humans = the 10 respondents kept by the attention rule; all 19 are in `q3_jsd.csv` as the sensitivity analysis. References: a uniform guess, and a **human split-half floor** (JSD between two random halves of the respondents, 1000 splits).
-- **Negation is compared with the `no_name` row, not the canonical one.** Canonical rows are scored with the character's name and negation rows without it, so canonical-vs-negation would mix the name effect into the "not" effect. Metric: total variation distance (as decided in the GoT first look), with the top-answer flip rate next to it.
-**First reading (with descriptions):**
-- Q1: NLI is best (HP 50%, GoT 44%, Avatar 29%), all below the HP human baseline (70%). BERT fill-in is 14–24%, around chance; the fixes add 2–7 points.
-- Q2: swapping in another group's name changes no accuracy significantly (no McNemar p < 0.05), and only 12–29% of answers follow the swapped name.
-- Q3 vague items: JSD to humans: NLI 0.23, BERT fill-in 0.35, BERT + fixes 0.35, Sentence-BERT 0.39; **uniform guess 0.32**, humans vs. humans 0.17. Only NLI is clearly closer to people than a uniform guess; the BERT variants are not.
-- Negation (78 characters, HP + Avatar + GoT): BERT fill-in moves 0.08 TVD and changes its top answer in 14% of cases; NLI moves 0.40 (83% flips). Consistent with Ettinger (2020): BERT barely reacts to "not".
+## 2026-11-23 · Invented world step 2: 32 personas (drafted by Claude, Ana reviews)
+- **Method (Ana, option B):** the invented world has no outside source, so traits are **written directly** under a rule fixed before writing. They aren't "extracted" from a paragraph we would also have written, which would be circular.
+- **Rule:**
+  - 5 traits per persona: **3 synonyms** of the house description (each persona covers 3 of the 4 description facets, rotating which one is left out) + **2 neutral** traits that point to no house.
+  - **32 personas, 8 per house**, 4 women and 4 men each.
+  - No trait is a house name, description word or word form (`leak_words.csv` + `groups.csv`, same filter as `fetch_personality.py`).
+  - **Every neutral word appears in exactly 2 different houses** (32 neutral words × 2), so a neutral word can't give a house away.
+  - **Names** are invented and share no BERT word piece with a house name: the builder caught "Treve" (`ve`, as in Veltrin) and "Fesk" (`sk`, as in Durrask), renamed to Jonah Merrill and Dorian Holt.
+- **Files:**
+  - `data/invented/personas.csv`: the editable sheet (`name, gold_group, traits, fits, neutral`).
+  - `data/invented/build_personas.py`: checks every rule and writes the canonical rows to `tests.csv`, keeping generated rows. It refuses to write if any rule is broken.
+  - Trait order within each persona was shuffled once (seed 42), so the 3 fits aren't always first.
+- **Step 4 run:** `make_tests.py invented` → 32 no_name, 32 name_swap, 32 negation, 26 conflicting (4 per house pair + the 2 vote items), 25 generic.
+- **Gold labels:** the house each persona was written for. Since the team wrote the traits, the invented world measures *"does the model read the descriptions?"* and not memory, which is its purpose (PLAN.md §2.4). It is only meaningful **with descriptions**.
+- **Ana reviewed and approved the personas as drafted (2026-11-23).** "stubborn" kept as a neutral word (it appears in Osmark and Durrask).
+- **Step 3 (agreement):** `agreement.py make invented` → `data/invented/agreement/sheet_A.xlsx`, `sheet_B.xlsx`, `key.csv`: 20 nameless personas, 5 per house, a different order per sheet, the house descriptions at the top.
+  - 🛑 Any two of Thais, Fardin and Esther fill them in, **without opening `personas.csv`, `tests.csv` or `key.csv` first**. Ana wrote the personas and can't annotate.
+- Then: `run_experiments.py run invented` (all methods + fixes), and `agreement.py score invented` when the sheets are back.
 
 ---
 
-*(Restored 2026-11-24: these three Divergent entries were lost in a merge; text copied unchanged from commits 8ed39ce and fcd10d3.)*
-
-## 2026-11-23 · Divergent step 2.3: human baseline and κ (on probes)
-**Why probes.** `agreement.py make` draws 20 canonical rows, and Divergent has only 4 (all Dauntless), so the sheets use 20 of the hand-written probes instead: 10 single-faction (`clr-*`, 5 direct + 5 synonym) and 10 conflicting (`cnf-*-syn-ab`, one per faction pair). The sheets show the same `groups.csv` descriptions as every other world.
-**Scoring rule.** On a conflicting item (gold `a|b`) either faction counts as correct. `agreement.py score` would count those as wrong, so the score was computed outside it and saved in `data/divergent/agreement/results.json` (same fields, plus a single/conflicting breakdown). Code was not changed.
-**Annotators.** Two friends of Thais, each alone, without names or the key.
-**Result.** Accuracy A 90%, B 90% (single 90%/90%, chance 20%; conflicting 90%/90%, chance 40%). Raw agreement 75% (single 80%, conflicting 70%). **Cohen's κ = 0.69** (single items only: 0.75).
-**Worth noting.** On conflicting items both people picked the same faction in 7 of 10. "Fearless" won every pair it was in (Dauntless, 4/4 for both), so humans also let one word dominate. On the same 20 items NLI with descriptions gets 80% single / 90% conflicting; the MLM 30–40% / 40–70%.
-**Not comparable to HP's κ as-is:** HP sorted canonical characters; Divergent sorted designed probes. Report it as a separate row with that note.
-**Note.** The first `key.csv` was lost with the untracked folder; it was rebuilt from the item list printed when the sheets were made, and every sheet row was checked to match it (identical traits).
-
----
-
-## 2026-11-23 · Divergent canonical test dropped as a measure; kept as a case study
-**What happened.** Thais pasted the Fandom "Personality" section of every character into `data/divergent/fandom_personality.txt`. 14 of 26 pages have **no Personality section**, including **every Abnegation, Amity and Candor character**.
-**Trait rule applied** (same for every row, no hand-picking): the **first 5 adjectives in text order** that describe the character's personality. Excluded: label leaks (brave, selfless, kind, intelligent…), looks ("big"), passing states ("distraught", "frustrated"), adjectives about something else ("logical response").
-**Result.** Only 4 characters reach 5 traits: Tris, Peter, Eric, Uriah, **all Dauntless**. 5 more have 2–4 traits (`needs_review`, not padded). Molly, Drew and Myra end the books factionless and are excluded.
-**Decision.** With a single class, accuracy is meaningless (always answering "Dauntless" scores 100%). The canonical test is **not used as a Divergent measure**. The Divergent evidence comes from the controlled probes (clear / conflicting / divergent_mode / generic / cross-franchise). The 4 characters are reported as a qualitative case study. Tris is the interesting case, because her three aptitude words (brave, selfless, intelligent) are removed by the leak rule.
-**For the report (Limitations):** the source describes personality almost only for Dauntless characters, because the books are narrated from inside Dauntless. This is a source bias, not a sampling choice.
-
----
-
-## 2026-11-18 · Divergent tests built (Thais's part)
-**Decided before any model output was seen.** Changing any of this after looking at results must be a new entry here.
-
-- **Sources.** Fandom (`divergent.fandom.com`) returns HTTP 402 to automated access, so the canonical traits can't be extracted automatically. `data/divergent/characters.csv` lists 26 characters with the faction **quoted from Wikipedia** (*List of Divergent characters*, *Insurgent (novel)*). Traits are filled by hand from Fandom; `build` enforces the rules (exactly 5, evidence filled, no label leak).
-- **Gold label = faction the character belongs to after the Choosing Ceremony** (book 1), not the birth faction. The birth faction is kept in `birth_faction` for a possible "transfers" analysis. Excluded: Edward and Evelyn (factionless).
-- **Divergent characters** (per Wikipedia): Tris, Four, Marcus, Uriah, Natalie. Tris's aptitude result is Abnegation, Dauntless and Erudite (*Divergent (novel)*).
-- **Probe words** (`WORDS` in `experiments/divergent.py`), one direct adjective plus two synonyms per faction: Abnegation selfless / humble / modest · Amity peaceful / gentle / forgiving · Candor honest / truthful / blunt · Dauntless brave / fearless / daring · Erudite intelligent / studious / analytical. Direct words share a stem with the descriptions **on purpose** (easy variant); synonyms are leak-checked.
-- **Test types.** `clear` = 2 words of one faction (11 rows, incl. `k01-div`). `conflicting` = 1 word from each of 2 factions, all 10 pairs × direct/synonym × both orders (40 rows; the gold `A|B` follows the trait order, so we can measure an order effect). It includes the vote items `c01-div` and `c02-div` with identical traits. `divergent_mode` = 1 word from each of 3 factions (all 10 triples × direct/synonym = 20 rows). `generic` = `g01–g03-div` copied from `vote_items.csv` (same ids, so step 4 shouldn't add them again).
-- **Pre-registered house mapping** for the cross-franchise test: Dauntless→Gryffindor, Erudite→Ravenclaw, Abnegation→Hufflepuff, Amity→Hufflepuff, Candor→none (left out). Chance = 0.25.
-- **Metrics.** Normalized entropy by type (one-sided Mann–Whitney vs. `clear`, Holm-corrected); for mixed inputs: mass on the mixed factions (chance 0.4 / 0.6), top-k = the mixed factions, balance (min/max), share with max prob > 0.8 (“overconfident”), first-listed bonus (Wilcoxon over the 20 pairs); soft correspondence P(house | faction) = Σ P(f|x)P(h|x) / Σ P(f|x); JSD vs. the simulated panel on the 6 Divergent vote items. MLM: metrics per template, then mean (and spread) over the 3 templates. Correspondence and JSD use the template-averaged distribution.
-- **Added after the first run (inputs unchanged, only extra checks):** a sanity table (accuracy on the `clear` inputs + share of the most common answer) and a **permutation baseline** for the cross-franchise consistency. Reason: several methods collapse onto one label (e.g. bert-mean with descriptions answers Amity 91% of the time), which made the fixed 0.25 chance level misleading. The permutation keeps each label's frequency, so only real pairing beats it.
+## 2026-11-23 · Invented world step 1 (like HP 2.1): names, descriptions, leak words (Ana + Esther)
+- **Owners changed (team, 2026-11-23):** the invented world is now built by **Ana + Esther**; Thais takes the app and the report tables.
+- **Descriptions:** `data/invented/groups.csv` already matches the live form word for word (Section 6): Veltrin "patient, observant, methodical, reserved"; Osmark "warm, generous, sociable, forgiving"; Calwen "restless, curious, independent, spontaneous"; Durrask "disciplined, competitive, proud, determined". No change.
+- **Word pieces** (bert-base-uncased): Veltrin `ve·##lt·##rin`, Osmark `os·##mark`, Calwen `cal·##wen`, Durrask `du·##rra·##sk`. All are multi-piece, as expected; PLL-word-l2r handles them.
+- **Real-name check** (web search, exact spelling): none is a real brand, product or place.
+  - Closest hits: "Veltliner" (a grape), the Osmar Strait (Antarctica), **"Callwen"** (an obscure Welsh saint and village, spelled with two Ls), and Duras / Durrës.
+  - Callwen is noted but harmless: different spelling, and no trait association.
+- **Leak words:** `data/invented/leak_words.csv` (51 words): the 4 group names, the 16 description words and their word forms (patience, observe, method, reserve, warmth, generosity, social, forgive, curiosity, independence, spontaneity, discipline, competition, pride, determination…).
+  - Checked against the filter: synonyms pass (unhurried, watchful, meticulous, gregarious, charitable, inquisitive, impulsive, rigorous, tenacious), while word forms are blocked (patiently, prideful, warmish).
+- **Format test:** one draft persona per house, written as a short "Personality" paragraph and run through `fetch_personality.adjectives` + the leak filter, gives 4–5 usable traits each. The tagger misses some adjectives depending on phrasing (as in HP), so every persona is checked with the tool, not by eye.
 
 ---
 
