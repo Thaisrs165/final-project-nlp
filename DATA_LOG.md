@@ -5,6 +5,24 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
 
 ---
 
+## 2026-11-23 · Step 6 results: Q2 and Q3 (Fardin)
+Computed with `analysis_q2q3.py` exactly as fixed in the entry below (committed first, 3599562). Output: `results/q2q3/` (`SUMMARY.md` has every table; fix methods in `*_fixes.csv`). Worlds: hp, divergent, got, avatar; the invented world has no predictions yet. Checked: no_name accuracies with template-averaged probabilities match `summary_q1q2.csv` exactly; 8 new tests in `tests/test_analysis_q2q3.py`.
+
+**Q2 (traits or names?)**
+- The target "McNemar p ≥ 0.05" is met in **24 of 24** world × method × variant rows, but **informative in only 1**: nli with descriptions on HP (no_name 0.50, chance 0.25; name_swap 0.41; p = 0.25). Everywhere else no_name accuracy is at chance, so the name can't take anything away.
+- Largest name effect (own name − no name): nli on GoT, +0.31 without descriptions.
+- **Occlusion: no word-order bias.** The most influential trait is the first one for 7–27% of characters vs. 20% by chance (all binomial p > 0.1). The share of characters where removing one trait changes the answer moves with the variant (HP 0.62 without descriptions, 0.09 with; GoT 0.00 vs. 0.62): it follows where the collapse sits, not trait reading.
+
+**Q3 (ambiguity)**
+- **JSD target met only by nli with descriptions:** vs. humans d = −0.091 (95% CI −0.146 to −0.035, Wilcoxon p = 0.002, 17 items); vs. the simulated panel d = −0.058 (−0.113 to −0.004, 27 items). **Not robust:** with all 19 respondents d = −0.036 (−0.076 to 0.002). mlm without descriptions is *further* than a uniform guess (d = +0.125, CI 0.033 to 0.218). Best JSD (nli, 0.229) is still above the human split-half floor (0.153; 95% of splits 0.111–0.219).
+- **Entropy:** higher on ambiguous inputs in only 3 of 24 testable rows after Holm (avatar bert-mean and mlm with descriptions, hp bert-mean without). Divergent has no `no_name` rows, so it is not testable there.
+- **Negation (TV vs. the different-character baseline):** embed moves 0.19–0.44 of the baseline (the "not" is largely ignored); mlm 0.61–1.01, bert-mean 0.43–1.32; nli 1.00–1.21 (flip rate 0.36–0.94). The plain-BERT methods agree with Ettinger (2020); nli is the exception, as expected from a model fine-tuned on MNLI.
+- **Calibration pull (mlm):** raw scores give one answer to 100% of no_name rows in HP (gryffindor), GoT (stark) and Avatar without descriptions (earth). Calibration moves the collapse to another group (GoT: tyrell / greyjoy, 100% of no_name rows) instead of removing it. The predicted "more pull on vague inputs" can't be seen: raw is already at 100% on both input types.
+
+**Clarifications (not changes):** the Q2 target count leaves out divergent (no no_name / name_swap rows). Figure 1 (b) averages the per-world means over the three worlds with negation rows. In Figure 1 (a) each dashed line is the uniform guess measured against its own reference (blue = humans, orange = panel).
+
+---
+
 ## 2026-11-23 · Step 6, Q2 and Q3: analysis choices fixed BEFORE computing them (Fardin)
 Written before any of these numbers was computed, so the choices can't follow the results. One script, `analysis_q2q3.py`, reads `results/all.csv`, `results/occlusion.csv`, `results/summary_q1q2.csv` and the vote files, and writes `results/q2q3/` (tables, Figure 1, `SUMMARY.md`). Every world in `all.csv` is included automatically (the invented world joins once it has predictions).
 
