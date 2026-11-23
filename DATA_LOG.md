@@ -5,6 +5,25 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
 
 ---
 
+## 2026-11-23 · HP: caption traits checked after Fardin's parser fix; Cho "cheerful" → "irrational" (Ana: Rule 2)
+- **Why:** Fardin fixed a bug in `fetch_personality.py` (entry below): the old parser could drop section text, and it let quote-box captions through.
+- **Re-fetched every HP page with the fixed parser** into a scratch folder (`data/hp/raw/` was not touched). **No page gains text**, so no HP text had been lost; each page only shrinks by its caption lines. The 8 `needs_review` pages really are short.
+- **5 of the 185 HP traits appear only in caption lines:** Cho "cheerful", Myrtle "over-emotional" and "self-conscious", Sprout "no-nonsense", Umbridge "insincere".
+- **Rule chosen (Ana, "Rule 2"):** a trait may come from anything in the Personality section, caption lines included, **except another character's opinion**.
+  - Caption lines like "Hermione Granger regarding Myrtle's over-emotional nature" or "Professor Sprout's no-nonsense attitude as a teacher" are the wiki's own description of the character, so they stay.
+  - The alternative, article text only, would have turned Myrtle and Sprout into `needs_review` (no valid article-text replacement exists: Sprout's options are about Neville or one moment, and "kind" and "brave" are leak words). Ravenclaw would have dropped to 7 and Hufflepuff to 5.
+- **Cho "cheerful" broke the rule.** It comes from Harry's hedged opinion ("She's probably cheerful enough with someone else."), which the original context check missed.
+  - Replaced with **"irrational"**, the literal adjective of the article sentence "Cho also felt irrational jealousy and paranoia…". Ana suggested "jealous", but only the noun "jealousy" is in the text, and traits must appear literally.
+  - "irrational" is flagged as borderline: it describes her jealousy.
+  - The trait check figure changes accordingly: the accepted "cheerful" was the wrong pick.
+- **Re-run:** `build` + `make_tests.py hp` changed exactly 5 rows (hp-c12, -nn, -ns, -neg, hp-x02).
+  - `run_experiments.py` now **drops cached rows whose traits or name no longer match `tests.csv`**, so nothing is counted twice (new `prune`, with a test): 150 old rows were replaced and 10 occlusion rows redone.
+  - HP canonical accuracy is unchanged for every method (NLI 53% / 50%). Two cells moved by one character: mlm-cal with descriptions, no_name 21% → 24%; mlm-large-cal with descriptions, name_swap 18% → 21%. Probe identical for every world.
+- **Agreement sheets:** item hp-a18 (Cho) was answered with "cheerful". It is not redone. The human baseline stays valid for the traits the annotators saw; noted here.
+- **Avatar checked the same way** (all 33 rows re-fetched with the fixed parser): **0 caption-only traits**, so nothing to change.
+
+---
+
 ## 2026-11-23 · Game of Thrones: results of the MLM fixes (all reported, as fixed in advance)
 - **2,358 new predictions**, as expected. No existing row of `all.csv`, `summary_q1q2.csv` or `probe.csv` changed; HP and Avatar probe numbers are identical to the committed ones.
 - **GoT canonical accuracy, without / with descriptions** (chance 20%, n = 16):

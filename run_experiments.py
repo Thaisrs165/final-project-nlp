@@ -73,8 +73,37 @@ def jobs_for(world, rows, methods):
                     yield r, method, template, desc, name
 
 
+def prune(path, worlds, has_name=True):
+    """Drop cached rows that no longer match tests.csv (a row's traits or name changed, or
+    the row was removed / became needs_review), so nothing is counted twice. Only the
+    given worlds are touched; returns how many rows were dropped."""
+    if not path.exists():
+        return 0
+    current = {}
+    for w in worlds:
+        for r in load_tests(w):
+            name = r.get("name", "").strip() if r["test_type"] in NAMED_TYPES else ""
+            current[(w, r["id"])] = (r["traits"], name)
+    with open(path, newline="") as f:
+        reader = csv.DictReader(f)
+        cols, rows = reader.fieldnames, list(reader)
+    keep = [r for r in rows if r["world"] not in worlds or (
+        (r["world"], r["id"]) in current
+        and current[(r["world"], r["id"])][0] == r["traits"]
+        and (not has_name or current[(r["world"], r["id"])][1] == r["name"]))]
+    if len(keep) < len(rows):
+        with open(path, "w", newline="") as f:
+            w = csv.DictWriter(f, fieldnames=cols)
+            w.writeheader()
+            w.writerows(keep)
+        print(f"{path.name}: dropped {len(rows) - len(keep)} outdated rows")
+    return len(rows) - len(keep)
+
+
 def run(worlds, methods, limit=None):
     OUT.mkdir(exist_ok=True)
+    if not limit:
+        prune(PRED, [w for w in worlds if load_tests(w)])
     done = set()
     if PRED.exists():
         with open(PRED, newline="") as f:
@@ -122,6 +151,7 @@ def occlusion(worlds):
     """Leave-one-trait-out (Li et al. 2016) on canonical rows: MLM, template 0, no name
     (we want the traits' own effect), with and without descriptions. Cached like `run`."""
     OUT.mkdir(exist_ok=True)
+    prune(OCCL, [w for w in worlds if load_tests(w)], has_name=False)
     done = set()
     if OCCL.exists():
         with open(OCCL, newline="") as f:

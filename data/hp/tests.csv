@@ -55,10 +55,9 @@ hp-c11,canonical,Luna Lovegood,perceptive; quirky; serene; unflappable; non-judg
 Luna was an extremely quirky girl, with a serene disposition and many eccentric beliefs and qualities. | serene: Personality and traits
 — Luna's unusual character traits
 Luna was an extremely quirky girl, with a serene disposition and many eccentric beliefs and qualities. | unflappable: She was also completely unflappable and rarely seemed anxious or stressed, even under difficult circumstances such as being a prisoner of Malfoy Manor. | non-judgmental: She was unfazed by this, and instead chose to be non-judgmental and accepting of those around her.1] She once said that she did not like dancing much, though she did dance some at the wedding of Bill and Fleur, along with her father.",,
-hp-c12,canonical,Cho Chang,sweet; well-mannered; cheerful; emotional; popular,ravenclaw,https://harrypotter.fandom.com/wiki/Cho_Chang,"sweet: — Ron Weasley and Harry Potter discussing Cho
+hp-c12,canonical,Cho Chang,sweet; well-mannered; irrational; emotional; popular,ravenclaw,https://harrypotter.fandom.com/wiki/Cho_Chang,"sweet: — Ron Weasley and Harry Potter discussing Cho
 Generally polite, sweet, and well-mannered, Cho was easy to get along with and was a popular student at Hogwarts, with a large group of friends and many boys who admired her for her extreme beauty (including Harry Potter himself). | well-mannered: — Ron Weasley and Harry Potter discussing Cho
-Generally polite, sweet, and well-mannered, Cho was easy to get along with and was a popular student at Hogwarts, with a large group of friends and many boys who admired her for her extreme beauty (including Harry Potter himself). | cheerful: Personality and traits
-Harry Potter: ""She's probably cheerful enough with someone else."" | emotional: For the most part, Cho was often found around Hogwarts with a gaggle of girlfriends, though after one of her emotional breakdowns over Cedric's death, they apparently left her during her depression. | popular: — Ron Weasley and Harry Potter discussing Cho
+Generally polite, sweet, and well-mannered, Cho was easy to get along with and was a popular student at Hogwarts, with a large group of friends and many boys who admired her for her extreme beauty (including Harry Potter himself). | irrational: Cho also felt irrational jealousy and paranoia when Harry would bring up Hermione Granger for what Cho saw to be flippant insensitivity from Harry's end. | emotional: For the most part, Cho was often found around Hogwarts with a gaggle of girlfriends, though after one of her emotional breakdowns over Cedric's death, they apparently left her during her depression. | popular: — Ron Weasley and Harry Potter discussing Cho
 Generally polite, sweet, and well-mannered, Cho was easy to get along with and was a popular student at Hogwarts, with a large group of friends and many boys who admired her for her extreme beauty (including Harry Potter himself).",,
 hp-c13,canonical,Filius Flitwick,gentle; tolerant; generous; intellectual; sensitive,ravenclaw,https://harrypotter.fandom.com/wiki/Filius_Flitwick,"gentle: Provided by: Community
 Personality and traits
@@ -259,7 +258,7 @@ hp-c08-nn,no_name,,reckless; impulsive; mischievous; arrogant; irresponsible,gry
 hp-c09-nn,no_name,,self-sacrificing; good-natured; forgiving; perceptive; mature,gryffindor,,,hp-c09,
 hp-c10-nn,no_name,,warm; gentle; sensitive; perceptive; aggressive,gryffindor,,,hp-c10,
 hp-c11-nn,no_name,,perceptive; quirky; serene; unflappable; non-judgmental,ravenclaw,,,hp-c11,
-hp-c12-nn,no_name,,sweet; well-mannered; cheerful; emotional; popular,ravenclaw,,,hp-c12,
+hp-c12-nn,no_name,,sweet; well-mannered; irrational; emotional; popular,ravenclaw,,,hp-c12,
 hp-c13-nn,no_name,,gentle; tolerant; generous; intellectual; sensitive,ravenclaw,,,hp-c13,
 hp-c14-nn,no_name,,attention-seeking; self-serving; fraudulent; impractical; reckless,ravenclaw,,,hp-c14,
 hp-c15-nn,no_name,,theatrical; showy; sensitive; defensive; ethereal,ravenclaw,,,hp-c15,
@@ -293,7 +292,7 @@ hp-c08-ns,name_swap,Quirinus Quirrell,reckless; impulsive; mischievous; arrogant
 hp-c09-ns,name_swap,Sybill Trelawney,self-sacrificing; good-natured; forgiving; perceptive; mature,gryffindor,,,hp-c09|hp-c15,ravenclaw
 hp-c10-ns,name_swap,Lucius Malfoy,warm; gentle; sensitive; perceptive; aggressive,gryffindor,,,hp-c10|hp-c34,slytherin
 hp-c11-ns,name_swap,Draco Malfoy,perceptive; quirky; serene; unflappable; non-judgmental,ravenclaw,,,hp-c11|hp-c31,slytherin
-hp-c12-ns,name_swap,Hermione Granger,sweet; well-mannered; cheerful; emotional; popular,ravenclaw,,,hp-c12|hp-c02,gryffindor
+hp-c12-ns,name_swap,Hermione Granger,sweet; well-mannered; irrational; emotional; popular,ravenclaw,,,hp-c12|hp-c02,gryffindor
 hp-c13-ns,name_swap,Harry Potter,gentle; tolerant; generous; intellectual; sensitive,ravenclaw,,,hp-c13|hp-c01,gryffindor
 hp-c14-ns,name_swap,Ginny Weasley,attention-seeking; self-serving; fraudulent; impractical; reckless,ravenclaw,,,hp-c14|hp-c05,gryffindor
 hp-c15-ns,name_swap,Rubeus Hagrid,theatrical; showy; sensitive; defensive; ethereal,ravenclaw,,,hp-c15|hp-c10,gryffindor
@@ -327,7 +326,7 @@ hp-c08-neg,negation,,not reckless; not impulsive; not mischievous; not arrogant;
 hp-c09-neg,negation,,not self-sacrificing; not good-natured; not forgiving; not perceptive; not mature,,,,hp-c09,
 hp-c10-neg,negation,,not warm; not gentle; not sensitive; not perceptive; not aggressive,,,,hp-c10,
 hp-c11-neg,negation,,not perceptive; not quirky; not serene; not unflappable; not non-judgmental,,,,hp-c11,
-hp-c12-neg,negation,,not sweet; not well-mannered; not cheerful; not emotional; not popular,,,,hp-c12,
+hp-c12-neg,negation,,not sweet; not well-mannered; not irrational; not emotional; not popular,,,,hp-c12,
 hp-c13-neg,negation,,not gentle; not tolerant; not generous; not intellectual; not sensitive,,,,hp-c13,
 hp-c14-neg,negation,,not attention-seeking; not self-serving; not fraudulent; not impractical; not reckless,,,,hp-c14,
 hp-c15-neg,negation,,not theatrical; not showy; not sensitive; not defensive; not ethereal,,,,hp-c15,
@@ -351,7 +350,7 @@ hp-c40-neg,negation,,not mean-spirited; not selfish; not unwise; not anxious; no
 hp-c41-neg,negation,,not thuggish; not stupid; not greedy; not gluttonous; not reckless,,,,hp-c41,
 hp-c42-neg,negation,,not cheerful; not dutiful; not reckless; not careful; not professorial,,,,hp-c42,
 hp-x01,conflicting,,gullible; timid; clumsy; timid; nervous,gryffindor|ravenclaw,,,hp-c04|hp-c16,
-hp-x02,conflicting,,popular; self-sacrificing; perceptive; forgiving; cheerful,gryffindor|ravenclaw,,,hp-c09|hp-c12,
+hp-x02,conflicting,,popular; self-sacrificing; perceptive; forgiving; irrational,gryffindor|ravenclaw,,,hp-c09|hp-c12,
 hp-x03,conflicting,,fraudulent; strong-willed; hot-tempered; modest; impractical,gryffindor|ravenclaw,,,hp-c01|hp-c14,
 hp-x04,conflicting,,canny; benevolent; perceptive; reckless; self-serving,gryffindor|ravenclaw,,,hp-c06|hp-c14,
 hp-x05,conflicting,,polite; modest; benevolent; civil; canny,gryffindor|hufflepuff,,,hp-c06|hp-c21,
