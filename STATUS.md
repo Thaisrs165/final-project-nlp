@@ -12,7 +12,7 @@ A one-page snapshot for everyone, and for your AI assistant. Details live in [DA
 | Data: Game of Thrones (Fardin) | ✅ 16 characters (Tyrell = Olenna only) + test rows; 🛑 agreement sheets sent, not scored yet |
 | Data: Invented (Esther) | 🛑 **not started** (0 personas) |
 | Human form | ✅ 19 responses (10 after the attention rule, decided in advance) |
-| Shared runner `run_experiments.py` | ✅ 15,672 predictions: HP, Avatar, Divergent (4 methods + 3 fixes), GoT (4 methods; fixes not run yet) |
+| Shared runner `run_experiments.py` | ✅ 18,030 predictions: HP, Avatar, Divergent, GoT (4 methods + 3 fixes each) |
 | Fixes for the "always Gryffindor" problem | ✅ all tried and reported (see below) |
 | App (Gradio, Ana) | 🟡 starter works (`app/app.py`); polish + deploy to do |
 | Tables and figure for the report | ⏳ next |

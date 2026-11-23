@@ -5,6 +5,24 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
 
 ---
 
+## 2026-11-23 · Game of Thrones: results of the MLM fixes (all reported, as fixed in advance)
+- **2,358 new predictions**, as expected. No existing row of `all.csv`, `summary_q1q2.csv` or `probe.csv` changed; HP and Avatar probe numbers are identical to the committed ones.
+- **GoT canonical accuracy, without / with descriptions** (chance 20%, n = 16):
+
+  | Method | Accuracy | Named prompts (canonical + name_swap, 32), most common answers |
+  |---|---|---|
+  | mlm (baseline) | 6% / 19% | Greyjoy 17, Tyrell 15 / **Greyjoy 32** |
+  | mlm-cal (fix A) | 6% / 31% (12–56%) | Tyrell 18, Greyjoy 13 / Greyjoy 18, Tyrell 5, Stark 4 |
+  | mlm-large (fix B) | 19% / 25% | **Greyjoy 30** / **Stark 31** |
+  | mlm-large-cal (A+B) | 12% / 25% | Greyjoy 27 / Stark 25, Targaryen 4 |
+  | *for reference:* nli | 56% / 44% | |
+
+- **Unlike HP, the fixes don't break the collapse in GoT.** Fix A spreads the answers somewhat (with descriptions: Greyjoy 18 of 32 instead of 32). Fix B only moves the collapse to another house: bert-large answers Greyjoy (without descriptions) or Stark (with) for 30–31 of 32 named prompts. Every CI includes chance (20%).
+- **Q2 with the fixes:** name_swap is never significantly different from no_name (all McNemar p ≥ 0.5).
+- **Negation (top-answer changes vs. no_name, 16 pairs):** baseline 0 / 0, mlm-cal 3 / 1, mlm-large 1 / 7, mlm-large-cal 1 / **11**. The 11 of mlm-large-cal with descriptions is the only sizeable number; step 6 should check it with total variation distance before reading it as sensitivity to "not".
+- **Probe (fix C, trained, NOT zero-shot):** raw BERT 37.5% (12–62%), MiniLM 37.5% (12–62%); **majority baseline 37.5%** (Lannister, 6 of 16). The probe does no better than always answering Lannister.
+- **Takeaway, same as HP:** calibration and model size change *where* the MLM fails, not *whether* it fails. NLI (56%) is the only method above chance, and the Game of Thrones step 5 entry shows it gets there through the names.
+
 ## 2026-11-23 · Game of Thrones: the MLM fixes run too, settings fixed BEFORE running (Fardin)
 - **Decision:** run fixes A, B, A+B and C on GoT with **exactly** the settings of the entry "Fixes for the MLM collapse, fixed BEFORE running them" below. Nothing is changed or tuned for GoT.
 - **Why:** so every world is scored with the same methods, and the report can describe one method. GoT was left out of the first fix run only because it had no data yet.
