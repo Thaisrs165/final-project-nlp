@@ -5,6 +5,17 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
 
 ---
 
+## 2026-11-23 · Divergent step 2.3: human baseline and κ (on probes)
+**Why probes.** `agreement.py make` draws 20 canonical rows, and Divergent has only 4 (all Dauntless), so the sheets use 20 of the hand-written probes instead: 10 single-faction (`clr-*`, 5 direct + 5 synonym) and 10 conflicting (`cnf-*-syn-ab`, one per faction pair). The sheets show the same `groups.csv` descriptions as every other world.
+**Scoring rule.** On a conflicting item (gold `a|b`) either faction counts as correct. `agreement.py score` would count those as wrong, so the score was computed outside it and saved in `data/divergent/agreement/results.json` (same fields, plus a single/conflicting breakdown). Code was not changed.
+**Annotators.** Two friends of Thais, each alone, without names or the key.
+**Result.** Accuracy A 90%, B 90% (single 90%/90%, chance 20%; conflicting 90%/90%, chance 40%). Raw agreement 75% (single 80%, conflicting 70%). **Cohen's κ = 0.69** (single items only: 0.75).
+**Worth noting.** On conflicting items both people picked the same faction in 7 of 10. "Fearless" won every pair it was in (Dauntless, 4/4 for both), so humans also let one word dominate. On the same 20 items NLI with descriptions gets 80% single / 90% conflicting; the MLM 30–40% / 40–70%.
+**Not comparable to HP's κ as-is:** HP sorted canonical characters; Divergent sorted designed probes. Report it as a separate row with that note.
+**Note.** The first `key.csv` was lost with the untracked folder; it was rebuilt from the item list printed when the sheets were made, and every sheet row was checked to match it (identical traits).
+
+---
+
 ## 2026-11-23 · Results of the fixes (all reported, as fixed in advance)
 8,460 new predictions (3 fixes × the same 470 rows × 3 templates × 2 description variants) + the probe. Original `mlm` re-checked: identical to the committed run (max difference 0).
 
