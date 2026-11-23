@@ -1,0 +1,163 @@
+{
+  "world": "divergent",
+  "n_items": 20,
+  "chance": 0.2,
+  "note": "Items are probes, not canonical characters (only 4, all Dauntless). 10 single-faction + 10 conflicting (gold 'a|b': either faction counts as correct). Scored outside agreement.py, which would count a conflicting answer as wrong.",
+  "accuracy_A": 0.9,
+  "accuracy_B": 0.9,
+  "raw_agreement": 0.75,
+  "cohen_kappa": 0.6855345911949686,
+  "single_n": 10,
+  "single_chance": 0.2,
+  "single_accuracy_A": 0.9,
+  "single_accuracy_B": 0.9,
+  "single_raw_agreement": 0.8,
+  "conflicting_n": 10,
+  "conflicting_chance": 0.4,
+  "conflicting_accuracy_A": 0.9,
+  "conflicting_accuracy_B": 0.9,
+  "conflicting_raw_agreement": 0.7,
+  "single_cohen_kappa": 0.7530864197530864,
+  "per_item": [
+    {
+      "item": "divergent-a01",
+      "test_id": "clr-abn-direct",
+      "gold": "abnegation",
+      "A": "abnegation",
+      "B": "abnegation"
+    },
+    {
+      "item": "divergent-a02",
+      "test_id": "clr-abn-syn",
+      "gold": "abnegation",
+      "A": "abnegation",
+      "B": "candor"
+    },
+    {
+      "item": "divergent-a03",
+      "test_id": "clr-ami-direct",
+      "gold": "amity",
+      "A": "amity",
+      "B": "amity"
+    },
+    {
+      "item": "divergent-a04",
+      "test_id": "clr-ami-syn",
+      "gold": "amity",
+      "A": "amity",
+      "B": "amity"
+    },
+    {
+      "item": "divergent-a05",
+      "test_id": "clr-can-direct",
+      "gold": "candor",
+      "A": "candor",
+      "B": "candor"
+    },
+    {
+      "item": "divergent-a06",
+      "test_id": "clr-can-syn",
+      "gold": "candor",
+      "A": "candor",
+      "B": "candor"
+    },
+    {
+      "item": "divergent-a07",
+      "test_id": "clr-dau-direct",
+      "gold": "dauntless",
+      "A": "dauntless",
+      "B": "dauntless"
+    },
+    {
+      "item": "divergent-a08",
+      "test_id": "clr-dau-syn",
+      "gold": "dauntless",
+      "A": "abnegation",
+      "B": "dauntless"
+    },
+    {
+      "item": "divergent-a09",
+      "test_id": "clr-eru-direct",
+      "gold": "erudite",
+      "A": "erudite",
+      "B": "erudite"
+    },
+    {
+      "item": "divergent-a10",
+      "test_id": "clr-eru-syn",
+      "gold": "erudite",
+      "A": "erudite",
+      "B": "erudite"
+    },
+    {
+      "item": "divergent-a11",
+      "test_id": "cnf-abn-ami-syn-ab",
+      "gold": "abnegation|amity",
+      "A": "amity",
+      "B": "candor"
+    },
+    {
+      "item": "divergent-a12",
+      "test_id": "cnf-abn-can-syn-ab",
+      "gold": "abnegation|candor",
+      "A": "candor",
+      "B": "candor"
+    },
+    {
+      "item": "divergent-a13",
+      "test_id": "cnf-abn-dau-syn-ab",
+      "gold": "abnegation|dauntless",
+      "A": "dauntless",
+      "B": "dauntless"
+    },
+    {
+      "item": "divergent-a14",
+      "test_id": "cnf-abn-eru-syn-ab",
+      "gold": "abnegation|erudite",
+      "A": "amity",
+      "B": "erudite"
+    },
+    {
+      "item": "divergent-a15",
+      "test_id": "cnf-ami-can-syn-ab",
+      "gold": "amity|candor",
+      "A": "amity",
+      "B": "amity"
+    },
+    {
+      "item": "divergent-a16",
+      "test_id": "cnf-ami-dau-syn-ab",
+      "gold": "amity|dauntless",
+      "A": "dauntless",
+      "B": "dauntless"
+    },
+    {
+      "item": "divergent-a17",
+      "test_id": "cnf-ami-eru-syn-ab",
+      "gold": "amity|erudite",
+      "A": "erudite",
+      "B": "erudite"
+    },
+    {
+      "item": "divergent-a18",
+      "test_id": "cnf-can-dau-syn-ab",
+      "gold": "candor|dauntless",
+      "A": "dauntless",
+      "B": "dauntless"
+    },
+    {
+      "item": "divergent-a19",
+      "test_id": "cnf-can-eru-syn-ab",
+      "gold": "candor|erudite",
+      "A": "candor",
+      "B": "erudite"
+    },
+    {
+      "item": "divergent-a20",
+      "test_id": "cnf-dau-eru-syn-ab",
+      "gold": "dauntless|erudite",
+      "A": "erudite",
+      "B": "erudite"
+    }
+  ]
+}
