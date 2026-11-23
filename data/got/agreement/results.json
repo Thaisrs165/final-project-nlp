@@ -1,0 +1,107 @@
+{
+  "world": "got",
+  "n_items": 16,
+  "chance": 0.2,
+  "accuracy_A": 0.25,
+  "accuracy_B": 0.3125,
+  "raw_agreement": 0.375,
+  "cohen_kappa": 0.21568627450980393,
+  "per_item": [
+    {
+      "item": "got-a01",
+      "gold": "stark",
+      "A": "stark",
+      "B": "stark"
+    },
+    {
+      "item": "got-a02",
+      "gold": "lannister",
+      "A": "lannister",
+      "B": "greyjoy"
+    },
+    {
+      "item": "got-a03",
+      "gold": "targaryen",
+      "A": "tyrell",
+      "B": "tyrell"
+    },
+    {
+      "item": "got-a04",
+      "gold": "greyjoy",
+      "A": "greyjoy",
+      "B": "lannister"
+    },
+    {
+      "item": "got-a05",
+      "gold": "tyrell",
+      "A": "lannister",
+      "B": "tyrell"
+    },
+    {
+      "item": "got-a06",
+      "gold": "stark",
+      "A": "targaryen",
+      "B": "targaryen"
+    },
+    {
+      "item": "got-a07",
+      "gold": "lannister",
+      "A": "tyrell",
+      "B": "greyjoy"
+    },
+    {
+      "item": "got-a08",
+      "gold": "targaryen",
+      "A": "greyjoy",
+      "B": "lannister"
+    },
+    {
+      "item": "got-a09",
+      "gold": "greyjoy",
+      "A": "lannister",
+      "B": "targaryen"
+    },
+    {
+      "item": "got-a10",
+      "gold": "stark",
+      "A": "greyjoy",
+      "B": "greyjoy"
+    },
+    {
+      "item": "got-a11",
+      "gold": "lannister",
+      "A": "stark",
+      "B": "stark"
+    },
+    {
+      "item": "got-a12",
+      "gold": "greyjoy",
+      "A": "targaryen",
+      "B": "greyjoy"
+    },
+    {
+      "item": "got-a13",
+      "gold": "stark",
+      "A": "lannister",
+      "B": "targaryen"
+    },
+    {
+      "item": "got-a14",
+      "gold": "lannister",
+      "A": "lannister",
+      "B": "lannister"
+    },
+    {
+      "item": "got-a15",
+      "gold": "lannister",
+      "A": "tyrell",
+      "B": "lannister"
+    },
+    {
+      "item": "got-a16",
+      "gold": "lannister",
+      "A": "tyrell",
+      "B": "targaryen"
+    }
+  ]
+}
