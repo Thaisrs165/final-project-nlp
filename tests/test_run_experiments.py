@@ -25,3 +25,24 @@ def test_names_only_for_canonical_and_name_swap():
             {"id": "d", "test_type": "name_swap", "name": "Draco", "traits": "x"}]
     names = {r["id"]: n for r, _, _, _, n in rx.jobs_for("hp", rows, ["embed"])}
     assert names == {"a": "Ginny", "b": "", "c": "", "d": "Draco"}
+
+
+def test_prune_drops_only_outdated_rows(tmp_path, monkeypatch):
+    import csv
+    monkeypatch.setattr(rx, "load_tests", lambda w: [
+        {"id": "hp-c01", "test_type": "canonical", "name": "Ginny", "traits": "brave; new"},
+        {"id": "hp-c02", "test_type": "no_name", "name": "", "traits": "kind"}] if w == "hp" else [])
+    path = tmp_path / "all.csv"
+    rows = [{"world": "hp", "id": "hp-c01", "name": "Ginny", "traits": "brave; old"},   # outdated
+            {"world": "hp", "id": "hp-c01", "name": "Ginny", "traits": "brave; new"},   # current
+            {"world": "hp", "id": "hp-c02", "name": "", "traits": "kind"},              # current
+            {"world": "hp", "id": "hp-c99", "name": "", "traits": "x"},                 # removed
+            {"world": "got", "id": "got-c01", "name": "", "traits": "y"}]               # other world
+    with open(path, "w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=["world", "id", "name", "traits"])
+        w.writeheader()
+        w.writerows(rows)
+    assert rx.prune(path, ["hp"]) == 2
+    with open(path) as f:
+        left = [(r["id"], r["traits"]) for r in csv.DictReader(f)]
+    assert left == [("hp-c01", "brave; new"), ("hp-c02", "kind"), ("got-c01", "y")]
