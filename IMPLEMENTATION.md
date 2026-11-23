@@ -15,16 +15,16 @@ Steps 2 and 3 can run in parallel. Step 8's front end can start alongside them i
 | Step | State | Notes |
 |---|---|---|
 | 1. Setup | ✅ done | venv, pinned requirements, folder layout |
-| 2. Data | 🟡 in progress | Per-world folders exist. **2.1 group descriptions written for all 5 worlds** (owners still to check). Owners: HP Ana, Divergent Thais, GoT Fardin, Avatar Esther, Invented Esther. Simulated panel done. **Short human form (25 items) is live**, collecting responses. |
+| 2. Data | 🟡 in progress | Per-world folders exist. **2.1 group descriptions written for all 5 worlds** (owners still to check). **2.2 done for HP (34) and Avatar (28)**; Divergent, GoT and Invented still empty. Owners: HP Ana, Divergent Thais, GoT Fardin, Avatar Esther, Invented Esther. Simulated panel done. **Human form: 19 responses imported** (`data/human_votes.csv`). **Primary analysis: the 10 kept by the attention rule; all 19 reported as a sensitivity analysis** (decided 2026-11-23). |
 | 3. `sorter.py` | ✅ done | 4 methods, with and without descriptions, PLL-word-l2r, calibration, occlusion. Optional `name=` for Q2 (named prompt twins in `NAMED_TEMPLATES`, added 2026-11-21). **40/40 tests pass**; one MLM call takes about 0.1 s on the Mac GPU. |
-| 4. `make_tests.py` | ✅ built | HP: 34 no_name, 34 name_swap, 34 negation, 28 conflicting, 8 generic. Other worlds: re-run once their canonical rows exist. |
-| 5–6. Experiments, analysis | ⏳ waiting | Need steps 2 and 4. |
-| 7–8. API, interface | ⏳ not started | Node vs. Gradio still to decide. |
+| 4. `make_tests.py` | ✅ built | HP: 34 no_name, 34 name_swap, 34 negation, 28 conflicting, 25 generic. Avatar: 28 / 28 / 28 / 26 / 25. Other worlds: re-run once their canonical rows exist. |
+| 5. `run_experiments.py` | ✅ built 2026-11-23 | **The one shared runner** for every world: `run`, `occlusion`, `summary`. Results in `results/all.csv`. HP, Avatar and Divergent run; others re-run once their data lands. |
+| 6. Analysis | ⏳ next | Reads `results/all.csv`. Clustering dropped. |
+| 7–8. App | ⏳ not started | **Gradio, Ana builds it** (decided 2026-11-23). No separate `api.py` needed. |
 | 9–10. Report, presentation | ⏳ not started | |
 
 **Waiting on people (🛑):**
 - Each owner checks their world's `data/<world>/groups.csv` against the `source_quote` column (about 10 min). GoT and Avatar need the most attention: see DATA_LOG.md.
-- Form: send the reminder 2–3 days after launch. When responses arrive, link them to a Google Sheet and share the link so `data/human_votes.csv` can be built.
 - Review the simulated panel's assumptions (step 2.6).
 
 **Next for Claude, once approved:**
@@ -52,7 +52,7 @@ Steps 2 and 3 can run in parallel. Step 8's front end can start alongside them i
 | Step 2.2 | Trait check: mark each extracted trait ✓/✗ in the Google Sheet | each world's owner | ~1 h/world |
 | Step 2.3 | Sort 20 unnamed trait sets per world, independently | 2 people | 30 min each |
 | Step 2.4 | Approve the invented-world personas | Esther | 20 min |
-| Step 8 | Decide Node vs. Gradio and the hosting; approve the quiz keys | team | 30 min meeting |
+| Step 8 | ~~Decide Node vs. Gradio~~ Gradio (2026-11-23); approve the quiz keys | team | 15 min |
 | Step 8 | Create the hosting account or Space, if we host online (needs your login) | 1 person | 15 min |
 | Step 9 | Write the report text (one paragraph each); Claude only formats it and checks the page limit | everyone | ~4 days |
 | Step 10 | Interview practice at the whiteboard | everyone | 2 days |
@@ -243,13 +243,22 @@ Reads canonical rows and writes generated rows back to `data/<world>/tests.csv`,
 | `negation` | Add "not" to every trait. Paired with the original through `origin_id`. |
 | `conflicting` | 2–3 traits from group A plus 2–3 from group B. Gold is the pair `A\|B`. |
 | `generic` | Rows of `generic.csv`, copied into every world. Gold is empty. |
-| `shortcut` (Avatar) | Element-flavored vs. neutral synonyms, hand-written pairs. |
+| `shortcut` (Avatar) | Element-flavored vs. neutral synonyms. Hand-written in `data/avatar/shortcut_pairs.csv`; `make_tests.py` turns each pair into two rows (ids `…-el` / `…-ne`, same `origin_id`). |
 
 **Done when:** the counts per test type are printed and checked by hand on 5 random rows.
 
 ---
 
-## Step 5: `run_experiments.py` (1 day of code, then it runs)
+## Step 5: `run_experiments.py` ✅ built 2026-11-23
+
+> **Use this runner for every world; don't write your own.** It calls only `sorter.py`, so every world uses the same models, prompts, calibration and settings.
+> ```
+> .venv/bin/python run_experiments.py run [worlds]     # all methods x templates x with/without descriptions
+> .venv/bin/python run_experiments.py occlusion        # canonical rows, MLM -> results/occlusion.csv
+> .venv/bin/python run_experiments.py summary          # Q1/Q2 table with 95% CIs -> results/summary_q1q2.csv
+> ```
+> The name is passed only for `canonical` and `name_swap` rows (Q2). `needs_review` rows are skipped. Output columns = Thais's `results/divergent/predictions.csv` + `name`, `name_group`. World-specific extras (like `experiments/divergent.py`) can stay, but **headline numbers come from `results/all.csv`**.
+
 
 For each world × row × method × template, compute the probabilities and write one row to `results/all.csv`:
 
@@ -271,7 +280,7 @@ world, id, origin_id, test_type, method, template, gold, pred, probs_json, raw_p
 | `q1_correctness.ipynb` | M4 | Accuracy and macro-F1 per world × method, with bootstrap 95% CIs (1,000 resamples), against chance. **Real worlds vs. invented world.** | Table 1 |
 | `q2_traits.ipynb` | M1 | canonical vs. no_name vs. name_swap (McNemar on paired rows); the share of name_swap predictions that follow the name; whether the top occlusion trait is the one we expected | Table 1 (rows) |
 | `q3_ambiguity.ipynb` | M2 + M3 | Entropy for generic/conflicting vs. canonical (Wilcoxon); **JSD between BERT and the simulated panel**; Baan et al.'s entropy calibration error (against the panel); negation flip rate and total variation; conflicting split mass on A∪B | Figure 1 |
-| `clustering.ipynb` | whoever finishes first | ARI/NMI of KMeans on the embeddings vs. true groups; UMAP plot | Appendix |
+| ~~`clustering.ipynb`~~ | dropped 2026-11-23 | Doesn't answer Q1–Q3; no room in 2 pages | — |
 
 **Done when:** each notebook ends with a 5-line plain-language answer to its question.
 
@@ -312,7 +321,11 @@ A FastAPI wrapper around `sorter.py`. **This is the contract the Node app will c
 
 ---
 
-## Step 8: Node interface (2–3 days, proposed, not built)
+## Step 8: The app (Gradio, Ana; decided 2026-11-23)
+
+> **Decision:** Gradio instead of Node. It's faster: plain Python that imports `sorter.py` directly, with free hosting on Hugging Face Spaces. The Node design below is kept only for its tab and quiz ideas.
+
+### Original Node proposal (superseded)
 
 A small Node app called **"The Unsure Hat"**. It has no npm dependencies and calls `api.py` for every BERT number, so the app and the experiments always agree.
 

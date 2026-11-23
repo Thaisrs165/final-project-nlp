@@ -132,4 +132,6 @@ Options: Veltrin · Osmark · Calwen · Durrask
 
 **Not in the form:** the 12 conflicting items and `k02-hp` / `k03-hp` (they exist only in the simulated panel).
 
+**Outcome (2026-11-23):** 19 responses, 9 dropped by the attention rule, 10 kept. The attention items turned out to be ambiguous for people; see DATA_LOG.md.
+
 **Target:** about 35 responses (about 30 after the filter). 10 is the useful minimum for checking the panel.

@@ -1,0 +1,131 @@
+{
+  "world": "hp",
+  "n_items": 20,
+  "chance": 0.25,
+  "accuracy_A": 0.55,
+  "accuracy_B": 0.85,
+  "raw_agreement": 0.55,
+  "cohen_kappa": 0.3706293706293706,
+  "per_item": [
+    {
+      "item": "hp-a01",
+      "gold": "gryffindor",
+      "A": "slytherin",
+      "B": "gryffindor"
+    },
+    {
+      "item": "hp-a02",
+      "gold": "ravenclaw",
+      "A": "hufflepuff",
+      "B": "ravenclaw"
+    },
+    {
+      "item": "hp-a03",
+      "gold": "hufflepuff",
+      "A": "slytherin",
+      "B": "hufflepuff"
+    },
+    {
+      "item": "hp-a04",
+      "gold": "slytherin",
+      "A": "slytherin",
+      "B": "slytherin"
+    },
+    {
+      "item": "hp-a05",
+      "gold": "gryffindor",
+      "A": "slytherin",
+      "B": "gryffindor"
+    },
+    {
+      "item": "hp-a06",
+      "gold": "ravenclaw",
+      "A": "hufflepuff",
+      "B": "ravenclaw"
+    },
+    {
+      "item": "hp-a07",
+      "gold": "hufflepuff",
+      "A": "hufflepuff",
+      "B": "hufflepuff"
+    },
+    {
+      "item": "hp-a08",
+      "gold": "slytherin",
+      "A": "slytherin",
+      "B": "slytherin"
+    },
+    {
+      "item": "hp-a09",
+      "gold": "gryffindor",
+      "A": "gryffindor",
+      "B": "gryffindor"
+    },
+    {
+      "item": "hp-a10",
+      "gold": "ravenclaw",
+      "A": "gryffindor",
+      "B": "slytherin"
+    },
+    {
+      "item": "hp-a11",
+      "gold": "hufflepuff",
+      "A": "gryffindor",
+      "B": "hufflepuff"
+    },
+    {
+      "item": "hp-a12",
+      "gold": "slytherin",
+      "A": "slytherin",
+      "B": "slytherin"
+    },
+    {
+      "item": "hp-a13",
+      "gold": "gryffindor",
+      "A": "gryffindor",
+      "B": "gryffindor"
+    },
+    {
+      "item": "hp-a14",
+      "gold": "ravenclaw",
+      "A": "hufflepuff",
+      "B": "ravenclaw"
+    },
+    {
+      "item": "hp-a15",
+      "gold": "hufflepuff",
+      "A": "hufflepuff",
+      "B": "hufflepuff"
+    },
+    {
+      "item": "hp-a16",
+      "gold": "slytherin",
+      "A": "slytherin",
+      "B": "slytherin"
+    },
+    {
+      "item": "hp-a17",
+      "gold": "gryffindor",
+      "A": "gryffindor",
+      "B": "gryffindor"
+    },
+    {
+      "item": "hp-a18",
+      "gold": "ravenclaw",
+      "A": "gryffindor",
+      "B": "gryffindor"
+    },
+    {
+      "item": "hp-a19",
+      "gold": "hufflepuff",
+      "A": "hufflepuff",
+      "B": "gryffindor"
+    },
+    {
+      "item": "hp-a20",
+      "gold": "slytherin",
+      "A": "slytherin",
+      "B": "slytherin"
+    }
+  ]
+}

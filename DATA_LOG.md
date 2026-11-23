@@ -61,6 +61,154 @@ Built with the HP tools (`fetch_personality.py`, `make_tests.py`), wiki `gameoft
 
 ---
 
+## 2026-11-23 · Team decisions: targets, writers, clustering, app; step 5 runner
+- **Objective targets agreed** (Ana): full wording in REPORT_ROADMAP.md §4, short form in PLAN.md §1. Q1 vs. the human baseline and the invented world; Q2 McNemar no_name vs. name_swap; Q3 JSD vs. a uniform guess, negation compared with Ettinger 2020.
+- **Who writes what:**
+  - Intro: Thais
+  - Methods, data: Ana
+  - Methods, models and stats: Esther
+  - Results: Ana (Q1, Table 2) + Fardin (Q2, Q3, Figure 1)
+  - Conclusion: Esther
+  - The final editor is still to be picked. Details in REPORT_ROADMAP.md §5.
+- **Clustering dropped** (ARI/NMI, UMAP): it doesn't answer any of Q1–Q3 and there's no room in 2 pages.
+- **App: Gradio, built by Ana.** Chosen over Node because it's faster: plain Python calling `sorter.py` directly, no separate `api.py`, free hosting on Hugging Face Spaces.
+- **Papers:** the rubric requires a review of prior work (F without it; an A needs the gap). RELATED_WORK.md already has 34 papers; the 2-page list is **8 papers**, with the part to read in each (REPORT_ROADMAP.md §6). Whoever cites a paper opens the PDF first.
+- **Step 5: `run_experiments.py`**, the one shared runner.
+  - Every world's `tests.csv` × 4 methods × (3 templates for MLM, 1 otherwise) × with/without descriptions.
+  - The name is passed only for canonical and name_swap rows; `needs_review` is skipped.
+  - Output columns follow Thais's `results/divergent/predictions.csv`, plus `name` and `name_group`.
+  - Cached, so re-runs only compute new rows.
+  - `occlusion` (canonical, MLM, template 0, no name, both description variants) → `results/occlusion.csv`.
+  - `summary` → `results/summary_q1q2.csv`: accuracy per world × method × descriptions on canonical, no_name and name_swap. MLM probabilities are averaged over the 3 templates first. Bootstrap 95% CI (2,000 resamples, seed 42); "follows the name" rate on name_swap; exact McNemar no_name vs. name_swap, paired by character.
+  - All models stay in `sorter.py`; CLAUDE.md tells every assistant not to write another runner.
+- **First full run (2026-11-23):** 5,640 predictions (HP 189 rows, Avatar 203, Divergent 78; × 12 settings each). Occlusion done for 66 canonical rows. 3 fast tests added for the runner.
+- **First look at Q1/Q2 (not yet the analysis; step 6 does that properly):**
+  - **HP canonical accuracy** (chance 25%, humans 70%): NLI 53% / 50% (without / with descriptions), embed 41% / 44%, MLM 29% / 24%, bert-mean 24% / 35%.
+  - **Avatar** is near chance for every method (11–32%).
+  - **Divergent** has only 4 canonical rows, which is too few to report.
+  - **MLM collapses onto one group.** With a name and no descriptions, it answers Gryffindor in 97 of 102 HP predictions, whatever the name (name_swap: 96 of 102). Calibration doesn't remove it: the "N/A" prior doesn't capture the pull that a real name adds. With descriptions it **never** answers Gryffindor. Avatar shows the same pattern (no descriptions → mostly Earth; with descriptions → only Fire and Air).
+  - So for MLM, accuracy equals the share of the favoured group, and the McNemar test can't show a name effect, because the model ignores both the traits and *which* name it is. That is a Q2/Q3 finding (a frequency fallback, as Zhao 2021 describe), not a bug.
+
+---
+
+## 2026-11-23 · `make_tests.py` no longer touches hand-made rows that have an `origin_id`
+- After pulling Divergent: Thais's reversed conflicting probes (`cnf-…-ba`) have an `origin_id`, and `make_tests.py` treated any generated-type row with an `origin_id` as its own, so running it on Divergent would have **deleted 20 of her rows**. It wasn't run on Divergent, so nothing was lost.
+- Fix: generated rows are now recognised only by their id patterns (`-nn`, `-ns`, `-neg`, `<world>-x..`, `<world>-v-..`, `<world>-g-..`). Extra columns already in a world's `tests.csv` are kept. HP and Avatar output is byte-for-byte identical; a dry run keeps all 78 Divergent rows.
+- **Still open, in Thais's `experiments/divergent.py` (her file, not changed here):**
+  - its `build` drops every `conflicting`/`generic` row, including the ones `make_tests.py` adds;
+  - it writes without the `name_group` column, which name_swap rows need.
+  - So for now, run `make_tests.py divergent` **after** her `build`, never before.
+- Merged with Esther's shortcut rows (same day): their ids (`<world>-sNN-el` / `-ne`) were added to the id patterns, so re-runs replace them instead of duplicating them.
+
+---
+
+## 2026-11-23 · HP step 2.3: human baseline and κ (sheets returned)
+- Both sheets came back complete (20/20 answers each, all from the dropdown). Scored with `agreement.py score hp` → `data/hp/agreement/results.json`. Bootstrap 95% CIs (5,000 resamples of the 20 items, seed 42).
+
+| | Accuracy (95% CI) | Notes |
+|---|---|---|
+| A (Thais) | **55%** (35–75%) | never chose Ravenclaw (0/5 Ravenclaws right) |
+| B (Fardin) | **85%** (70–100%) | |
+| Mean (human baseline) | **70%** | chance = 25% |
+| A vs. B | raw agreement 55%, **Cohen's κ = 0.37** (0.08–0.64) | "fair" agreement (Landis & Koch 1977) |
+
+- **By house (A, B correct out of 5):** Slytherin 5, 5 · Gryffindor 3, 5 · Hufflepuff 3, 4 · **Ravenclaw 0, 3**. Both annotators were right on 10 items: 5 Slytherin, 3 Gryffindor, 2 Hufflepuff, **0 Ravenclaw**.
+- **Ravenclaw is hard by construction:** the leak filter bans the words that define it ("intelligent", "wise", "witty", "learning"), so Ravenclaw rows keep traits like "quirky, serene" (Luna) or "timid, gullible" (Quirrell). Slytherin rows keep openly negative traits ("sadistic", "spiteful"), which read as "villain" without any leak word. This asymmetry is a limitation of literal Fandom traits plus the leak filter. Read BERT's per-house accuracy with it in mind.
+- **Annotators:** A = Thais, B = Fardin. Ana confirmed Fardin doesn't know the books well, so his 85% isn't explained by recognising characters. Both results are kept as they are.
+- **The human form points the same way:** the HP attention item k01-hp "witty, bookish, original" (gold Ravenclaw) was answered correctly by only 8/19 people, even though it uses words close to the description (see the form entry below). People find Ravenclaw hard to recognise from traits.
+- The wide κ CI comes from n = 20. The report gives the CI, not just the point value.
+
+---
+
+## 2026-11-23 · Avatar shortcut pairs (lexical-shortcut test)
+**Question.** Does BERT sort by personality, or by surface element words ("fiery" → Fire Nation)?
+
+**Design.** `data/avatar/shortcut_pairs.csv`: **20 hand-written pairs, 5 per nation**, 3 traits each. Each pair has two versions with the same meaning:
+- **element:** element-flavored words, e.g. "fiery; hot-headed; explosive", "icy; frosty; cool-headed", "rock-solid; grounded; immovable", "airy; breezy; light-hearted";
+- **neutral:** synonyms without element imagery, e.g. "intense; short-tempered; volatile", "aloof; unfriendly; level-headed".
+
+Gold = the nation the element words point to. The metric is accuracy (and the probability on gold), element vs. neutral, paired by `pair_id`. If accuracy drops sharply with neutral wording, the model relies on surface words.
+
+**Rules.**
+- Neither version may use a group id, nation name or any word of the group descriptions, so both are equally far from the descriptions. `make_tests.py` enforces this. It caught "down-to-earth" and "salt of the earth", which contain the label word "earth" itself; they were replaced with "firmly planted" and "sturdy as stone".
+- These element words are banned from canonical rows (`leak_words.csv`), so they appear **only** here.
+- **Approved by Esther on 2026-11-23, before any BERT run on them.** They're now frozen: editing them after seeing results would make the test circular.
+
+**Pipeline.** `make_tests.py` now treats `shortcut` as a generated type. It rebuilds the rows from `shortcut_pairs.csv` on every run (ids `avatar-sNN-el` / `avatar-sNN-ne`, `origin_id` = pair id, `trait_evidence` = which variant), so edits go in the CSV, not in `tests.csv`. HP output is unchanged.
+
+**Avatar now:** 28 canonical, 5 needs_review, 28 no_name, 28 name_swap, 28 negation, 26 conflicting, 25 generic, **40 shortcut** (208 rows).
+
+---
+
+## 2026-11-23 · Human form responses imported
+**Source.** Google Forms export ("Forms NLP.xlsx", downloaded 2026-11-23): **19 responses** (2026-11-18 onward). The raw export isn't committed (it has submission timestamps); the anonymized data is:
+- `data/human_votes.csv`: `item_id, world, voter_id, group, source=human`. 19 × 25 = 475 votes; voter ids h01–h19 in submission order. Columns were mapped to item ids in form order, and every answer was checked to be a group of that item's world.
+- `data/human_respondents.csv`: `voter_id`, familiarity per franchise (0 = not at all, 1 = a little, 2 = well), `clear_wrong` (attention items missed, out of 5), `excluded` (1 if 2 or more missed).
+
+**Attention rule, as set in advance (≥ 2 of 5 wrong → drop): 9 of 19 excluded, 10 kept.** That's exactly the useful minimum.
+
+**⚠️ The attention items weren't obvious to people.** Correct answers per item, all 19 respondents:
+
+| Item | Expected | Correct | Most common other answer |
+|---|---|---|---|
+| k01-hp "witty, bookish, original" | Ravenclaw | **8/19** | Slytherin 7 |
+| k01-ava "never gives up, can endure anything" | Earth | 11/19 | Fire 8 |
+| k01-got "always keeps their word" | Stark | 12/19 | Greyjoy 3 |
+| k01-div "always tells the truth" | Candor | 14/19 | — |
+| k01-inv "watches carefully…" | Veltrin | 14/19 | — |
+
+So the rule removes people who **genuinely read the item differently**, not only random clickers. That pushes the kept sample toward consensus:
+- mean normalized entropy on the 20 generic items: **0.46 with the rule (n = 10)** vs **0.67 with everyone (n = 19)**;
+- simulated panel on the same items: 0.49.
+
+**Decision (Esther, 2026-11-23):** keep the rule as the **primary** analysis (n = 10), because it was set before the data, and changing it now would be choosing the rule after seeing results. Report **all 19** as a sensitivity analysis, and say in the report that the attention items turned out to be ambiguous (k01-hp especially). This is a finding about the items, not a reason to drop people silently.
+
+**First look (not a result).**
+- With the rule, humans are about as consensual as the panel (H 0.46 vs 0.49). Several generic items are near-unanimous for people too: "smart and nice" → Ravenclaw 10/10, "funny and kind" → Amity 10/10 in Divergent. The earlier worry (2026-11-18) that the panel was too unanimous doesn't hold for these items.
+- They disagree on specific items: "creative and talkative" (HP) is Gryffindor 60% for humans but Ravenclaw 91% for the panel; "easygoing and polite" is Air 50% vs 100% (Avatar) and Hufflepuff 90% vs 54% (HP).
+- Familiarity ("well"): HP 14, GoT 9, Avatar 9, Divergent 3 of 19.
+
+---
+
+## 2026-11-23 · Avatar step 2.2: canonical characters (+ step 4 rows, 2.3 sheets)
+Built with the HP tools (`fetch_personality.py`, `make_tests.py`, `agreement.py`), wiki `avatar`.
+
+**Gold-label rule (confirmed by Esther, 2026-11-23).** Gold = the nation in the character's **Avatar Wiki infobox** (`nation =` field), cross-checked against the `ethnicity` field. The wiki pages block scripts, so the fields were read through the MediaWiki API.
+- Includes both *Avatar: The Last Airbender* (2005–08) and *The Legend of Korra* (2012–14). Both are pre-2018.
+- **Excluded:** characters whose ethnicity doesn't match their nation, or who changed nation: Kyoshi (Air Nomad–Earth Kingdom), Kai and Opal (Earth Kingdom-born, later Air Nation), Pema, Zaheer, Kya, and LoK Bumi (Aang's son).
+- **Exception:** Tenzin, Jinora and Meelo (nation = air, Air Nomad ancestry mixed with Water Tribe) are kept, because without them the Air Nomads would have only 3 characters. In the story the Air Nomads were almost wiped out, so the imbalance is canon, not sampling.
+- `characters.csv` → `gold_source` records the infobox fields for each character.
+
+**Leak words (`data/avatar/leak_words.csv`, 53 words).**
+- Nation names and bending words.
+- Word forms of the description words: ambitious, passionate, adaptable, enduring, persistent, free, detached, peaceful… The automatic filter catches "bravely" from "brave" but **not** "ambitious" from "ambition", so forms must be listed.
+- Words from Iroh's speech: power, strong, resilient…
+- **Literal element words:** fiery, watery, fluid, earthy, grounded, airy… These belong only in the planned **shortcut test**, so canonical rows stay clean of them.
+- Metaphors like "hot-headed", "warm" and "cold" aren't on the list but were **avoided by hand** in the picks for the same reason (Zuko's "hot-headed", Roku's "warm", Sozin's "cold").
+
+**Result: 44 characters fetched → 33 rows: 28 canonical, 5 `needs_review`.**
+
+| Nation | Canonical | needs_review |
+|---|---|---|
+| Fire | 7 (Zuko, Iroh, Azula, Mai, Zhao, Sozin, Ursa) | 3 (Ozai, Roku, Ty Lee) |
+| Water | 7 (Katara, Sokka, Yue, Korra, Kuruk, Varrick, Noatak) | 1 (Tarrlok) |
+| Earth | 8 (Toph, King Bumi, Haru, Kuei, Jet, Lin, Suyin, Lao) | 1 (Suki) |
+| Air | 6 (Aang, Gyatso, Yangchen, Tenzin, Jinora, Meelo) | 0 |
+
+- Not usable: Long Feng and Tashi (empty Personality sections); Jeong Jeong, Piandao, Izumi, Hakoda, Hama, Tonraq, Yakone (fewer than 5 adjectives).
+- **Picks rejected after reading the sentence:**
+  - about someone else: Mai "callous" (Azula), Sozin "manipulative"/"petty" (his father), Ty Lee "pessimistic" (Mai), "traitorous" (Zuko), Ozai "moralistic" (Zuko), Toph "goofy" (Sokka), Kuvira "forgiving" (Suyin), Yangchen "wise" (other Air Nomads), Ikki "authoritarian" (Meelo);
+  - not personality: Ozai "evil" (about concepts), Zhao "sharp" ("sharp contrast"), Roku "noble" (upbringing), "volatile" (situations), "warm" (a hug), Varrick "irritable" (a rash), Suki "formidable" (her opponents), Sozin "cold" ("in cold blood"), Ikki "testy" (questions);
+  - public perception only: Tarrlok "fair-minded".
+- **Borderline picks for Esther's trait check:** Zuko "protective" (as a child), Mai "bitter" (one confrontation), Ursa "loving" (a relationship), Aang "carefree" (his "exterior"), Gyatso "wistful" ("wistful determination"), Kuei "fearful" (one moment), Roku "indecisive" (how he saw himself), Tarrlok "immoral" (his actions).
+
+**Step 4:** `make_tests.py avatar` → 28 no_name, 28 name_swap, 28 negation, 26 conflicting, 25 generic (168 rows in total).
+**Step 2.3:** `agreement.py make avatar` → 20 nameless sets, 5 per nation. 🛑 Two people who haven't seen the character list fill them in (not Esther).
+**Trait check (Esther, 2026-11-23):** all 8 borderline picks **kept**. Accepted as extracted: 140 of 140 canonical traits (100%), after the 20 rejections above were made while reading the sentences.
+**Still to do:** the agreement sheets (sent to Ana and Thais); the shortcut pairs.
+
+---
+
 ## 2026-11-21 · Name slot in `sorter.py` (Q2) and shared `generic.csv` (step 2.5)
 - **Name slot.** `predict(..., name=None)` (and `score_mlm`, `score_embed`, `score_nli`). With a name, every MLM template uses its named twin in `sorter.NAMED_TEMPLATES` ("Ginny Weasley, who is …, belongs to Gryffindor."); embed and NLI use "Ginny Weasley, who is …." as the person sentence. Without a name, the prompts are exactly as before, so existing results don't change.
   - **Calibration with a name:** the prior uses the named template with **both** name and traits set to "N/A". The prior removes the template's own bias but not what the name carries; using the real name in the prior would calibrate away the very effect Q2 measures.
@@ -89,7 +237,7 @@ Built with the HP tools (`fetch_personality.py`, `make_tests.py`), wiki `gameoft
 - **`agreement.py`** (new, any world) builds two annotator sheets from the canonical rows: 20 trait sets with the names removed, stratified by house (HP: 5 per house), drawn with seed 42, in a different order per sheet, with a dropdown of the houses. The house descriptions are shown at the top, the same text as the form and BERT's "with descriptions" variant.
 - `score` reads both filled sheets and reports each annotator's accuracy against gold (the human baseline for Table 1), raw agreement and Cohen's κ. Results go to `data/hp/agreement/results.json`. The scoring path was tested on throwaway copies with fake answers, which were then discarded.
 - Annotators: **Thais and Fardin**. They haven't seen the HP character list; Ana didn't annotate because she reviewed every character with names and traits, so her answers would measure memory. Sheets sent 2026-11-21.
-- 🛑 Waiting on their sheets.
+- ~~Waiting on their sheets~~ → returned 2026-11-23, see the entry above.
 
 ---
 
@@ -147,7 +295,7 @@ Built with the HP tools (`fetch_personality.py`, `make_tests.py`), wiki `gameoft
 |---|---|---|
 | Harry Potter | Wikipedia, *Hogwarts* §Houses | ✅ Strong. Every word matches or is a synonym (courage → bravery, nerve → daring, learning → love of learning, justice → fairness). |
 | Divergent | Wikipedia, *Divergent (novel)* | ✅ Strong, except Amity's "kindness", which is our addition (Wikipedia only says "peaceful"). |
-| Avatar | Iroh's speech in the official live-action series (Netflix, S2E3 transcript) | 🟡 Partial. Earth (enduring), Air (freedom, detachment, peace) and Water (change, adapting) are confirmed. **Fire's "drive, ambition, passion" and Water's "community"** come from Iroh's speech in the animated episode *Bitter Work* (2006), which **couldn't be checked online** because the Avatar wiki blocks automated access. Esther checks it by hand. |
+| Avatar | Iroh's speech in the official live-action series (Netflix, S2E3 transcript) | 🟡 Partial. Earth (enduring), Air (freedom, detachment, peace) and Water (change, adapting) are confirmed. **Fire's "drive, ambition, passion" and Water's "community"** come from Iroh's speech in the animated episode *Bitter Work* (2006), which **couldn't be checked online** because the Avatar wiki blocks automated access. **Checked by hand and confirmed by Esther (2026-11-23).** |
 | Game of Thrones | Wikipedia, *World of A Song of Ice and Fire*; Dummies, *Game of Thrones list of houses* | 🟡 Interpretive. Sources confirm Stark's "honorable devotion to duty", Lannister wealth, Greyjoy raids and rebellion, and Tyrell cleverness and scheming. "Pride", "passion, boldness, ambition" (Targaryen) and "defiance, toughness, independence" (Greyjoy) are **our reading of each house's reputation**, not quoted traits. Fardin checks them. Mottos were deliberately left out ("Fire and Blood" would be a literal fire cue). |
 | Invented | Our own definitions | Control world, no outside source. |
 

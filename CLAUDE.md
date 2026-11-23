@@ -1,6 +1,6 @@
 # Notes for AI assistants working in this repo
 
-Read these first: [PLAN.md](PLAN.md) (research design), [IMPLEMENTATION.md](IMPLEMENTATION.md) (steps, status, owners), [DATA_LOG.md](DATA_LOG.md) (every data decision, newest on top).
+Read these first: [PLAN.md](PLAN.md) (research design), [IMPLEMENTATION.md](IMPLEMENTATION.md) (steps, status, owners), [DATA_LOG.md](DATA_LOG.md) (every data decision, newest on top). For anything report-related: [REPORT_ROADMAP.md](REPORT_ROADMAP.md) (**2 pages max, IEEE template, references included; going over = F**; the appendix isn't graded and can't be cited).
 
 ## ⚑ Building a world's data (steps 2.2–2.3): use the existing tools
 Harry Potter was built with two reusable scripts. **For Divergent, Game of Thrones, Avatar or the invented world, use these. Don't write new extraction or agreement code.** Follow "How to build your world" in IMPLEMENTATION.md step 2, and use `data/hp/` as the worked example.
@@ -17,6 +17,12 @@ Harry Potter was built with two reusable scripts. **For Divergent, Game of Thron
 - **Tests:** 4 new ones in `tests/test_sorter.py`; all 40 pass.
 - **First look (one example, not a result):** Ginny's traits without a name give Ravenclaw 0.57, with "Ginny Weasley" Gryffindor 0.99, with "Draco Malfoy" Gryffindor 0.97. Named prompts may push everything to Gryffindor; step 5 must check this.
 - Full entry in DATA_LOG.md ("Name slot in `sorter.py` (Q2)"). If Esther wants it done differently, that's her call; change it and log it.
+
+## ⚑ Running experiments (step 5): use `run_experiments.py`, nothing else
+- **One shared runner for every world:** `.venv/bin/python run_experiments.py run [world]`, then `occlusion` and `summary`. Output: `results/all.csv`.
+- **All models, prompts and calibration live in `sorter.py`** (bert-base-uncased, MiniLM, BART-MNLI, pinned there). Never load a model or write a prompt anywhere else. If a world needs something new, add an option to `run_experiments.py` or `sorter.py` and log it.
+- World-specific scripts (e.g. `experiments/divergent.py`) may add extra analyses, but **the report's headline numbers come from `results/all.csv`**.
+- After adding or changing a world's rows: `make_tests.py <world>`, then `run_experiments.py run <world>` (cached, so it only computes what's new).
 
 ## Q2 (traits vs. names)
 `sorter.predict(..., name=...)` puts a character name into the prompt. In step 5, pass `name=row["name"]` for `canonical` and `name_swap` rows and no name for every other row type.
