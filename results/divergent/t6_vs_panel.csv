@@ -1,0 +1,49 @@
+method,variant,reference,item,type,traits,jsd,bert_top,ref_top,bert_entropy,ref_entropy
+bert-mean,names only,simulated panel,g01-div,generic,smart; nice,0.2636111416400665,dauntless,erudite,0.8651662746240611,0.31925216471368184
+bert-mean,names only,simulated panel,g02-div,generic,funny; kind,0.6347009964937855,erudite,amity,0.8753249631976083,0.2946420756809165
+bert-mean,names only,simulated panel,g03-div,generic,easygoing; polite,0.806548238442061,erudite,amity,0.8466313741008011,0.08061242606321459
+bert-mean,names only,simulated panel,c01-div,conflicting,brave; selfless,0.1561897076592513,dauntless,abnegation,0.8864414460468321,0.5643449847191297
+bert-mean,names only,simulated panel,c02-div,conflicting,honest; intelligent,0.2538852595472423,erudite,erudite,0.8771911286415449,0.5600187438934331
+bert-mean,names only,simulated panel,k01-div,clear,"always tells the truth, even when it hurts",0.663262193262634,dauntless,candor,0.9021682194059427,0.08061242606321459
+bert-mean,with descriptions,simulated panel,g01-div,generic,smart; nice,0.37993691132149593,amity,erudite,0.798270369813575,0.31925216471368184
+bert-mean,with descriptions,simulated panel,g02-div,generic,funny; kind,0.12504209834805868,amity,amity,0.7037156267077072,0.2946420756809165
+bert-mean,with descriptions,simulated panel,g03-div,generic,easygoing; polite,0.2938126249064612,amity,amity,0.8313354953091004,0.08061242606321459
+bert-mean,with descriptions,simulated panel,c01-div,conflicting,brave; selfless,0.4523102614853747,amity,abnegation,0.8513232800939549,0.5643449847191297
+bert-mean,with descriptions,simulated panel,c02-div,conflicting,honest; intelligent,0.25119516219110527,amity,erudite,0.8251936934693761,0.5600187438934331
+bert-mean,with descriptions,simulated panel,k01-div,clear,"always tells the truth, even when it hurts",0.4585741699075582,amity,candor,0.8616558535036821,0.08061242606321459
+embed,names only,simulated panel,g01-div,generic,smart; nice,0.6261463360334367,amity,erudite,0.5890137607972501,0.31925216471368184
+embed,names only,simulated panel,g02-div,generic,funny; kind,0.14447632982052344,amity,amity,0.725367216577623,0.2946420756809165
+embed,names only,simulated panel,g03-div,generic,easygoing; polite,0.13716622395836223,amity,amity,0.5198292797950218,0.08061242606321459
+embed,names only,simulated panel,c01-div,conflicting,brave; selfless,0.3646942198006554,dauntless,abnegation,0.37414093309452995,0.5643449847191297
+embed,names only,simulated panel,c02-div,conflicting,honest; intelligent,0.5259655488558164,amity,erudite,0.7478503295781689,0.5600187438934331
+embed,names only,simulated panel,k01-div,clear,"always tells the truth, even when it hurts",0.7285374822997732,dauntless,candor,0.7039116596955808,0.08061242606321459
+embed,with descriptions,simulated panel,g01-div,generic,smart; nice,0.38494079547025417,amity,erudite,0.5187396950760182,0.31925216471368184
+embed,with descriptions,simulated panel,g02-div,generic,funny; kind,0.16291822850731583,amity,amity,0.6827436857431849,0.2946420756809165
+embed,with descriptions,simulated panel,g03-div,generic,easygoing; polite,0.07001601346564784,amity,amity,0.32668966493736024,0.08061242606321459
+embed,with descriptions,simulated panel,c01-div,conflicting,brave; selfless,0.31903432102634843,dauntless,abnegation,0.20440356238953677,0.5643449847191297
+embed,with descriptions,simulated panel,c02-div,conflicting,honest; intelligent,0.16536710050897324,erudite,erudite,0.5058362441569021,0.5600187438934331
+embed,with descriptions,simulated panel,k01-div,clear,"always tells the truth, even when it hurts",0.5061896917080195,amity,candor,0.8754148202702016,0.08061242606321459
+mlm,names only,simulated panel,g01-div,generic,smart; nice,0.6851410490865106,dauntless,erudite,0.6970505901846712,0.31925216471368184
+mlm,names only,simulated panel,g02-div,generic,funny; kind,0.38920754296788035,dauntless,amity,0.8435454740378797,0.2946420756809165
+mlm,names only,simulated panel,g03-div,generic,easygoing; polite,0.493737560378764,dauntless,amity,0.7137265116308069,0.08061242606321459
+mlm,names only,simulated panel,c01-div,conflicting,brave; selfless,0.2592588209016229,dauntless,abnegation,0.9153198960002529,0.5643449847191297
+mlm,names only,simulated panel,c02-div,conflicting,honest; intelligent,0.4561558611296468,dauntless,erudite,0.9075571899331287,0.5600187438934331
+mlm,names only,simulated panel,k01-div,clear,"always tells the truth, even when it hurts",0.6168347940407901,dauntless,candor,0.8470519054557487,0.08061242606321459
+mlm,with descriptions,simulated panel,g01-div,generic,smart; nice,0.43607125661136115,dauntless,erudite,0.960456058785684,0.31925216471368184
+mlm,with descriptions,simulated panel,g02-div,generic,funny; kind,0.3585891408558075,dauntless,amity,0.9796731191851271,0.2946420756809165
+mlm,with descriptions,simulated panel,g03-div,generic,easygoing; polite,0.4765595633948737,dauntless,amity,0.9553682158852362,0.08061242606321459
+mlm,with descriptions,simulated panel,c01-div,conflicting,brave; selfless,0.2653510452348081,dauntless,abnegation,0.9910370975106637,0.5643449847191297
+mlm,with descriptions,simulated panel,c02-div,conflicting,honest; intelligent,0.31952304155687006,dauntless,erudite,0.98451315829099,0.5600187438934331
+mlm,with descriptions,simulated panel,k01-div,clear,"always tells the truth, even when it hurts",0.5349134972176784,amity,candor,0.9059475242185535,0.08061242606321459
+nli,names only,simulated panel,g01-div,generic,smart; nice,0.0991402751452485,erudite,erudite,0.764389760905282,0.31925216471368184
+nli,names only,simulated panel,g02-div,generic,funny; kind,0.36717548872361355,candor,amity,0.9234759163601106,0.2946420756809165
+nli,names only,simulated panel,g03-div,generic,easygoing; polite,0.5779733681414053,candor,amity,0.9263060961375508,0.08061242606321459
+nli,names only,simulated panel,c01-div,conflicting,brave; selfless,0.34393308207574486,candor,abnegation,0.9720394020816834,0.5643449847191297
+nli,names only,simulated panel,c02-div,conflicting,honest; intelligent,0.061806301886441956,erudite,erudite,0.7569748142995204,0.5600187438934331
+nli,names only,simulated panel,k01-div,clear,"always tells the truth, even when it hurts",0.41872010141630917,candor,candor,0.9412546018576394,0.08061242606321459
+nli,with descriptions,simulated panel,g01-div,generic,smart; nice,0.020842339071465335,erudite,erudite,0.38714951190452,0.31925216471368184
+nli,with descriptions,simulated panel,g02-div,generic,funny; kind,0.3514550552780341,erudite,amity,0.8946998475061678,0.2946420756809165
+nli,with descriptions,simulated panel,g03-div,generic,easygoing; polite,0.24229384344848165,amity,amity,0.6702423918643927,0.08061242606321459
+nli,with descriptions,simulated panel,c01-div,conflicting,brave; selfless,0.32603096351763217,dauntless,abnegation,0.9827511366921258,0.5643449847191297
+nli,with descriptions,simulated panel,c02-div,conflicting,honest; intelligent,0.02347701936518325,erudite,erudite,0.5432739509756033,0.5600187438934331
+nli,with descriptions,simulated panel,k01-div,clear,"always tells the truth, even when it hurts",0.2658551609123686,candor,candor,0.797824343473857,0.08061242606321459

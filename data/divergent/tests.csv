@@ -1,1 +1,79 @@
-id,test_type,name,traits,gold_group,source_url,trait_evidence
+id,test_type,name,traits,gold_group,source_url,trait_evidence,origin_id
+can-tris-prior,canonical,Tris Prior,reckless; smart; unbreakable; sensitive; unforgiving,dauntless,https://en.wikipedia.org/wiki/List_of_Divergent_characters,"https://divergent.fandom.com/wiki/Beatrice_Prior (Personality): Tris was becoming a reckless Dauntless | 'deadly smart, brave and selfless' | she seems unbreakable, she is also sensitive | Also unforgiving",
+can-peter-hayes,canonical,Peter Hayes,cruel; jealous; ambitious; sarcastic; harsh,dauntless,https://en.wikipedia.org/wiki/List_of_Divergent_characters,"https://divergent.fandom.com/wiki/Peter_Hayes (Personality): extremely cruel, jealous and ambitious | He is also very sarcastic | retains some of his cruel and harsh traits",
+can-eric-coulter,canonical,Eric Coulter,smart; malicious; ruthless; violent; sadistic,dauntless,https://en.wikipedia.org/wiki/List_of_Divergent_characters,https://divergent.fandom.com/wiki/Eric (Personality): Eric is very smart | also very malicious | the 'ruthless kind' of Dauntless | shown to be violent and often sadistic,
+can-uriah-pedrad,canonical,Uriah Pedrad,smart; confident; perverted; straightforward; happy,dauntless,https://en.wikipedia.org/wiki/List_of_Divergent_characters,https://divergent.fandom.com/wiki/Uriah_Pedrad (Personality): He is a complete smart guy | He is confident | He's slightly perverted | He's straightfoward [sic] | He is usually happy,
+clr-abn-direct,clear,,selfless; humble,abnegation,,WORDS (direct + synonym),
+clr-abn-syn,clear,,humble; modest,abnegation,,WORDS (synonyms only),
+clr-ami-direct,clear,,peaceful; gentle,amity,,WORDS (direct + synonym),
+clr-ami-syn,clear,,gentle; forgiving,amity,,WORDS (synonyms only),
+clr-can-direct,clear,,honest; truthful,candor,,WORDS (direct + synonym),
+clr-can-syn,clear,,truthful; blunt,candor,,WORDS (synonyms only),
+clr-dau-direct,clear,,brave; fearless,dauntless,,WORDS (direct + synonym),
+clr-dau-syn,clear,,fearless; daring,dauntless,,WORDS (synonyms only),
+clr-eru-direct,clear,,intelligent; studious,erudite,,WORDS (direct + synonym),
+clr-eru-syn,clear,,studious; analytical,erudite,,WORDS (synonyms only),
+cnf-abn-ami-direct-ab,conflicting,,selfless; peaceful,abnegation|amity,,WORDS (direct),
+cnf-abn-ami-direct-ba,conflicting,,peaceful; selfless,amity|abnegation,,"WORDS (direct), reversed order",cnf-abn-ami-direct-ab
+cnf-abn-ami-syn-ab,conflicting,,humble; gentle,abnegation|amity,,WORDS (syn),
+cnf-abn-ami-syn-ba,conflicting,,gentle; humble,amity|abnegation,,"WORDS (syn), reversed order",cnf-abn-ami-syn-ab
+cnf-abn-can-direct-ab,conflicting,,selfless; honest,abnegation|candor,,WORDS (direct),
+cnf-abn-can-direct-ba,conflicting,,honest; selfless,candor|abnegation,,"WORDS (direct), reversed order",cnf-abn-can-direct-ab
+cnf-abn-can-syn-ab,conflicting,,humble; truthful,abnegation|candor,,WORDS (syn),
+cnf-abn-can-syn-ba,conflicting,,truthful; humble,candor|abnegation,,"WORDS (syn), reversed order",cnf-abn-can-syn-ab
+cnf-abn-dau-direct-ab,conflicting,,selfless; brave,abnegation|dauntless,,WORDS (direct),
+cnf-abn-dau-direct-ba,conflicting,,brave; selfless,dauntless|abnegation,,"WORDS (direct), reversed order",cnf-abn-dau-direct-ab
+cnf-abn-dau-syn-ab,conflicting,,humble; fearless,abnegation|dauntless,,WORDS (syn),
+cnf-abn-dau-syn-ba,conflicting,,fearless; humble,dauntless|abnegation,,"WORDS (syn), reversed order",cnf-abn-dau-syn-ab
+cnf-abn-eru-direct-ab,conflicting,,selfless; intelligent,abnegation|erudite,,WORDS (direct),
+cnf-abn-eru-direct-ba,conflicting,,intelligent; selfless,erudite|abnegation,,"WORDS (direct), reversed order",cnf-abn-eru-direct-ab
+cnf-abn-eru-syn-ab,conflicting,,humble; studious,abnegation|erudite,,WORDS (syn),
+cnf-abn-eru-syn-ba,conflicting,,studious; humble,erudite|abnegation,,"WORDS (syn), reversed order",cnf-abn-eru-syn-ab
+cnf-ami-can-direct-ab,conflicting,,peaceful; honest,amity|candor,,WORDS (direct),
+cnf-ami-can-direct-ba,conflicting,,honest; peaceful,candor|amity,,"WORDS (direct), reversed order",cnf-ami-can-direct-ab
+cnf-ami-can-syn-ab,conflicting,,gentle; truthful,amity|candor,,WORDS (syn),
+cnf-ami-can-syn-ba,conflicting,,truthful; gentle,candor|amity,,"WORDS (syn), reversed order",cnf-ami-can-syn-ab
+cnf-ami-dau-direct-ab,conflicting,,peaceful; brave,amity|dauntless,,WORDS (direct),
+cnf-ami-dau-direct-ba,conflicting,,brave; peaceful,dauntless|amity,,"WORDS (direct), reversed order",cnf-ami-dau-direct-ab
+cnf-ami-dau-syn-ab,conflicting,,gentle; fearless,amity|dauntless,,WORDS (syn),
+cnf-ami-dau-syn-ba,conflicting,,fearless; gentle,dauntless|amity,,"WORDS (syn), reversed order",cnf-ami-dau-syn-ab
+cnf-ami-eru-direct-ab,conflicting,,peaceful; intelligent,amity|erudite,,WORDS (direct),
+cnf-ami-eru-direct-ba,conflicting,,intelligent; peaceful,erudite|amity,,"WORDS (direct), reversed order",cnf-ami-eru-direct-ab
+cnf-ami-eru-syn-ab,conflicting,,gentle; studious,amity|erudite,,WORDS (syn),
+cnf-ami-eru-syn-ba,conflicting,,studious; gentle,erudite|amity,,"WORDS (syn), reversed order",cnf-ami-eru-syn-ab
+cnf-can-dau-direct-ab,conflicting,,honest; brave,candor|dauntless,,WORDS (direct),
+cnf-can-dau-direct-ba,conflicting,,brave; honest,dauntless|candor,,"WORDS (direct), reversed order",cnf-can-dau-direct-ab
+cnf-can-dau-syn-ab,conflicting,,truthful; fearless,candor|dauntless,,WORDS (syn),
+cnf-can-dau-syn-ba,conflicting,,fearless; truthful,dauntless|candor,,"WORDS (syn), reversed order",cnf-can-dau-syn-ab
+cnf-can-eru-direct-ab,conflicting,,honest; intelligent,candor|erudite,,WORDS (direct),
+cnf-can-eru-direct-ba,conflicting,,intelligent; honest,erudite|candor,,"WORDS (direct), reversed order",cnf-can-eru-direct-ab
+cnf-can-eru-syn-ab,conflicting,,truthful; studious,candor|erudite,,WORDS (syn),
+cnf-can-eru-syn-ba,conflicting,,studious; truthful,erudite|candor,,"WORDS (syn), reversed order",cnf-can-eru-syn-ab
+cnf-dau-eru-direct-ab,conflicting,,brave; intelligent,dauntless|erudite,,WORDS (direct),
+cnf-dau-eru-direct-ba,conflicting,,intelligent; brave,erudite|dauntless,,"WORDS (direct), reversed order",cnf-dau-eru-direct-ab
+cnf-dau-eru-syn-ab,conflicting,,fearless; studious,dauntless|erudite,,WORDS (syn),
+cnf-dau-eru-syn-ba,conflicting,,studious; fearless,erudite|dauntless,,"WORDS (syn), reversed order",cnf-dau-eru-syn-ab
+div-abn-ami-can-direct,divergent_mode,,selfless; peaceful; honest,abnegation|amity|candor,,WORDS (direct),
+div-abn-ami-can-syn,divergent_mode,,humble; gentle; truthful,abnegation|amity|candor,,WORDS (syn),
+div-abn-ami-dau-direct,divergent_mode,,selfless; peaceful; brave,abnegation|amity|dauntless,,WORDS (direct),
+div-abn-ami-dau-syn,divergent_mode,,humble; gentle; fearless,abnegation|amity|dauntless,,WORDS (syn),
+div-abn-ami-eru-direct,divergent_mode,,selfless; peaceful; intelligent,abnegation|amity|erudite,,WORDS (direct),
+div-abn-ami-eru-syn,divergent_mode,,humble; gentle; studious,abnegation|amity|erudite,,WORDS (syn),
+div-abn-can-dau-direct,divergent_mode,,selfless; honest; brave,abnegation|candor|dauntless,,WORDS (direct),
+div-abn-can-dau-syn,divergent_mode,,humble; truthful; fearless,abnegation|candor|dauntless,,WORDS (syn),
+div-abn-can-eru-direct,divergent_mode,,selfless; honest; intelligent,abnegation|candor|erudite,,WORDS (direct),
+div-abn-can-eru-syn,divergent_mode,,humble; truthful; studious,abnegation|candor|erudite,,WORDS (syn),
+div-abn-dau-eru-direct,divergent_mode,,selfless; brave; intelligent,abnegation|dauntless|erudite,https://en.wikipedia.org/wiki/Divergent_(novel),"Tris's aptitude result: Abnegation, Dauntless and Erudite; WORDS (direct)",
+div-abn-dau-eru-syn,divergent_mode,,humble; fearless; studious,abnegation|dauntless|erudite,https://en.wikipedia.org/wiki/Divergent_(novel),"Tris's aptitude result: Abnegation, Dauntless and Erudite; WORDS (syn)",
+div-ami-can-dau-direct,divergent_mode,,peaceful; honest; brave,amity|candor|dauntless,,WORDS (direct),
+div-ami-can-dau-syn,divergent_mode,,gentle; truthful; fearless,amity|candor|dauntless,,WORDS (syn),
+div-ami-can-eru-direct,divergent_mode,,peaceful; honest; intelligent,amity|candor|erudite,,WORDS (direct),
+div-ami-can-eru-syn,divergent_mode,,gentle; truthful; studious,amity|candor|erudite,,WORDS (syn),
+div-ami-dau-eru-direct,divergent_mode,,peaceful; brave; intelligent,amity|dauntless|erudite,,WORDS (direct),
+div-ami-dau-eru-syn,divergent_mode,,gentle; fearless; studious,amity|dauntless|erudite,,WORDS (syn),
+div-can-dau-eru-direct,divergent_mode,,honest; brave; intelligent,candor|dauntless|erudite,,WORDS (direct),
+div-can-dau-eru-syn,divergent_mode,,truthful; fearless; studious,candor|dauntless|erudite,,WORDS (syn),
+g01-div,generic,,smart; nice,,,data/vote_items.csv,
+g02-div,generic,,funny; kind,,,data/vote_items.csv,
+g03-div,generic,,easygoing; polite,,,data/vote_items.csv,
+k01-div,clear,,always tells the truth; even when it hurts,candor,,data/vote_items.csv,
