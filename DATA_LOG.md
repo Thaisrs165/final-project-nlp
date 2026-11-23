@@ -5,6 +5,21 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
 
 ---
 
+## 2026-11-23 · Game of Thrones step 5: first run (not yet the analysis)
+- `run_experiments.py run got` → **1,572 predictions** (131 rows × 12 settings; the 8 `needs_review` rows are skipped). `occlusion got` → 160 rows (16 canonical × 5 traits × 2 variants). `summary` → 8 new GoT rows in `results/summary_q1q2.csv`. No existing row of any file changed.
+- **Q1/Q2, canonical accuracy** (chance 20%; n = 16, so CIs are wide):
+
+  | Method | Without descriptions | With descriptions |
+  |---|---|---|
+  | NLI | **56%** (31–81%) | 44% (19–69%) |
+  | embed | 44% (19–69%) | 31% (12–56%) |
+  | bert-mean | 31% | 12% |
+  | MLM | 6% | 19% |
+
+- **NLI's 56% comes from the names.** Without descriptions, all 6 Lannisters are right when the first name is given (Tywin, Cersei, Jaime, Tyrion, Kevan, Lancel). Without the name, accuracy drops to 25%; with a swapped name, it follows the name 56% of the time and the traits only 6%. The McNemar test (no_name vs. name_swap) is not significant (p = 0.375): 16 pairs are too few. **Starks are never recognised by name:** Eddard, Sansa, Arya and Lyanna all go to Targaryen or Lannister.
+- **Collapse onto one group, as in HP and Avatar.** Share of all GoT rows that get the single most common answer: MLM Tyrell 80% (without descriptions) and **Greyjoy 99%** (with); embed Targaryen 59% / **92%**; bert-mean Tyrell 44% / 76%; NLI Lannister 39% / Greyjoy 36%. For MLM and embed with descriptions, accuracy is therefore the share of the favoured house, not trait reading.
+- **Q3, first look:** mean normalized entropy is almost the same for clear and ambiguous inputs in every method (e.g. embed with descriptions: no_name 0.56, conflicting 0.57, generic 0.69). **Negation:** MLM never changes its top answer (0/16 in both variants). NLI without descriptions changes 14/16, but its entropy is 0.98 (nearly uniform), so those changes are noise between almost equal scores, not a response to "not". Step 6 should use total variation distance, not top-answer flips alone.
+
 ## 2026-11-23 · Game of Thrones: owner rulings (Fardin), steps 2.3 and 4 re-run
 - **First names only: kept.** Claude's proposal; Fardin saw it and did not object. Not an explicit ruling.
 - **Olenna admitted as an exception to the birth rule.** She is born Redwyne and Tyrell by marriage, but she heads House Tyrell in the series, and without her the house had no canonical row. Added at the end of `trait_picks.csv` as `got-c24` (sharp, astute, outspoken, unafraid, intelligent), so no existing id changed. **For the report:** Tyrell rests on **one** character, who is not Tyrell by birth; every generated conflicting row with Tyrell uses her traits. Read the Tyrell numbers as a case study.
