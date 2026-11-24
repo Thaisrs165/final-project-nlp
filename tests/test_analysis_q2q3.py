@@ -65,3 +65,13 @@ def test_q2_flags_need_above_chance():
     # a row can only be "informative" if the target is met AND no_name beats chance
     assert not (q2.target_informative & ~q2.no_name_above_chance).any()
     assert not (q2.target_informative & ~q2.target_met).any()
+
+
+def test_human_floor_uses_only_compared_items():
+    """The floor must use the vague items the models are scored on, not the clear ones."""
+    items = pd.read_csv(A.DATA / "vote_items.csv")
+    refs, _ = A.references(items)
+    generic = set(items[items.item_type == "generic"].item_id)
+    with_clear, _ = A.human_floor(refs["humans"], set(refs["humans"].item_id), n_splits=50)
+    only_vague, _ = A.human_floor(refs["humans"], generic, n_splits=50)
+    assert only_vague > with_clear   # people agree on clear items, so these lower the floor
