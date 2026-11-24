@@ -222,13 +222,15 @@ def q3_jsd_summary(per_item):
     return pd.DataFrame(rows)
 
 
-def human_floor(votes, n_splits=N_SPLITS, seed=SEED):
-    """Mean JSD between two random halves of the kept humans, averaged over items."""
+def human_floor(votes, item_ids, n_splits=N_SPLITS, seed=SEED):
+    """Mean JSD between two random halves of the kept humans, averaged over the same
+    items the models are compared on (fixed 2026-11-24: the clear attention items were
+    counted too, which lowered the floor from 0.17 to 0.15)."""
     rng = np.random.default_rng(seed)
     voters = np.array(sorted(votes.voter_id.unique()))
     groups_by_world = {w: sorted(g.group.str.lower().unique()) for w, g in
                        pd.read_csv(DATA / "simulated_votes.csv").groupby("world")}
-    items = votes[["item_id", "world"]].drop_duplicates().to_numpy()
+    items = votes[votes.item_id.isin(item_ids)][["item_id", "world"]].drop_duplicates().to_numpy()
     out = []
     for _ in range(n_splits):
         perm = rng.permutation(voters)
@@ -373,7 +375,8 @@ def main():
     occ = occlusion_table()
     per_item = q3_jsd(pred, items, refs, MAIN + FIXES)
     js = q3_jsd_summary(per_item)
-    floor, floor_ci = human_floor(refs["humans"])
+    floor, floor_ci = human_floor(
+        refs["humans"], set(per_item[per_item.reference == "humans"].item_id))
     ent = q3_entropy(pred, MAIN + FIXES)
     neg = q3_negation(pred, MAIN + FIXES)
     cal = calibration_pull(pred)

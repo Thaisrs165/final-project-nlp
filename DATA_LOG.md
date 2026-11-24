@@ -5,6 +5,13 @@ Newest entries at the top. Anything that goes in the report's Data or Limitation
 
 ---
 
+## 2026-11-24 · Figure 1 chosen; human floor fixed in `analysis_q2q3.py` (Fardin)
+- **Figure 1 = `results/report/fig1_q3` (from `make_tables.py`).** `results/q2q3/fig1` stays in the repo as a working figure, not for the report. **Why:** it is already in the LaTeX with its caption, it pools the four worlds with negation rows (110 pairs) into one 95% CI per method, and it shows the flip rate next to each point, which is the number the Q3 target compares with Ettinger (2020). The simulated panel and the "other character" negation baseline stay in `results/q2q3/` tables (appendix).
+- **Bug fixed: the human split-half floor in `analysis_q2q3.py` counted the 5 clear attention items** as well as the 20 vague items the models are compared on. People agree on clear items, so the floor came out too low (0.153). It now uses only the compared items: **0.175** (95% of splits 0.131–0.256), in line with `make_tables.py` (0.174; the small gap is the random splits). The fixed choice ("averaged over items" the models are compared on) didn't change; only the code was wrong. Nothing else in `results/q2q3/` changed. New test: `test_human_floor_uses_only_compared_items`.
+- **Results text for Q2 and Q3** drafted with the numbers of the chosen figure (floor 0.17).
+
+---
+
 ## 2026-11-23 · Avatar step 2.3: human baseline and κ (sheets returned)
 **Annotators:** Ana (sheet A, already on main since PR #10) and Thais (sheet B). Neither had seen the Avatar character list. Each sorted the 20 nameless trait sets (5 per nation), using only the 4 nation descriptions. Scored with `agreement.py score avatar` → `data/avatar/agreement/results.json`.
 
@@ -66,7 +73,7 @@ Computed with `analysis_q2q3.py` exactly as fixed in the entry further down (com
 - **Occlusion: no word-order bias.** The most influential trait is the first one for 7–28% of characters vs. 20% by chance (divergent, n = 4: up to 50%); all binomial p > 0.1. The share of characters where removing one trait changes the answer moves with the variant (HP 0.62 without descriptions, 0.09 with; GoT 0.00 vs. 0.62): it follows where the collapse sits, not trait reading.
 
 **Q3 (ambiguity)**
-- **JSD target met only by nli with descriptions**, against every reference: humans d = −0.103 (95% CI −0.156 to −0.050, Wilcoxon p < 0.001, 20 items); all 19 respondents d = −0.047 (−0.083 to −0.012); simulated panel d = −0.070 (−0.119 to −0.021, 32 items). mlm without descriptions is *further* than a uniform guess (d = +0.113, CI 0.035 to 0.196). Best JSD (nli, 0.206) is still above the human split-half floor (0.153; 95% of splits 0.111–0.219).
+- **JSD target met only by nli with descriptions**, against every reference: humans d = −0.103 (95% CI −0.156 to −0.050, Wilcoxon p < 0.001, 20 items); all 19 respondents d = −0.047 (−0.083 to −0.012); simulated panel d = −0.070 (−0.119 to −0.021, 32 items). mlm without descriptions is *further* than a uniform guess (d = +0.113, CI 0.035 to 0.196). Best JSD (nli, 0.206) is still above the human split-half floor (0.175; 95% of splits 0.131–0.256; corrected 2026-11-24, it was 0.153 because the clear items were counted).
 - **Context: the robustness check leans on the invented items.** Before the invented world arrived (4 real worlds, 17 human items) the all-19 check was not met (d = −0.036, CI −0.076 to 0.002). The 3 invented items have the largest gains (mean d −0.11 vs. all 19, −0.18 vs. the 10). So: nli with descriptions is reliably closer to the 10 kept humans and to the panel; against all 19 it holds only with the invented items included.
 - **Entropy:** higher on ambiguous inputs in only 6 of 32 testable rows after Holm (avatar bert-mean and mlm with descriptions; hp bert-mean without; invented bert-mean without, mlm and nli with). Divergent has no `no_name` rows, so it is not testable there.
 - **Negation (TV vs. the different-character baseline):** embed moves 0.19–0.44 of the baseline (the "not" is largely ignored); mlm 0.56–1.29, bert-mean 0.41–1.32; nli 0.87–1.21 (flip rate 0.36–1.00). The plain-BERT methods agree with Ettinger (2020); nli is the exception, as expected from a model fine-tuned on MNLI.

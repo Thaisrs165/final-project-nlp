@@ -15,7 +15,7 @@ A one-page snapshot for everyone, and for your AI assistant. Details live in [DA
 | Shared runner `run_experiments.py` | ✅ 23,400 predictions: HP, Avatar, Divergent, GoT, Invented (4 methods + 3 fixes each) |
 | Fixes for the "always Gryffindor" problem | ✅ all tried and reported (see below) |
 | App (Gradio, Ana; redesign Esther) | ✅ dark theme, one quiz sorted into every world × every model (multiverse grid), Trick BERT, Why it's unsure. Runs locally; temporary public link with `GRADIO_SHARE=True`. **No deploy:** Gradio Spaces on Hugging Face now need a paid plan (2026-11-23; `space/README.md`). Optional: 1–2 min screen recording for the report's Material |
-| Tables and figure for the report | ✅ `make_tables.py` → `results/report/` (Table 1, Table 2 with the invented world, a Q3 figure); Fardin's `results/q2q3/fig1` also exists: **pick one Figure 1**. Avatar and GoT κ are in; `make_tables.py` re-run 2026-11-23 |
+| Tables and figure for the report | ✅ `make_tables.py` → `results/report/` (Table 1, Table 2 with the invented world, a Q3 figure); **Figure 1 = `results/report/fig1_q3`** (chosen 2026-11-24; `results/q2q3/` keeps the extra Q2/Q3 tables). Avatar and GoT κ are in; `make_tables.py` re-run 2026-11-23 |
 | Report text | ⏳ not started; who writes what is in REPORT_ROADMAP.md §5 |
 
 ## What we've found so far (HP; Avatar looks the same)
@@ -37,7 +37,7 @@ A one-page snapshot for everyone, and for your AI assistant. Details live in [DA
 | Who | To do |
 |---|---|
 | **Thais** | ✅ Introduction written · ✅ Tables 1–2 (`make_tables.py`) · ✅ Divergent wiki fully checked (4 characters; needs the team's rule decision to add more)  |
-| **Fardin** | GoT data and first run done (DATA_LOG, 2026-11-23). Next: score the GoT agreement sheets when they come back. Write **Results Q2 + Q3 / Figure 1**. |
+| **Fardin** | GoT data and first run done (DATA_LOG, 2026-11-23). GoT agreement scored. Q2/Q3 analysis done (`analysis_q2q3.py`); **Results Q2 + Q3 text drafted** (2026-11-24). |
 | **Esther** | ✅ Avatar agreement scored (invented personas were done by Ana). Write **Methods: models and stats** and the **Conclusion**. Note: `sorter.py` got an optional `name=` and extra fix methods (see CLAUDE.md); plain `mlm` is unchanged. |
 | **Ana** | Write **Methods: data** + **Results Q1 / Table 2**. |
 | **Team** | Pick the final editor. Pick one Figure 1. Decide the Divergent trait rule. Who runs the app (and the `GRADIO_SHARE` link + QR) at the presentation. Each person reads only the papers they cite (REPORT_ROADMAP.md §6, 8 papers, the listed parts only). |

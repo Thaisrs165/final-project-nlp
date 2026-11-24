@@ -89,7 +89,7 @@ Target "McNemar p >= 0.05" is formally met in 32 of 32 rows (world x method x va
 | panel | nli | False | 32 | 0.236 | 0.255 | -0.019 | -0.050 to 0.007 | 0.1475 | False |
 | panel | nli | True | 32 | 0.186 | 0.255 | -0.07 | -0.119 to -0.021 | 0.0066 | True |
 
-Human floor (JSD between random halves of the 10 kept humans, 1000 splits): 0.153 (95% of splits: 0.111 to 0.219). Halves of 5 are noisier than the full group, so this floor is on the high side.
+Human floor (JSD between random halves of the 10 kept humans, 1000 splits): 0.175 (95% of splits: 0.131 to 0.256). Halves of 5 are noisier than the full group, so this floor is on the high side.
 
 ### Entropy: ambiguous (generic + conflicting) vs. no_name (Holm-corrected one-sided Mann-Whitney)
 
